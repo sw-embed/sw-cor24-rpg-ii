@@ -1,6 +1,6 @@
 number = 1
 slug = "skeleton-uart"
-status = "pending"
+status = "in-progress"
 description = "Create rpg2.s with reset vector, UART emit subroutine (_emit_char, _emit_stri..."
 role = "production"
 context_files = []
