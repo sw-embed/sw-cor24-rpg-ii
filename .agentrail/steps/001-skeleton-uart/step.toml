@@ -1,8 +1,9 @@
 number = 1
 slug = "skeleton-uart"
-status = "in-progress"
+status = "completed"
 description = "Create rpg2.s with reset vector, UART emit subroutine (_emit_char, _emit_stri..."
 role = "production"
 context_files = []
 created_at = "2026-04-15T18:55:44"
-commits = []
+completed_at = "2026-04-15T19:05:39"
+commits = ["c60a5c119685fb9981d20413fbf0589d88fa623b"]

@@ -1,0 +1,1 @@
+Created rpg2.s skeleton with UART TX busy-wait (matching Forth pattern), prints RPG-II to UART, reg-rs test passes

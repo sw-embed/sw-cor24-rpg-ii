@@ -1,6 +1,6 @@
 number = 2
 slug = "card-deck-reader"
-status = "pending"
+status = "in-progress"
 description = "Implement _read_record subroutine in rpg2.s to read 80-byte records from a me..."
 role = "production"
 context_files = []
