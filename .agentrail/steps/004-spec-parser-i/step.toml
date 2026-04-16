@@ -1,0 +1,8 @@
+number = 4
+slug = "spec-parser-i"
+status = "pending"
+description = "Parse I-spec (input field definitions) from source deck. Build field descript..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:55:53"
+commits = []

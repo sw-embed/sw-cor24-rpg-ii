@@ -1,0 +1,8 @@
+number = 5
+slug = "indicator-table"
+status = "pending"
+description = "Implement indicator table (256 bytes) and _set_ind, _test_ind, _clear_ind sub..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:55:53"
+commits = []

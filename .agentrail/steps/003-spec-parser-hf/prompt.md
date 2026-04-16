@@ -1,0 +1,1 @@
+Parse H-spec and F-spec records from the source deck in rpg2.s. Classify records by column 6 type code. Build _parse_specs dispatch that reads source deck and classifies each record. Print spec type for each record. Create reg-rs test.

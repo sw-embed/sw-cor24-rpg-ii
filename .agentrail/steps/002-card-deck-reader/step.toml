@@ -1,0 +1,8 @@
+number = 2
+slug = "card-deck-reader"
+status = "pending"
+description = "Implement _read_record subroutine in rpg2.s to read 80-byte records from a me..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:55:53"
+commits = []

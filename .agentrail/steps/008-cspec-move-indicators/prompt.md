@@ -1,0 +1,1 @@
+Implement MOVE, Z-ADD, SETON, SETOF operations in rpg2.s. Z-ADD zeros result before adding. Test move a field, set indicator 01, print results. Create reg-rs test.

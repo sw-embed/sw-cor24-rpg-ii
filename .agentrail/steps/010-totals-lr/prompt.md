@@ -1,0 +1,1 @@
+Implement total-time processing in rpg2.s. Accumulate totals in working storage. Set LR indicator on EOF. Evaluate total-time C-specs and O-specs. Test: sum a field across all records, print total. Create reg-rs test.

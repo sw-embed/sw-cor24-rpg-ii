@@ -1,119 +1,11 @@
-# CLAUDE.md
+# AGENTS.md
 
-## Project: sw-cor24-rpg-ii -- RPG-II for COR24
+Instructions for AI coding agents (Claude Code, opencode, Cursor, etc.)
+working in this repository. This project uses **agentrail** to keep
+multi-session agent work on track. Follow these rules exactly.
 
-RPG-II report program generator for the COR24 24-bit RISC ISA.
-Written entirely in COR24 assembly (`rpg2.s`). Shell scripts for
-build/test/demo. No C, Rust, Python, or other HLL.
-
-See `docs/` for detailed documentation:
-- `docs/prd.md` -- product requirements
-- `docs/architecture.md` -- system architecture
-- `docs/design.md` -- design decisions
-- `docs/plan.md` -- phased implementation plan
-- `docs/research.txt` -- RPG-II research notes
-
-## Build / Test
-
-```bash
-./build.sh              # assemble check via cor24-run
-./demo.sh               # run automated demo
-./demo.sh test          # run test suite
-./demo.sh repl          # interactive (future)
-```
-
-Toolchain repos (siblings under `~/github/sw-embed/`):
-- `sw-cor24-emulator` -- emulator + assembler (cor24-run)
-
-## CRITICAL: AgentRail Session Protocol (MUST follow exactly)
-
-### 1. START (do this FIRST, before anything else)
-```bash
-agentrail next
-```
-Read the output carefully. It contains your current step, prompt,
-plan context, and any relevant skills/trajectories.
-
-### 2. BEGIN (immediately after reading the next output)
-```bash
-agentrail begin
-```
-
-### 3. WORK (do what the step prompt says)
-Do NOT ask "want me to proceed?". The step prompt IS your instruction.
-Execute it directly.
-
-### 4. COMMIT (after the work is done)
-Commit your code changes with git.
-
-### 5. COMPLETE (LAST thing, after committing)
-```bash
-agentrail complete --summary "what you accomplished" \
-  --reward 1 \
-  --actions "tools and approach used"
-```
-- If the step failed: `--reward -1 --failure-mode "what went wrong"`
-- If the saga is finished: add `--done`
-
-### 6. STOP (after complete, DO NOT continue working)
-Do NOT make further code changes after running `agentrail complete`.
-Any changes after complete are untracked and invisible to the next
-session. Future work belongs in the NEXT step, not this one.
-
-## Key Rules
-
-- **Do NOT skip steps** -- the next session depends on accurate tracking
-- **Do NOT ask for permission** -- the step prompt is the instruction
-- **Do NOT continue working** after `agentrail complete`
-- **Commit before complete** -- always commit first, then record completion
-- **NO Python, Rust, C, or other HLL** -- assembly and shell scripts only
-
-## Useful Commands
-
-```bash
-agentrail status          # Current saga state
-agentrail history         # All completed steps
-agentrail plan            # View the plan
-agentrail next            # Current step + context
-```
-
-## COR24 Quick Reference
-
-- 24-bit RISC, 8 registers (r0-r2 GP, fp, sp, z, iv, ir)
-- 1 MB SRAM + 8 KB EBR stack
-- UART at 0xFF0100 (data), 0xFF0101 (status)
-- No hardware divide -- use software division
-- Variable-length instructions (1, 2, or 4 bytes)
-- Calling convention: args on stack, return in r0, link in r1
-
-## COR24 Assembly Syntax
-
-- Labels on own line: `label:` (no inline `label: instr`)
-- Comments: `;` only (not `#`)
-- Decimal immediates (not hex): `la r0, -65280` not `la r0, 0xFF0100`
-- `.byte 72,101,108` -- raw bytes (no string literals)
-- No `.align`; pad with `.byte 0` manually
-- `push ra`/`pop ra` only for r0, r1, r2, fp
-
-## Register Allocation (Frozen)
-
-| Register | Use |
-|----------|-----|
-| r0 | Work register / scratch |
-| r1 | Scratch / temp pointer |
-| r2 | Pointer to current record / working area |
-| fp | Frame pointer for subroutines |
-| sp | Data stack (hardware push/pop) |
-
-## Testing
-
-Regression tests use `reg-rs` (golden-output regression tool):
-```bash
-reg-rs create -t rpg2_TESTNAME -P "$PP" --timeout 30 \
-  -c "cor24-run --run rpg2.s --load-binary test.bin@0x080000 -n 1000000 2>&1" \
-  --desc "description"
-reg-rs run -p rpg2_ --parallel
-```
+Rename or copy this file to whatever your agent reads (`AGENTS.md`,
+`CLAUDE.md`, `.cursorrules`, etc.) — the content is the same.
 
 ---
 
@@ -207,6 +99,8 @@ Treat it like source code.
 ### Always track it in git
 
 - `.agentrail/` **must** be tracked in git. Never add it to `.gitignore`.
+  If you inherit a repo that has `.agentrail/` ignored, that is a bug —
+  unignore it and commit the existing contents first.
 - Commit step artifacts as each step completes, in the same commit as
   your code changes.
 
@@ -216,10 +110,90 @@ Treat it like source code.
   under `.agentrail/` or `.agentrail-archive/`.
 - Always go through agentrail subcommands: `init`, `add`, `begin`,
   `complete`, `abort`, `archive`, `plan`, `audit`.
+- Direct deletion of untracked step files is **unrecoverable** — git
+  reflog cannot restore blobs that were never staged. This has happened
+  before and lost saga history.
 
 ### Commit order matters
 
 Work → `git add` → `git commit` → `agentrail complete`. In that order.
+Completing before committing means `commits` is empty and the audit
+command can't link step to commit.
+
+---
+
+## Recovering from gaps
+
+If history gets out of sync — for example, an agent made commits without
+running `agentrail complete`, or steps were added without matching
+commits — use the audit command.
+
+```bash
+agentrail audit                    # human-readable markdown report
+agentrail audit --emit-commands    # shell script of suggested add lines
+agentrail audit --since v1.0       # only look at commits after v1.0
+```
+
+The report has four sections:
+
+1. **Matched** — commits that line up with a saga step (by recorded hash
+   or by timestamp window for legacy steps).
+2. **Orphan commits** — commits with no matching step. These are the
+   gaps.
+3. **Orphan steps** — steps whose recorded commit isn't in the current
+   history (rebased away, squashed, never made).
+4. **Working tree** — uncommitted changes. Reported for awareness, not
+   turned into commands.
+
+With `--emit-commands`, the tool prints a shell script with one
+`agentrail add --commit <hash> --slug ... --prompt ...` line per orphan
+commit. **Review and edit the slugs and prompts before running** — the
+defaults are seeded from commit subjects and need human judgment.
+
+## Retroactive history for old projects
+
+If the project predates agentrail and you want to add a saga on top of
+existing history:
+
+```bash
+agentrail audit --emit-commands > rebuild.sh
+# Edit rebuild.sh: reword slugs and prompts as coherent step descriptions
+sh rebuild.sh
+```
+
+The script begins with `agentrail init --retroactive --name development`
+(when no saga exists) and then adds one step per historical commit.
+Retroactive sagas are marked in `saga.toml` so future audits know those
+commits are claimed.
+
+Going forward from there, run new sagas normally.
+
+## Safety net: `agentrail snapshot`
+
+If you have files under `.agentrail/` that are not yet committed and
+you're about to do something risky (a big agent run, a rebase, cleaning
+up untracked files), run:
+
+```bash
+agentrail snapshot
+```
+
+This creates a git commit under `refs/agentrail/snapshots/<timestamp>`
+containing a copy of `.agentrail/` and `.agentrail-archive/`. The user's
+real git index is not touched — it uses a throwaway temp index under the
+hood. The snapshot survives `git gc` because a named ref holds it.
+
+Restore from a snapshot with a normal git command:
+
+```bash
+git restore --source=refs/agentrail/snapshots/<timestamp> \
+    -- .agentrail .agentrail-archive
+```
+
+List existing snapshots with `agentrail snapshot --list`.
+
+This is a safety net, not a replacement for committing. Commit your
+work normally — use snapshot only as belt-and-suspenders insurance.
 
 ---
 
@@ -233,9 +207,12 @@ Work → `git add` → `git commit` → `agentrail complete`. In that order.
 | `agentrail status` | Inspect current saga state (read-only) |
 | `agentrail history` | Show all step summaries (read-only) |
 | `agentrail plan --update ...` | Revise the saga plan |
-| `agentrail add --slug ... --prompt ...` | Add a step without completing current one |
+| `agentrail add --slug ... --prompt ...` | Add a step without completing current one (maintenance mode) |
 | `agentrail abort --reason "..."` | Mark current step as blocked |
+| `agentrail archive --reason "..."` | Close out a saga and start fresh |
 | `agentrail audit` | Diagnose saga-vs-git gaps |
+| `agentrail snapshot` | Save a safety-net copy of `.agentrail/` into the git object store (opt-in) |
+| `agentrail snapshot --list` | List existing snapshot refs |
 
 ## What not to do
 

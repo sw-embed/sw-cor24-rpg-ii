@@ -1,0 +1,8 @@
+number = 8
+slug = "cspec-move-indicators"
+status = "pending"
+description = "Implement MOVE, Z-ADD, SETON, SETOF operations in rpg2.s. Z-ADD zeros result ..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:56:10"
+commits = []

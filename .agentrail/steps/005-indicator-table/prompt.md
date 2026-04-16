@@ -1,0 +1,1 @@
+Implement indicator table (256 bytes) and _set_ind, _test_ind, _clear_ind subroutines in rpg2.s. Map indicator numbers 00-99 and MR/LR/L1-L9 to table addresses. Test: set indicator 01, test it, print result. Create reg-rs test.

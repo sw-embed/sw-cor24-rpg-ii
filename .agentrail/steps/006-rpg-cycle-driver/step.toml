@@ -1,0 +1,8 @@
+number = 6
+slug = "rpg-cycle-driver"
+status = "pending"
+description = "Implement _rpg_cycle main loop in rpg2.s: read record, check EOF, print 'deta..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:56:10"
+commits = []

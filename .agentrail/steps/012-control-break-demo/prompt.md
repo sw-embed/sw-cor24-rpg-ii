@@ -1,0 +1,1 @@
+Add single-level control break detection to rpg2.s. Compare control field to previous value, trigger L1 on change, print subtotals on break, grand total at EOF. Create department salary report example with sample data deck and reg-rs test.

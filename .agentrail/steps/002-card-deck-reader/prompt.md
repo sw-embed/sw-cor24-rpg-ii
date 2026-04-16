@@ -1,0 +1,1 @@
+Implement _read_record subroutine in rpg2.s to read 80-byte records from a memory-backed deck descriptor (base address, record count, current index). Load a small 3-record test deck via --load-binary and verify records are read correctly. Print first 10 bytes of each record to UART. Create reg-rs test.

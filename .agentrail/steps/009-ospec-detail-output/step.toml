@@ -1,0 +1,8 @@
+number = 9
+slug = "ospec-detail-output"
+status = "pending"
+description = "Implement O-spec output processing for detail time in rpg2.s. Write formatted..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:56:10"
+commits = []

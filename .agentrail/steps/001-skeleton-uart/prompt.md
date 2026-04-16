@@ -1,0 +1,1 @@
+Create rpg2.s with reset vector, UART emit subroutine (_emit_char, _emit_string), and a halt loop. Print 'RPG-II' to UART and halt. Verify it assembles and runs with cor24-run. Create a reg-rs test capturing UART output. Reference docs/design.md for register allocation and assembly conventions. Follow sw-cor24-forth patterns.

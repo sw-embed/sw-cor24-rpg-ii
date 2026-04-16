@@ -1,0 +1,8 @@
+number = 1
+slug = "skeleton-uart"
+status = "pending"
+description = "Create rpg2.s with reset vector, UART emit subroutine (_emit_char, _emit_stri..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:55:44"
+commits = []

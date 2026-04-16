@@ -1,0 +1,1 @@
+Implement O-spec output processing for detail time in rpg2.s. Write formatted fields to print line buffer (132 bytes). Flush completed lines to UART via _emit_line. Test: print a formatted detail line from input data. Create reg-rs test.

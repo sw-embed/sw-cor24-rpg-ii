@@ -1,0 +1,1 @@
+Parse I-spec (input field definitions) from source deck. Build field descriptor table in memory. Implement _extract_field to copy bytes from record buffer by column range. Test by extracting fields from a data record and printing values. Create reg-rs test.

@@ -1,0 +1,8 @@
+number = 10
+slug = "totals-lr"
+status = "pending"
+description = "Implement total-time processing in rpg2.s. Accumulate totals in working stora..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:56:10"
+commits = []

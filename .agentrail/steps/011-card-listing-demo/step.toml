@@ -1,0 +1,8 @@
+number = 11
+slug = "card-listing-demo"
+status = "pending"
+description = "Wire up a complete card listing demo (RPG-II hello world). Create example RPG..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:56:26"
+commits = []

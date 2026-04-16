@@ -1,0 +1,1 @@
+Implement C-spec arithmetic operations (ADD, SUB, MULT) in rpg2.s. Parse C-spec operation lines from source deck. Evaluate with factor/result field references to working storage. Test: add two input fields, print result. Create reg-rs test.

@@ -1,0 +1,1 @@
+Implement edit codes in O-spec output formatting: zero suppression (1-4), right-justify blank fill (J), comma and decimal insertion. Test: format 1000 as '1,000', 42 as '    42', 0 as blank. Create reg-rs test.

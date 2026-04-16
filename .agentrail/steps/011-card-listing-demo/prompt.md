@@ -1,0 +1,1 @@
+Wire up a complete card listing demo (RPG-II hello world). Create example RPG-II source with H, F, I, O specs that reads a data deck and prints each record as a line. Create demo.sh integration and reg-rs test. This is the first end-to-end working program.

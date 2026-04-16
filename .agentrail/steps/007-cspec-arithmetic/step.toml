@@ -1,0 +1,8 @@
+number = 7
+slug = "cspec-arithmetic"
+status = "pending"
+description = "Implement C-spec arithmetic operations (ADD, SUB, MULT) in rpg2.s. Parse C-sp..."
+role = "production"
+context_files = []
+created_at = "2026-04-15T18:56:10"
+commits = []

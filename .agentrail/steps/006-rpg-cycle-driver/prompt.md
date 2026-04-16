@@ -1,0 +1,1 @@
+Implement _rpg_cycle main loop in rpg2.s: read record, check EOF, print 'detail' for each record, 'EOF' at end. No calculations or output yet -- just the cycle skeleton with data deck read loop. Create reg-rs test.
