@@ -1,0 +1,1340 @@
+
+
+
+
+I'd like to implement RPG-II for my embedded COR24 ISA emulator.  What language was RPG implemented in?  
+
+Restating your goal
+You want to implement RPG-II targeting your COR24 emulator, and you’re asking what language RPG itself was originally implemented in—presumably to inform bootstrapping, architecture, or translation strategy.
+
+Short Answer
+RPG (including RPG-II) was primarily implemented in assembly language, often tightly coupled to the hardware and operating system of the target machine (especially IBM System/3, System/32, System/34, and System/36).
+
+Why Assembly Was Used
+Historical / Architectural Context
+RPG originated in the late 1950s / early 1960s on IBM mainframes.
+
+Early systems had:
+
+Very limited memory (KB-scale)
+
+No portable runtime environments
+
+No mature high-level implementation languages
+
+Design Implications
+RPG was:
+
+Not just a language, but a report generation system
+
+Deeply tied to:
+
+Card input formats
+
+Fixed-format records
+
+Printer output devices
+
+Cycle-based execution model
+
+Because of this, the compiler/interpreter:
+
+Needed tight control over I/O
+
+Was often closer to a domain-specific runtime system
+
+Was written in assembly for performance and control
+
+Evolution Over Time
+Era	Implementation Language
+RPG I / II (1960s–1970s)	Assembly (mostly IBM internal)
+RPG III (System/38 era)	Still largely low-level, some higher-level tooling
+RPG IV (ILE RPG)	Likely implemented in C/C++ or internal IBM HLLs
+What This Means for Your COR24 Design
+Requirements / Constraints
+You’re building:
+
+An educational / embedded implementation
+
+On a minimal ISA (COR24: 3 registers, 24-bit, no OS)
+
+So your design space looks
+
+
+continue
+
+I’m checking the historical implementation path for RPG and RPG II so I can answer the bootstrapping angle accurately, not just guess from folklore.
+
+Thought for 20s
+For an embedded COR24 RPG-II project, the practical answer is:
+
+Most likely: assembly language / machine code
+The original IBM RPG family dates back to the IBM 1401 era (1959), and RPG II arrived around 1969 for systems like the System/3. On machines of that era, language processors such as compilers were typically written in assembler or very low-level machine code, not in a higher-level language like COBOL or FORTRAN. The 1401 itself was initially programmed in machine language and Autocoder, and RPG was introduced as one of its early high-level business languages. 
+
+For RPG II specifically, IBM documentation describes it as a compiler program for System/3 rather than an interpreter, and contemporary System/3 materials and later RPG practice strongly fit the pattern of these compilers being implemented in the machine’s own low-level systems code. 
+
+What that means architecturally
+If your real question is:
+
+“How should I implement RPG-II on COR24?”
+
+then the historically faithful model is:
+
+front end: tokenizer/parser for RPG-II fixed-column specs
+
+middle: build an internal representation of files, indicators, calculations, output specs, and the RPG cycle
+
+back end: generate COR24 assembly or bytecode for a small runtime
+
+runtime: implement the RPG cycle, record I/O, indicators, totals, overflow, and report formatting
+
+That is much closer to how the original systems behaved than trying to build an AST interpreter first.
+
+Best inference
+I would not claim I found a single IBM source that explicitly says, word for word, “the RPG II compiler was written in assembler.” But given the period, the target hardware, and IBM’s tooling conventions, assembler is the overwhelmingly likely answer. 
+
+For your COR24 emulator
+You have three viable implementation styles:
+
+Compiler to COR24 assembly
+Most historically faithful. Best if you want “real language processor” feel.
+
+Compiler to your p-code VM
+Easier to get working. Good if you want RPG-II syntax and semantics without fighting COR24 register limits immediately.
+
+Direct interpreter
+Fastest prototype, but least like classic RPG-II systems.
+
+For your setup, I would lean toward:
+
+phase 1: parse RPG-II and execute via an interpreter for validation
+
+phase 2: lower to a compact IR
+
+phase 3: generate COR24 .s or p-code
+
+That gives you correctness first, then faithfulness.
+
+If you want, I can sketch a COR24-friendly RPG-II architecture with:
+
+fixed-column parser
+
+indicator model
+
+RPG cycle runtime
+
+file spec/data description handling
+
+codegen choices for .s vs p-code
+
+
+I expect to be able to load an input "card deck" (an array of 80 column records) in memory and write to an in-memory buffer (to create an ouput card deck, if needed).  The RPG-II program can also write to a printer (either a low-volume console printer via UART, or a "high-volume" line-printer in another in-memory buffer.   Also, unlikely for an RPG-II program, the UART could be a console input.  
+
+Thought for a couple of seconds
+That fits RPG-II unusually well.
+
+What you are describing is very close to the original mental model:
+
+input as a deck or sequential records
+
+output as printed reports and optionally punched/cards
+
+mostly batch, with only limited console-style interaction
+
+So for COR24, I would treat RPG-II as a record-processing language with device abstractions, not as a general-purpose interactive language.
+
+Restating the target
+You want an RPG-II environment on your embedded COR24 emulator where:
+
+an input card deck is an in-memory array of 80-column records
+
+an output card deck can be produced in another in-memory array/buffer
+
+a printer can target:
+
+UART text output for low-volume console printing
+
+a line-printer buffer in memory for higher-volume report output
+
+possibly a UART console input exists, though this is atypical for classic RPG-II workloads
+
+That suggests a design with a small virtual device layer plus an RPG-II runtime cycle on top.
+
+High-level design
+I would split it into four layers:
+
+1. RPG-II compiler/front-end
+Parses fixed-column RPG-II source and emits an internal representation or code.
+
+2. RPG-II runtime
+Implements:
+
+program cycle
+
+indicators
+
+record matching / control breaks
+
+output specs
+
+totals / overflow handling
+
+file status / EOF
+
+3. Device abstraction layer
+Provides record-oriented and line-oriented device operations.
+
+4. COR24 emulator integration
+Maps device buffers and UART access into your emulator memory map and host tooling.
+
+This separation matters because the same RPG-II program should not care whether “printer” means UART or memory-backed line printer.
+
+Recommended execution model
+Given your environment, I would use this progression:
+
+Option A: direct interpreter first
+Best for bringing up semantics.
+
+parse RPG-II source
+
+build internal structures for F-specs, I-specs, C-specs, O-specs
+
+interpret one cycle at a time
+
+Pros
+fastest to validate semantics
+
+easiest to debug
+
+easiest to compare with known RPG-II behavior
+
+Cons
+less historically faithful
+
+slower
+
+harder to later optimize unless you introduce an IR
+
+Option B: compile to an RPG VM / p-code
+Best middle ground.
+
+parse RPG-II
+
+lower to compact opcodes
+
+run on a small runtime VM
+
+Pros
+easier than native COR24 codegen
+
+more structured than direct interpretation
+
+reusable for visualization/debugging
+
+Cons
+adds another VM
+
+slightly less “real iron” feel
+
+Option C: compile to COR24 assembly
+Best for authenticity.
+
+Pros
+fits your toolchain goals
+
+nice educational story
+
+can integrate naturally with emulator memory map
+
+Cons
+hardest first step
+
+register pressure on COR24 may be annoying
+
+report formatting logic may be bulky in generated code
+
+For your project, I would do:
+
+interpreter
+
+IR
+
+COR24 codegen
+
+That keeps the semantics stable before fighting backend constraints.
+
+Device model
+Your devices are naturally divided into two classes:
+
+Record-oriented devices
+These operate on fixed-size records.
+
+card reader input: 80-byte records
+
+card punch output: 80-byte records
+
+optional console input: could also be wrapped as record input if needed
+
+Line-oriented devices
+These operate on printable lines.
+
+line printer buffer
+
+UART console printer
+
+This suggests defining a minimal runtime API around:
+
+read_record(device_id, dst, len) -> status
+
+write_record(device_id, src, len) -> status
+
+write_line(device_id, src, len) -> status
+
+read_char(device_id) -> status/byte only if console input is needed
+
+write_char(device_id, byte) for UART low-level support
+
+Concrete virtual devices
+I would define these logical devices:
+
+Device 0: Card reader
+source: in-memory array of 80-byte records
+
+sequential read only
+
+signals EOF when out of records
+
+Device 1: Card punch
+destination: in-memory array of 80-byte records
+
+append-only writes
+
+fixed 80-byte records only
+
+Device 2: Printer
+Logical printer target chosen by configuration:
+
+UART printer
+
+line-printer buffer
+
+both, if you want tee behavior
+
+Device 3: Console input
+UART-based
+
+optional
+
+probably outside normal RPG cycle, but could support operator prompts or debugging extensions
+
+Memory layout idea
+A simple emulator-facing memory layout might be:
+
+Input card deck
+base address
+
+record count
+
+current index
+
+80 bytes per record
+
+Output card deck
+base address
+
+max records
+
+current record count
+
+80 bytes per record
+
+Line printer buffer
+base address
+
+max lines
+
+current line count
+
+fixed line width, maybe 132 bytes
+
+UART
+Already memory-mapped in your system, so the printer runtime can call putch.
+
+You could also keep the host-side implementation outside guest memory and expose only service calls, but if the goal is educational visibility, explicit guest-visible buffers are nicer.
+
+Suggested data structures
+Card deck descriptor
+Something like:
+
+base pointer
+
+record length = 80
+
+record count
+
+current index
+
+Printer descriptor
+mode: UART / memory / both
+
+line width: 80 or 132
+
+page length
+
+current column
+
+current line
+
+current page
+
+RPG file descriptor
+Per F-spec file:
+
+file type: input / output / combined
+
+device class: card / printer / console
+
+record length
+
+eof flag
+
+current record pointer
+
+buffer pointer
+
+key/control info if later extended
+
+This lets RPG runtime talk to logical files, and logical files map to device descriptors.
+
+RPG-II semantics that matter most here
+For your environment, the key behaviors to model are:
+
+1. Primary input cycle
+Classic RPG programs often:
+
+read next record
+
+move fields into working storage
+
+evaluate calculations
+
+emit report lines/cards
+
+continue until EOF
+
+This maps perfectly onto your input deck.
+
+2. Record identification
+If you support different input card types, each 80-column record can carry:
+
+type code in fixed columns
+
+different field extraction layouts
+
+That is very RPG-like.
+
+3. Output specs
+Output lines/cards are produced from:
+
+constants
+
+fields
+
+edited numeric values
+
+indicators controlling conditional printing
+
+This maps well to:
+
+output card deck
+
+printer line buffer
+
+UART printer
+
+4. Overflow / page control
+If using a line-printer buffer:
+
+page length matters
+
+skip-before / skip-after behavior matters
+
+headings / totals may need page handling
+
+UART printer can either:
+
+ignore page model
+
+or honor it with form-feed / visible separators
+
+Best buffer formats
+Card input/output
+Use exact 80-byte fixed records.
+
+Pad short host strings with spaces.
+Avoid null-terminated strings in the deck itself.
+
+That keeps everything faithful and simple.
+
+Printer lines
+Use fixed-width lines, preferably:
+
+132 columns for line printer realism
+
+maybe 80 as a secondary compact mode
+
+Again, store as space-padded fixed lines.
+
+This is much easier than variable-length strings for RPG report logic.
+
+UART as printer vs console
+These are different modes.
+
+UART printer mode
+Treat printer output as write-only line-oriented text stream.
+
+convert line buffer to characters
+
+strip trailing spaces if desired for terminal readability
+
+emit CR/LF at end of line
+
+UART console input mode
+This is much less RPG-II-like, but still possible.
+
+Two possible approaches:
+
+Approach 1: extension outside classic RPG-II
+Add runtime calls like:
+
+ACCEPT
+
+DISPLAY
+or equivalent nonstandard ops
+
+Approach 2: map console input to a pseudo-record file
+Read a line from UART into an 80-column record buffer.
+
+This is more consistent with RPG’s record-oriented worldview.
+
+I would prefer pseudo-record console input if you want the feature without distorting the model too much.
+
+Nonfunctional requirements
+For your emulator and educational goals, I would optimize for:
+
+Determinism
+Given same source and same input deck, identical output decks/printer output.
+
+Inspectability
+You should be able to view:
+
+current input record
+
+parsed fields
+
+indicators
+
+output line buffer
+
+page/line counters
+
+current deck indices
+
+Simplicity
+Avoid making UART interaction central to RPG-II.
+Keep batch model primary.
+
+Extensibility
+Later you may want:
+
+disk-like sequential files
+
+indexed files
+
+multiple input decks
+
+job control wrappers
+
+So define the device layer cleanly now.
+
+Low-level runtime approach
+I would model the runtime around a small set of operations:
+
+File lifecycle
+open input
+
+open output
+
+rewind if supported
+
+close
+
+Record operations
+read next record
+
+write output record
+
+Printer operations
+compose line in print buffer
+
+emit line
+
+skip lines
+
+new page
+
+Program cycle state
+EOF
+
+first-cycle
+
+last-record / LR-like end indicator
+
+overflow indicator
+
+control-break indicators
+
+Even if you do not implement full RPG-II at first, these are the right hooks.
+
+Suggested phased implementation
+Phase 1: minimal batch subset
+Support:
+
+one input card file
+
+one printer file
+
+one punch output file
+
+fixed 80-column records
+
+simple field extraction
+
+simple calculations
+
+simple output specs
+
+EOF termination
+
+This is enough for:
+
+listing cards
+
+reformatting cards
+
+producing simple reports
+
+totals by input stream
+
+Phase 2: printer realism
+Add:
+
+page length
+
+skip before/after
+
+headings
+
+overflow indicators
+
+line-printer buffer format
+
+Phase 3: multiple record types
+Add:
+
+record-identification logic
+
+multiple input layouts
+
+indicators based on record type
+
+Phase 4: console extensions
+Add:
+
+UART pseudo-record input
+
+optional operator messages
+
+maybe nonstandard debug/runtime controls
+
+Internal representation recommendation
+Even if you start with interpretation, define a compact IR.
+
+For example, operations like:
+
+load field from input columns
+
+compare
+
+set indicator
+
+move field
+
+add/subtract
+
+format edited value
+
+emit literal
+
+emit field
+
+write line
+
+write card
+
+branch on indicator
+
+eof test
+
+This will make later COR24 codegen much easier.
+
+Practical host/emulator integration
+There are two ways to implement the virtual devices.
+
+Approach 1: host-assisted devices
+The emulator provides “syscalls” or traps for:
+
+read card
+
+write card
+
+print line
+
+Pros
+easy
+
+compact guest code
+
+Cons
+less self-contained
+
+less visible from inside guest memory
+
+Approach 2: memory-backed devices with guest runtime
+All decks and line buffers live in emulated memory, and runtime writes directly there.
+
+Pros
+better educational visibility
+
+easier to inspect state in debugger/UI
+
+more authentic for an embedded target
+
+Cons
+slightly more runtime code
+
+For your work, I would favor memory-backed devices, with UART still handled through MMIO.
+
+My recommended concrete model
+Input card reader
+memory-backed
+
+exact 80-byte records
+
+sequential only
+
+Output card punch
+memory-backed
+
+exact 80-byte records
+
+append only
+
+Printer
+primary target: memory-backed line printer buffer, 132 cols
+
+optional mirrored output to UART for immediate visibility
+
+Console input
+optional pseudo-file
+
+UART line input marshaled into an 80-byte record
+
+This gives you both:
+
+historical batch flavor
+
+interactive convenience when useful
+
+Risks and tradeoffs
+Risk: making it too interactive
+If you lean too much into UART console behavior, you stop designing RPG-II and start inventing a general business shell language.
+
+Mitigation
+Keep console input as optional extension, not core path.
+
+Risk: mixing printer and card semantics
+Cards are record devices; printers are line devices.
+If you unify them too aggressively, formatting gets messy.
+
+Mitigation
+Separate write_record and write_line.
+
+Risk: overcommitting to native codegen too early
+RPG-II semantics have enough quirks that direct codegen can slow you down.
+
+Mitigation
+Interpreter + IR first.
+
+What I would build first
+I would implement this smallest useful system:
+
+Runtime devices
+CARDIN
+
+CARDOUT
+
+PRINTER
+
+Buffers
+CARDIN: N x 80
+
+CARDOUT: M x 80
+
+PRINTER: P x 132
+
+Semantics
+one input file
+
+one working record buffer
+
+field slicing by column
+
+output formatting to print line
+
+output formatting to punched card
+
+EOF ends run
+
+That is enough to demo classic workloads such as:
+
+card reformatter
+
+simple report generator
+
+sort-of “mailing label” report
+
+totals report by category code in fixed columns
+
+My recommendation on compiler target
+For your stated device model, the cleanest backend target is:
+
+first target: RPG runtime IR or p-code
+because:
+
+device calls are easy
+
+buffers are easy
+
+output formatting is easier to debug
+
+fixed-column parsing can be validated independently
+
+later target: COR24 assembly
+once:
+
+semantics are correct
+
+device model is stable
+
+runtime ABI is fixed
+
+Bottom line
+Your proposed I/O model is a very good fit for RPG-II:
+
+input card deck in memory → excellent
+
+output card deck in memory → excellent
+
+printer to UART or line-printer buffer → excellent
+
+optional UART console input → possible, but keep it secondary
+
+The right architecture is:
+
+RPG-II compiler or interpreter
+
+runtime cycle
+
+device abstraction
+
+memory-backed card/printer buffers + UART MMIO
+
+And the key design rule is:
+
+treat cards as fixed 80-byte records, printers as fixed-width lines, and console input as an optional pseudo-record device.
+
+I can draft a COR24 RPG-II runtime design next, including:
+
+memory map
+
+device descriptor structs
+
+runtime API
+
+minimal IR opcodes
+
+a tiny sample RPG-style program flow against an 80-column input deck.
+
+
+To level set, the RPG-II source gets fed to a compiler producing a program that reads input(s) and produces output(s).  What are classic examples that might make sense in an eventual web UI demo?  The demo would have a program and input data and produce output data.  
+
+Restating the goal
+You want classic RPG-II-style workloads that:
+
+take record-oriented input (80-column card deck)
+
+run through the RPG cycle
+
+produce structured output:
+
+printed reports (line printer / UART)
+
+optionally punched/output cards (80-column)
+
+are visualizable in a web UI
+
+input deck → processing → output buffer
+
+ideally step-through friendly
+
+So we’re looking for canonical “batch business data” programs that:
+
+highlight RPG idioms (control breaks, indicators, formatting)
+
+map cleanly to your memory buffers
+
+are easy to demonstrate visually
+
+High-level design criteria for demos
+Each demo should:
+
+1. Fit the RPG mental model
+sequential file processing
+
+fixed-column fields
+
+minimal user interaction
+
+2. Showcase a distinct concept
+control breaks
+
+totals
+
+formatting
+
+conditional output
+
+record types
+
+3. Be visually explorable
+show current input record
+
+show extracted fields
+
+show indicators changing
+
+show output buffer growing
+
+Recommended demo set (progressive complexity)
+I’ll group these into tiers so you can build your UI and runtime incrementally.
+
+🟢 Tier 1: Minimal / Foundational
+1. Card listing program (“Hello World” of RPG)
+Input
+Deck of 80-column records (free text or simple structured fields)
+
+Output
+prints each record as a line
+
+optionally punches identical output deck
+
+Why it’s good
+simplest possible RPG program
+
+validates:
+
+record read
+
+output write
+
+buffer flow
+
+UI value
+left: input cards
+
+right: printed lines
+
+step button: “next record”
+
+2. Field extraction and reformatting
+Input
+Columns:
+1–5   ID
+6–25  NAME
+26–30 AGE
+Output
+Formatted:
+
+ID: 00001  NAME: ALICE        AGE: 023
+Why it’s good
+demonstrates:
+
+fixed-column slicing
+
+field movement
+
+formatting
+
+UI value
+highlight column ranges
+
+show extracted fields live
+
+3. Filter records (conditional output)
+Input
+Records with a “status” column
+
+Output
+Only print records where:
+
+STATUS = 'A'
+Why it’s good
+introduces:
+
+comparisons
+
+indicators
+
+conditional output
+
+UI value
+show indicator flipping on/off
+
+show skipped vs printed records
+
+🟡 Tier 2: Core RPG behavior
+4. Totals report (single-level)
+Input
+ACCOUNT   AMOUNT
+A001      100
+A002      250
+A003      75
+Output
+ACCOUNT REPORT
+--------------
+A001      100
+A002      250
+A003       75
+--------------
+TOTAL     425
+Why it’s good
+introduces:
+
+accumulation
+
+final total
+
+end-of-file logic
+
+UI value
+show running total variable
+
+5. Control break report (classic RPG demo)
+Input (sorted)
+DEPT  EMP   SALARY
+10    A     100
+10    B     150
+20    C     200
+Output
+DEPT 10
+ A 100
+ B 150
+ TOTAL 250
+
+DEPT 20
+ C 200
+ TOTAL 200
+Why it’s important
+This is the canonical RPG-II demo.
+
+demonstrates:
+
+control breaks
+
+group totals
+
+indicators (e.g., “new department”)
+
+UI value
+show:
+
+previous key vs current key
+
+“break detected”
+
+subtotal reset
+
+6. Multi-level control breaks
+Input
+REGION DEPT EMP SALARY
+Output
+totals by:
+
+department
+
+region
+
+grand total
+
+Why it’s good
+shows:
+
+nested breaks
+
+multiple accumulators
+
+UI value
+hierarchical visualization
+
+tree-like aggregation display
+
+🔵 Tier 3: Classic business-style programs
+7. Invoice generator
+Input
+Line items:
+
+INV#  ITEM   QTY PRICE
+Output
+Formatted invoice:
+
+Invoice 1001
+Item   Qty  Price  Total
+A      2    10     20
+B      1    15     15
+-----------------------
+Total               35
+Why it’s good
+realistic
+
+combines:
+
+formatting
+
+arithmetic
+
+totals
+
+UI value
+show line accumulation
+
+show formatted output buffer
+
+8. Payroll summary
+Input
+EMP  HOURS RATE
+Output
+EMP   GROSS PAY
+A     800
+B     600
+TOTAL 1400
+Why it’s good
+arithmetic-heavy
+
+realistic business example
+
+9. Card-to-card transformation (punch deck output)
+Input
+Raw records
+
+Output
+New 80-column cards:
+
+restructured
+
+padded
+
+normalized
+
+Why it’s good
+highlights:
+
+non-printer output
+
+exact 80-column output
+
+UI value
+side-by-side card decks
+
+🟣 Tier 4: More advanced / interesting
+10. Sort + report (if you add sort pre-pass)
+Input
+Unsorted records
+
+Process
+sort by key
+
+then run control-break report
+
+Why it’s good
+matches real batch pipelines
+
+11. Record-type processing
+Input
+Different card types:
+
+H = header
+D = detail
+T = trailer
+Output
+Different logic per type
+
+Why it’s good
+shows RPG record identification
+
+branching logic
+
+12. Exception report
+Input
+Transactions
+
+Output
+Only print:
+
+negative balances
+
+out-of-range values
+
+Why it’s good
+common real-world pattern
+
+demonstrates conditional filtering + reporting
+
+Web UI design ideas
+For your emulator + visualization, each demo can share a common UI layout:
+
+Layout
+Left panel
+input card deck (scrollable)
+
+current record highlighted
+
+Middle panel
+parsed fields
+
+indicators
+
+working storage
+
+current totals
+
+Right panel
+printer output buffer
+
+card output buffer (if used)
+
+Step controls
+Step (one record)
+
+Run (to EOF)
+
+Break on:
+
+control break
+
+indicator change
+
+output event
+
+Visual highlights
+highlight column ranges in the input card
+
+animate:
+
+field extraction
+
+accumulator updates
+
+output writes
+
+Recommended first demo sequence
+If you want a clean progression:
+
+Card listing
+
+Field extraction
+
+Filter
+
+Totals
+
+Control break report ← milestone demo
+
+Invoice
+
+That sequence builds both:
+
+runtime capability
+
+UI richness
+
+Why these are historically accurate
+These demos reflect real RPG-II workloads:
+
+batch processing
+
+report generation
+
+accounting-style aggregation
+
+minimal interaction
+
+heavy formatting
+
+They are exactly the kinds of jobs run on:
+
+punched cards
+
+line printers
+
+early IBM midrange systems
+
+My recommendation
+For your first compelling web demo, build:
+
+👉 “Department Salary Control Break Report”
+Because it:
+
+is iconic RPG
+
+exercises:
+
+input parsing
+
+indicators
+
+control breaks
+
+totals
+
+formatted output
+
+produces visually interesting output
+
+is easy to explain
+
+If you want next, I can:
+
+design a sample 80-column input deck
+
+show a minimal RPG-II-like source program
+
+define the IR ops needed
+
+and map it all the way to COR24 runtime calls
+
+so you can go end-to-end from card deck → compiled program → output buffers.
+
+
+
+
