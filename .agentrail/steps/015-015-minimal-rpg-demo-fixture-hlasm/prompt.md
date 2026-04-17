@@ -1,0 +1,1 @@
+Extend rpg2.hlasm and the current source fixture toward a minimal complete RPG-II demo by defining one tiny fixed-shape source program path end to end: keep current visible output stable, but make the internal flow clearly correspond to input field extraction, one computed field, and one output record definition that could plausibly be presented as a minimal RPG program demo.

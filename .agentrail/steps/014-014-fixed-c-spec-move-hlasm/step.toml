@@ -1,8 +1,9 @@
 number = 14
 slug = "014-fixed-c-spec-move-hlasm"
-status = "in-progress"
+status = "completed"
 description = "Extend rpg2.hlasm with one tiny C-spec-like calculation stage over the extrac..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-16T23:28:47"
-commits = []
+completed_at = "2026-04-16T23:30:15"
+commits = ["4b83f8e3967e1dea261b6a08589b2568b4a6f160"]

@@ -1,0 +1,1 @@
+Added a tiny C-spec-like MOVE stage in rpg2.hlasm so detail-time now copies the extracted I-spec field into a separate computed work field before output-line formatting. The visible CLI output is unchanged and ./build.sh test still passes.

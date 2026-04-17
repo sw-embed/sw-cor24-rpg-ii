@@ -142,6 +142,10 @@ _init_source_parser:
 	sw	r0,0(r1)
 	la	r1,_i_spec_count
 	sw	r0,0(r1)
+	la	r1,_c_spec_count
+	sw	r0,0(r1)
+	la	r1,_o_spec_count
+	sw	r0,0(r1)
 	la	r1,_other_spec_count
 	sw	r0,0(r1)
 	la	r1,_field_table_count
@@ -156,6 +160,14 @@ _init_source_parser:
 	sw	r0,0(r1)
 	la	r1,_calc_table_count
 	sw	r0,0(r1)
+	la	r1,_output_desc0_src_ptr
+	sw	r0,0(r1)
+	la	r1,_output_desc0_kind
+	sw	r0,0(r1)
+	la	r1,_output_desc0_len
+	sw	r0,0(r1)
+	la	r1,_output_table_count
+	sw	r0,0(r1)
 	la	r1,_source_parse_ok
 	sw	r0,0(r1)
 	la	r1,_src_desc
@@ -164,7 +176,7 @@ _init_source_parser:
 	jal	r1,(r0)
 	la	r1,_source_spec_count
 	lw	r0,0(r1)
-	lc	r1,3
+	lc	r1,5
 	ceq	r0,r1
 	brf	_src_parse_fail
 	la	r1,_h_spec_count
@@ -174,7 +186,7 @@ _init_source_parser:
 	brf	_src_parse_fail
 	la	r1,_f_spec_count
 	lw	r0,0(r1)
-	lc	r1,2
+	lc	r1,1
 	ceq	r0,r1
 	brf	_src_parse_fail
 	la	r1,_i_spec_count
@@ -182,7 +194,27 @@ _init_source_parser:
 	lc	r1,1
 	ceq	r0,r1
 	brf	_src_parse_fail
+	la	r1,_c_spec_count
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_o_spec_count
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_src_parse_fail
 	la	r1,_field_table_count
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_calc_table_count
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_output_table_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
@@ -296,6 +328,12 @@ _classify_source_spec:
 	lc	r1,73
 	ceq	r0,r1
 	brt	_spec_is_i
+	lc	r1,67
+	ceq	r0,r1
+	brt	_spec_is_c
+	lc	r1,79
+	ceq	r0,r1
+	brt	_spec_is_o
 	la	r0,_parse_other_spec
 	jal	r1,(r0)
 	bra	_spec_done
@@ -309,6 +347,14 @@ _spec_is_f:
 	bra	_spec_done
 _spec_is_i:
 	la	r0,_parse_i_spec
+	jal	r1,(r0)
+	bra	_spec_done
+_spec_is_c:
+	la	r0,_parse_c_spec
+	jal	r1,(r0)
+	bra	_spec_done
+_spec_is_o:
+	la	r0,_parse_o_spec
 	jal	r1,(r0)
 _spec_done:
 	RET21
@@ -362,9 +408,6 @@ _parse_i_spec:
 	la	r1,_field_desc0_len
 	la	r0,10
 	sw	r0,0(r1)
-	la	r1,_calc_table_count
-	la	r0,1
-	sw	r0,0(r1)
 	bra	_i_spec_done
 _i_spec_skip_desc:
 	la	r1,_field_table_count
@@ -372,6 +415,51 @@ _i_spec_skip_desc:
 	add	r0,1
 	sw	r0,0(r1)
 _i_spec_done:
+	RET21
+_parse_c_spec:
+	FRAME21
+	la	r1,_source_spec_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_c_spec_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_calc_table_count
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_c_spec_done
+	add	r0,1
+	sw	r0,0(r1)
+_c_spec_done:
+	RET21
+_parse_o_spec:
+	FRAME21
+	la	r1,_source_spec_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_o_spec_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_output_table_count
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_o_spec_done
+	add	r0,1
+	sw	r0,0(r1)
+	lw	r0,9(fp)
+	la	r1,_output_desc0_src_ptr
+	sw	r0,0(r1)
+	la	r1,_output_desc0_kind
+	lc	r0,79
+	sw	r0,0(r1)
+	la	r1,_output_desc0_len
+	la	r0,10
+	sw	r0,0(r1)
+_o_spec_done:
 	RET21
 _parse_other_spec:
 	FRAME1
@@ -535,6 +623,10 @@ _format_output_line:
 	la	r1,_output_line_ready
 	la	r0,0
 	sw	r0,0(r1)
+	la	r1,_output_table_count
+	lw	r0,0(r1)
+	ceq	r0,z
+	brt	_format_output_line_done
 	la	r1,_calc_field_ready
 	lw	r0,0(r1)
 	ceq	r0,z
@@ -697,7 +789,7 @@ _deck_desc:
 _src_desc:
 	.word	_src_deck
 	.word	80
-	.word	3
+	.word	5
 	.word	0
 _source_spec_count:
 	.word	0
@@ -706,6 +798,10 @@ _h_spec_count:
 _f_spec_count:
 	.word	0
 _i_spec_count:
+	.word	0
+_c_spec_count:
+	.word	0
+_o_spec_count:
 	.word	0
 _other_spec_count:
 	.word	0
@@ -720,6 +816,12 @@ _field_desc0_kind:
 _field_desc0_offset:
 	.word	0
 _field_desc0_len:
+	.word	0
+_output_desc0_src_ptr:
+	.word	0
+_output_desc0_kind:
+	.word	0
+_output_desc0_len:
 	.word	0
 _indicator_runtime_ok:
 	.word	0
@@ -775,7 +877,16 @@ _src_deck:
 	SP10
 	SP10
 	SP8
-	.byte 48,48,48,48,51,70,79,85,84,70,73,76
+	.byte 48,48,48,48,53,67,77,79,86,69,48,49
+	SP10
+	SP10
+	SP10
+	SP10
+	SP10
+	SP10
+	SP10
+	SP8
+	.byte 48,48,48,48,54,79,68,69,84,65,73,76
 	SP10
 	SP10
 	SP10
