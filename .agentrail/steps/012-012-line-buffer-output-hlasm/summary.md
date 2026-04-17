@@ -1,0 +1,1 @@
+Added an explicit output-line buffer stage in rpg2.hlasm so detail-time now formats preview data into a line buffer before UART emission, while keeping the visible output unchanged. Verified with ./build.sh test.

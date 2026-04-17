@@ -1,0 +1,1 @@
+Extend rpg2.hlasm so the current I-spec placeholder drives one real field extraction from the detail record into a named work area. Keep visible output stable, but make the detail cycle populate that extracted field before output-line formatting so the path moves closer to a minimal runnable RPG program.
