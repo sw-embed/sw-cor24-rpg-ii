@@ -1,0 +1,1 @@
+Extended rpg2.hlasm so the current I-spec placeholder now defines one real extracted field descriptor and detail-time copies that field from each record into a named work area before output-line formatting. Visible CLI output is unchanged and ./build.sh test still passes.

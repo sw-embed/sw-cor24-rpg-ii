@@ -1,0 +1,1 @@
+Extend rpg2.hlasm with one tiny C-spec-like calculation stage over the extracted I-spec field before output formatting. Keep visible output stable, but introduce an explicit computed work field or MOVE-style stage so the path gets closer to executing a minimal complete RPG-II program.

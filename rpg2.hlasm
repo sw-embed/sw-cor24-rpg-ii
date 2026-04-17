@@ -154,6 +154,8 @@ _init_source_parser:
 	sw	r0,0(r1)
 	la	r1,_field_desc0_len
 	sw	r0,0(r1)
+	la	r1,_calc_table_count
+	sw	r0,0(r1)
 	la	r1,_source_parse_ok
 	sw	r0,0(r1)
 	la	r1,_src_desc
@@ -201,6 +203,8 @@ _init_data_runtime:
 	la	r0,0
 	sw	r0,0(r1)
 	la	r1,_detail_field_ready
+	sw	r0,0(r1)
+	la	r1,_calc_field_ready
 	sw	r0,0(r1)
 	la	r1,_detail_record_count
 	sw	r0,0(r1)
@@ -358,6 +362,9 @@ _parse_i_spec:
 	la	r1,_field_desc0_len
 	la	r0,10
 	sw	r0,0(r1)
+	la	r1,_calc_table_count
+	la	r0,1
+	sw	r0,0(r1)
 	bra	_i_spec_done
 _i_spec_skip_desc:
 	la	r1,_field_table_count
@@ -413,6 +420,8 @@ _run_detail_calcs:
 	la	r0,_extract_field0
 	jal	r1,(r0)
 	add	sp,3
+	la	r0,_run_cspec_move0
+	jal	r1,(r0)
 	la	r2,_detail_field0_buf
 	la	r1,_detail_preview_buf
 	lbu	r0,0(r2)
@@ -470,6 +479,42 @@ _extract_field0:
 	la	r0,1
 	sw	r0,0(r1)
 	RET21
+_run_cspec_move0:
+	FRAME1
+	la	r1,_calc_field_ready
+	la	r0,0
+	sw	r0,0(r1)
+	la	r1,_detail_field_ready
+	lw	r0,0(r1)
+	ceq	r0,z
+	brt	_run_cspec_move0_done
+	la	r2,_detail_field0_buf
+	la	r1,_calc_field0_buf
+	lbu	r0,0(r2)
+	sb	r0,0(r1)
+	lbu	r0,1(r2)
+	sb	r0,1(r1)
+	lbu	r0,2(r2)
+	sb	r0,2(r1)
+	lbu	r0,3(r2)
+	sb	r0,3(r1)
+	lbu	r0,4(r2)
+	sb	r0,4(r1)
+	lbu	r0,5(r2)
+	sb	r0,5(r1)
+	lbu	r0,6(r2)
+	sb	r0,6(r1)
+	lbu	r0,7(r2)
+	sb	r0,7(r1)
+	lbu	r0,8(r2)
+	sb	r0,8(r1)
+	lbu	r0,9(r2)
+	sb	r0,9(r1)
+	la	r1,_calc_field_ready
+	la	r0,1
+	sw	r0,0(r1)
+_run_cspec_move0_done:
+	RET1
 _emit_detail_output:
 	FRAME1
 	la	r0,_format_output_line
@@ -490,11 +535,11 @@ _format_output_line:
 	la	r1,_output_line_ready
 	la	r0,0
 	sw	r0,0(r1)
-	la	r1,_detail_field_ready
+	la	r1,_calc_field_ready
 	lw	r0,0(r1)
 	ceq	r0,z
 	brt	_format_output_line_done
-	la	r2,_detail_field0_buf
+	la	r2,_calc_field0_buf
 	la	r1,_output_line_buf
 	lbu	r0,0(r2)
 	sb	r0,0(r1)
@@ -682,6 +727,10 @@ _calc_table_count:
 	.word	0
 _output_table_count:
 	.word	0
+_calc_field_ready:
+	.word	0
+_calc_field0_buf:
+	.byte 0,0,0,0,0,0,0,0,0,0
 _detail_field_ready:
 	.word	0
 _detail_field0_buf:
