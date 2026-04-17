@@ -1,0 +1,1 @@
+Decoded the first O-spec detail-line definition from the external tiny source deck into runtime output metadata instead of relying on fixed output descriptor values. The runtime now records output kind and length from the source line, formatting honors that decoded metadata, and verification passed with ./build.sh test and ./demo.sh mini.

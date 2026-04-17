@@ -1,0 +1,1 @@
+Implement the next smallest capability toward a genuinely runnable tiny user-supplied program: make the CLI demo surface report the actual runtime-produced output for the tiny external source program instead of an explicitly stated expected-output block, while keeping the program shape narrow and current visible output stable.

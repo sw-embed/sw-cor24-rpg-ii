@@ -1,0 +1,1 @@
+BLOCKED: Blocked by current sw-cor24-hlasm output: the generated build/rpg2.generated.s is mostly labels and blank lines, so the guest runtime does not produce a truthful live output surface for demo.sh mini. User directed changes to stay within this repo only.
