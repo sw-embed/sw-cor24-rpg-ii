@@ -82,25 +82,48 @@ ENDIFASM
 _main:
 	MAINPRO
 	la	r2,-65280
-	la	r0,_init_runtime
+	la	r0,_rpg_cycle
 	jal	r1,(r0)
-_detail_loop:
-	la	r0,_next_detail_record
-	jal	r1,(r0)
-	ceq	r0,z
-	brt	_all_done
-	push	r0
-	la	r0,_render_detail_preview
-	jal	r1,(r0)
-	add	sp,3
-	bra	_detail_loop
-_all_done:
 	MAINRET
 _halt:
 	bra	_halt
 ; --- Runtime skeleton entry points ---
 ; These keep the high-level RPG-II shape visible even while the executable
 ; subset is still only the deck-reader demo.
+_rpg_cycle:
+	FRAME1
+	la	r0,_rpg_cycle_startup
+	jal	r1,(r0)
+	ceq	r0,z
+	brt	_rpg_cycle_total_phase
+_rpg_cycle_detail_loop:
+	la	r0,_rpg_cycle_detail
+	jal	r1,(r0)
+	ceq	r0,z
+	brt	_rpg_cycle_total_phase
+	bra	_rpg_cycle_detail_loop
+_rpg_cycle_total_phase:
+	la	r0,_rpg_cycle_total
+	jal	r1,(r0)
+	RET1
+_rpg_cycle_startup:
+	FRAME1
+	la	r0,_init_runtime
+	jal	r1,(r0)
+	la	r1,_source_parse_ok
+	lw	r0,0(r1)
+	ceq	r0,z
+	brt	_rpg_cycle_startup_fail
+	la	r1,_indicator_runtime_ok
+	lw	r0,0(r1)
+	ceq	r0,z
+	brt	_rpg_cycle_startup_fail
+	la	r0,1
+	bra	_rpg_cycle_startup_done
+_rpg_cycle_startup_fail:
+	la	r0,0
+_rpg_cycle_startup_done:
+	RET1
 _init_runtime:
 	FRAME1
 	la	r0,_init_source_parser
@@ -211,26 +234,11 @@ _ind_runtime_done:
 	RET1
 _next_detail_record:
 	FRAME1
-	la	r1,_source_parse_ok
-	lw	r0,0(r1)
-	ceq	r0,z
-	brf	_next_detail_fetch
-	la	r0,0
-	bra	_next_detail_ret
-_next_detail_fetch:
-	la	r1,_indicator_runtime_ok
-	lw	r0,0(r1)
-	ceq	r0,z
-	brf	_next_detail_fetch2
-	la	r0,0
-	bra	_next_detail_ret
-_next_detail_fetch2:
 	la	r0,_deck_desc
 	push	r0
 	la	r0,_read_record
 	jal	r1,(r0)
 	add	sp,3
-_next_detail_ret:
 	RET1
 _render_detail_preview:
 	FRAME1
@@ -351,13 +359,42 @@ _parse_other_spec:
 	add	r0,1
 	sw	r0,0(r1)
 	RET1
+_rpg_cycle_detail:
+	FRAME1
+	la	r0,_next_detail_record
+	jal	r1,(r0)
+	ceq	r0,z
+	brt	_rpg_cycle_detail_eof
+	sw	r0,-3(fp)
+	la	r0,_run_detail_calcs
+	jal	r1,(r0)
+	lw	r0,-3(fp)
+	push	r0
+	la	r0,_emit_detail_output
+	jal	r1,(r0)
+	add	sp,3
+	la	r0,1
+	bra	_rpg_cycle_detail_done
+_rpg_cycle_detail_eof:
+	la	r0,0
+_rpg_cycle_detail_done:
+	RET1
 _run_detail_calcs:
 	FRAME1
 	; Placeholder for future C-spec evaluation.
 	RET1
 _emit_detail_output:
 	FRAME1
-	; Placeholder for future O-spec formatting.
+	lw	r0,6(fp)
+	push	r0
+	la	r0,_render_detail_preview
+	jal	r1,(r0)
+	add	sp,3
+	RET1
+_rpg_cycle_total:
+	FRAME1
+	la	r0,_run_total_phase
+	jal	r1,(r0)
 	RET1
 _run_total_phase:
 	FRAME1

@@ -1,8 +1,9 @@
 number = 9
 slug = "indicator-table-hlasm"
-status = "pending"
+status = "completed"
 description = "Add the first indicator-table slice in rpg2.hlasm: define indicator storage, ..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-16T23:17:36"
-commits = []
+completed_at = "2026-04-16T23:19:13"
+commits = ["5f9430acdcc72e7203182c3f85269035915a243b"]

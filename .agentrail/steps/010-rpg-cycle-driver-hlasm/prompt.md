@@ -1,0 +1,1 @@
+Add the first explicit RPG cycle driver slice in rpg2.hlasm by separating source-parse time from detail-time more clearly. Keep the current detail-preview behavior, but introduce named entry points and control flow that more closely match the planned RPG cycle shape for future calculation and output steps.

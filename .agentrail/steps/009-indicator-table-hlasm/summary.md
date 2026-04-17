@@ -1,0 +1,1 @@
+Added the first indicator-table slice in rpg2.hlasm: indicator storage, table initialization, and minimal set/test/clear entry points, plus a runtime self-check that keeps the current detail-preview demo gated on parser and indicator readiness.
