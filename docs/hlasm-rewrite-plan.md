@@ -251,6 +251,17 @@ either:
 2. an explicit decision is made to continue with temporary local workarounds
    and accept the resulting source-style constraints.
 
+### Later Recheck
+
+A later upstream recheck after newer `sw-cor24-hlasm` commits such as
+include-ready switching and patchable main-source configuration still produced
+the same blocker results:
+
+- blank-line probe still stops before the first post-blank source line;
+- parameterized macro probe still emits literal `\a` / `\b` text.
+
+So the current status remains "wait" rather than "resume deeper rewrite here."
+
 ## Build and Tooling Changes
 
 Replace the current direct build model:

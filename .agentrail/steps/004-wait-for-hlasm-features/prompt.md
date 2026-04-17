@@ -1,0 +1,1 @@
+Stand by for upstream sw-cor24-hlasm improvements. Resume deeper RPG-II rewrite work only after blank-line handling and macro-parameter substitution have improved, or if an explicit decision is made to tolerate those constraints and proceed with local workarounds.

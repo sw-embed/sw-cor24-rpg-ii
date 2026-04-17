@@ -1,0 +1,8 @@
+number = 4
+slug = "wait-for-hlasm-features"
+status = "in-progress"
+description = "Stand by for upstream sw-cor24-hlasm improvements. Resume deeper RPG-II rewri..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T19:23:24"
+commits = []

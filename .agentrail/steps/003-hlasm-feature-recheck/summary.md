@@ -1,0 +1,1 @@
+Re-checked sw-cor24-hlasm against the blockers exposed by the RPG-II spike. Tests still pass and upstream progress continues, but blank lines still terminate input early and parameterized macros are still unsafe, so the rewrite should stay paused at the current capability-spike level.
