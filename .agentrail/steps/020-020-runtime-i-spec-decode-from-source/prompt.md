@@ -1,0 +1,1 @@
+Implement the next smallest capability toward a runnable tiny user-supplied program: decode the first I-spec field definition from the external tiny source deck into runtime field metadata instead of relying on fixed descriptor values. Keep the program shape narrow and current visible output stable.

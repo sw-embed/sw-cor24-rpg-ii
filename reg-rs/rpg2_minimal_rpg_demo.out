@@ -2,8 +2,8 @@
 Program:
 H  control header
 F  input file INFIL
-I  field A0105  (10-char input slice)
-C  MOVE A0105 -> calc work field
+I  field A0110  (10-char input slice)
+C  MOVE A0110 -> calc work field
 O  DETAIL output (10 chars)
 
 Current boundary:

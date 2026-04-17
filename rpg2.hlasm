@@ -209,6 +209,15 @@ _init_source_parser:
 	lc	r1,1
 	ceq	r0,r1
 	brf	_src_parse_fail
+	la	r1,_field_desc0_offset
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_src_parse_fail
+	la	r1,_field_desc0_len
+	lw	r0,0(r1)
+	lc	r1,10
+	ceq	r0,r1
+	brf	_src_parse_fail
 	la	r1,_calc_table_count
 	lw	r0,0(r1)
 	lc	r1,1
@@ -382,6 +391,7 @@ _parse_f_spec:
 	RET1
 _parse_i_spec:
 	FRAME21
+	lw	r2,9(fp)
 	la	r1,_source_spec_count
 	lw	r0,0(r1)
 	add	r0,1
@@ -402,11 +412,30 @@ _parse_i_spec:
 	la	r1,_field_desc0_kind
 	lc	r0,73
 	sw	r0,0(r1)
+	lbu	r0,7(r2)
+	add	r0,-48
+	mul	r0,10
+	lbu	r1,8(r2)
+	add	r1,-48
+	add	r0,r1
+	add	r0,-1
 	la	r1,_field_desc0_offset
-	la	r0,0
 	sw	r0,0(r1)
+	lbu	r0,9(r2)
+	add	r0,-48
+	mul	r0,10
+	lbu	r1,10(r2)
+	add	r1,-48
+	add	r0,r1
+	lbu	r1,7(r2)
+	add	r1,-48
+	mul	r1,10
+	lbu	r2,8(r2)
+	add	r2,-48
+	add	r1,r2
+	sub	r0,r1
+	add	r0,1
 	la	r1,_field_desc0_len
-	la	r0,10
 	sw	r0,0(r1)
 	bra	_i_spec_done
 _i_spec_skip_desc:

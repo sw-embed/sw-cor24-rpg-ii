@@ -1,0 +1,1 @@
+Moved the tiny demo program source out of rpg2.hlasm and into an external source-deck file, with build.sh now packing and loading that source buffer for the runtime. Kept current behavior stable, updated the demo/docs text to reflect the external source path, and verified with ./build.sh test plus ./demo.sh mini.

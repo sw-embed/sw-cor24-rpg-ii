@@ -1,8 +1,9 @@
 number = 19
 slug = "019-external-source-deck-path"
-status = "in-progress"
+status = "completed"
 description = "Implement the first concrete capability from the runnable-gap analysis: start..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-17T00:01:15"
-commits = []
+completed_at = "2026-04-17T00:04:19"
+commits = ["d8e036d7cf81abe342c28189b2456c6dc63c9335"]

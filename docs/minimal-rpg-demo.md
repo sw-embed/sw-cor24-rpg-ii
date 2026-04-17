@@ -14,7 +14,7 @@ Current fixed program shape:
 
 - `H` control header
 - `F` one input file: `INFIL`
-- `I` one extracted field: `A0105`
+- `I` one extracted field: `A0110`
 - `C` one MOVE-style calc stage from the extracted field into a computed work field
 - `O` one detail output record definition
 
@@ -57,7 +57,7 @@ Current execution path:
 
 1. load and parse the external fixed-shape `H/F/I/C/O` demo source
 2. read each 80-byte input record from `test_deck.bin`
-3. extract the first 10 bytes into `A0105`
+3. extract the first 10 bytes into `A0110`
 4. copy that field through the fixed C-spec-like work field
 5. format one 10-byte output line
 6. emit the line over UART
