@@ -341,6 +341,9 @@ _src_parse_check_12:
 	lc	r1,77
 	ceq	r0,r1
 	brt	_src_parse_check_13
+	lc	r1,82
+	ceq	r0,r1
+	brt	_src_parse_check_13
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -944,7 +947,7 @@ _run_detail_calcs:
 	la	r0,_extract_field1
 	jal	r1,(r0)
 	add	sp,3
-	la	r0,_run_cspec_move0
+	la	r0,_run_cspec_calc0
 	jal	r1,(r0)
 	la	r2,_calc_field0_buf
 	la	r1,_detail_preview_buf
@@ -1016,7 +1019,7 @@ _extract_field1_done:
 	la	r0,1
 	sw	r0,0(r1)
 	RET21
-_run_cspec_move0:
+_run_cspec_calc0:
 	FRAME1
 	la	r1,_calc_field_ready
 	la	r0,0
@@ -1025,7 +1028,18 @@ _run_cspec_move0:
 	lw	r0,0(r1)
 	lc	r1,77
 	ceq	r0,r1
-	brf	_run_cspec_move0_done
+	brf	_run_cspec_calc0_check_rev
+	la	r0,_run_cspec_calc0_move
+	jmp	(r0)
+_run_cspec_calc0_check_rev:
+	lc	r1,82
+	ceq	r0,r1
+	brf	_run_cspec_calc0_noop
+	la	r0,_run_cspec_calc0_rev
+	jmp	(r0)
+_run_cspec_calc0_noop:
+	RET1
+_run_cspec_calc0_move:
 	la	r1,_calc_desc0_src_field
 	lw	r0,0(r1)
 	lc	r1,1
@@ -1034,7 +1048,25 @@ _run_cspec_move0:
 	lc	r1,2
 	ceq	r0,r1
 	brt	_run_cspec_move0_select1
-	brf	_run_cspec_move0_done
+	brf	_run_cspec_calc0_move_bad_field
+_run_cspec_calc0_move_bad_field:
+	RET1
+_run_cspec_calc0_rev:
+	la	r1,_calc_desc0_src_field
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_run_cspec_calc0_rev_check1
+	la	r0,_run_cspec_rev0_select0
+	jmp	(r0)
+_run_cspec_calc0_rev_check1:
+	lc	r1,2
+	ceq	r0,r1
+	brf	_run_cspec_calc0_rev_bad_field
+	la	r0,_run_cspec_rev0_select1
+	jmp	(r0)
+_run_cspec_calc0_rev_bad_field:
+	RET1
 _run_cspec_move0_select0:
 	la	r0,1
 	push	r0
@@ -1044,7 +1076,9 @@ _run_cspec_move0_select0:
 	la	r1,_detail_field_ready
 	lw	r0,0(r1)
 	ceq	r0,z
-	brt	_run_cspec_move0_done
+	brf	_run_cspec_move0_select0_have_field
+	RET1
+_run_cspec_move0_select0_have_field:
 	la	r2,_detail_field0_buf
 	la	r0,_field_desc0_len
 	lw	r0,0(r0)
@@ -1058,7 +1092,9 @@ _run_cspec_move0_select1:
 	la	r1,_detail_field1_ready
 	lw	r0,0(r1)
 	ceq	r0,z
-	brt	_run_cspec_move0_done
+	brf	_run_cspec_move0_select1_have_field
+	RET1
+_run_cspec_move0_select1_have_field:
 	la	r2,_detail_field1_buf
 	la	r0,_field_desc1_len
 	lw	r0,0(r0)
@@ -1079,7 +1115,59 @@ _run_cspec_move0_copy_done:
 	la	r1,_calc_field_ready
 	la	r0,1
 	sw	r0,0(r1)
-_run_cspec_move0_done:
+	RET1
+_run_cspec_rev0_select0:
+	la	r0,1
+	push	r0
+	la	r0,_clear_ind
+	jal	r1,(r0)
+	add	sp,3
+	la	r1,_detail_field_ready
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_run_cspec_rev0_select0_have_field
+	RET1
+_run_cspec_rev0_select0_have_field:
+	la	r2,_detail_field0_buf
+	la	r0,_field_desc0_len
+	lw	r0,0(r0)
+	add	r2,r0
+	add	r2,-1
+	bra	_run_cspec_rev0_copy
+_run_cspec_rev0_select1:
+	la	r0,1
+	push	r0
+	la	r0,_set_ind
+	jal	r1,(r0)
+	add	sp,3
+	la	r1,_detail_field1_ready
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_run_cspec_rev0_select1_have_field
+	RET1
+_run_cspec_rev0_select1_have_field:
+	la	r2,_detail_field1_buf
+	la	r0,_field_desc1_len
+	lw	r0,0(r0)
+	add	r2,r0
+	add	r2,-1
+_run_cspec_rev0_copy:
+	la	r1,_calc_field0_buf
+_run_cspec_rev0_loop:
+	ceq	r0,z
+	brt	_run_cspec_rev0_copy_done
+	push	r0
+	lbu	r0,0(r2)
+	sb	r0,0(r1)
+	pop	r0
+	add	r2,-1
+	add	r1,1
+	add	r0,-1
+	bra	_run_cspec_rev0_loop
+_run_cspec_rev0_copy_done:
+	la	r1,_calc_field_ready
+	la	r0,1
+	sw	r0,0(r1)
 	RET1
 _emit_detail_output:
 	FRAME1

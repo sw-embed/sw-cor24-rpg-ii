@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by adding one more parsed C-spec behavior beyond MOVE01/MOVE02 while staying on the vendored HLASM path. Keep the current demos green, add one new tiny source fixture that exercises the new calc behavior end to end, and update the CLI/docs/regression surface only as needed to explain the new supported boundary.

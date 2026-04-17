@@ -10,10 +10,10 @@ O  DETAIL02 output (3 chars)
 
 Current boundary:
 - Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O
-  source parsing, two decoded I-spec fields, one MOVE-style calc stage that
-  selects field 01 or 02, and two selectable O-spec output definitions.
+  source parsing, two decoded I-spec fields, a tiny parsed calc subset
+  (currently MOVE and REVR), and two selectable O-spec output definitions.
 - Placeholder today: the subset is still tiny; there is no general RPG
-  parser, no variable C-spec execution beyond one MOVE selector, no general
+  parser, no general C-spec execution beyond that small calc subset, no general
   O-spec formatting, and no arbitrary user-supplied RPG program execution.
 
 Current runtime-produced output:
@@ -25,6 +25,8 @@ Authored source: rpg2.hlasm
 Tiny demo source: tiny_rpg_demo.src
 Alternate tiny demo source: tiny_rpg_demo_tail3.src
 Indicator-gated tiny demo source: tiny_rpg_demo_gateoff.src
+Reverse-field tiny demo source: tiny_rpg_demo_rev3.src
 Try: ./demo.sh mini-tail3
 Try: ./demo.sh mini-gateoff
+Try: ./demo.sh mini-rev3
 Generated source: build/rpg2.generated.s

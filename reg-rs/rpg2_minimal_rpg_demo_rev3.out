@@ -1,0 +1,24 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Reverse-Field Variant) ===
+Program:
+H  control header
+F  input file INFIL
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  REVR02 -> calc work field
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
+
+Current boundary:
+- Real today: the tiny parsed C-spec subset now includes one second behavior,
+  REVR, which reverses the selected decoded input field before output.
+- Placeholder today: calc parsing is still one-op-at-a-time, with no general
+  expression engine or chained C-spec execution.
+
+Current runtime-produced output:
+A10
+B20
+C30
+
+Authored source: rpg2.hlasm
+Tiny demo source: tiny_rpg_demo_rev3.src
+Generated source: build/rpg2.generated.s

@@ -23,14 +23,14 @@ The current runnable subset supports:
 - one `H` spec
 - one `F` input file spec
 - two `I` field specs
-- one `C` calc spec using `MOVE01` or `MOVE02`
+- one `C` calc spec using `MOVE01`, `MOVE02`, or `REVR01` / `REVR02`
 - two `O` detail output specs, with the active one selected by the `MOVE`
 - one parsed indicator-style gate on an output spec
 
 That means the tiny program can:
 
 - decode two input field slices from each input record
-- select one of those fields through a fixed MOVE-style calc stage
+- transform one of those fields through a tiny fixed calc stage
 - select one of two parsed detail output definitions
 - optionally suppress the selected output definition through indicator `01`
 - emit one output line per input record
@@ -42,6 +42,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo.src)
 - [tiny_rpg_demo_tail3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_tail3.src)
 - [tiny_rpg_demo_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_gateoff.src)
+- [tiny_rpg_demo_rev3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_rev3.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -49,6 +50,8 @@ The second variant uses `MOVE02` and the 3-byte output definition.
 
 The gated variant uses `MOVE01`, selects the 10-byte output definition, and
 suppresses it because indicator `01` is off.
+
+The reverse variant uses `REVR02` and emits the selected 3-byte field in reverse order.
 
 ## Running The Demos
 
@@ -74,6 +77,12 @@ Run the indicator-gated no-output variant:
 
 ```sh
 ./demo.sh mini-gateoff
+```
+
+Run the reverse-field variant:
+
+```sh
+./demo.sh mini-rev3
 ```
 
 Run the regression suite:
@@ -122,6 +131,8 @@ The demo source lines are intentionally compact:
 - `IA0810` means field 02 spans columns 8-10
 - `CMOVE01` selects field 01
 - `CMOVE02` selects field 02
+- `CREVR01` reverses field 01
+- `CREVR02` reverses field 02
 - `ODETAIL1000` defines a 10-byte output with no indicator gate
 - `ODETAIL0301` defines a 3-byte output gated by indicator `01`
 - `ODETAIL1001` defines a 10-byte output gated by indicator `01`
@@ -135,7 +146,7 @@ subset described above.
 Still missing:
 
 - arbitrary numbers of files, fields, calcs, and outputs
-- general C-spec execution
+- general C-spec execution beyond the current MOVE/REVR subset
 - general O-spec formatting
 - general indicator-driven calc/output branching beyond the one parsed gate
 - user-friendly diagnostics for malformed RPG source

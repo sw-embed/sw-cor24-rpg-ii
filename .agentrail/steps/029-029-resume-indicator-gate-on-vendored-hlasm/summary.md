@@ -1,0 +1,1 @@
+Resumed the tiny runtime-parsed subset on the vendored HLASM path by adding a parsed indicator-gated output demo, plus matching docs and regression coverage.

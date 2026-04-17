@@ -1,0 +1,4 @@
+command = './demo.sh mini-rev3 2>&1'
+timeout = 20
+exit_code = 0
+desc = "Minimal RPG-II demo surface: reverse-field REVR02 fixture runs through the CLI"
