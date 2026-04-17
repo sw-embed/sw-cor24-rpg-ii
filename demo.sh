@@ -8,8 +8,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-RPG2="rpg2.s"
-RUN="cor24-run --run $RPG2 --speed 0"
+RPG2_GEN="build/rpg2.generated.s"
 
 case "${1:-demo}" in
     test)
@@ -19,19 +18,16 @@ case "${1:-demo}" in
         echo "=== sw-cor24-rpg-ii REPL (not yet implemented) ==="
         echo "Type RPG-II commands. Ctrl-C to exit."
         echo ""
-        cor24-run --run "$RPG2" --terminal --echo --speed 0
+        ./build.sh run --terminal --echo
         ;;
     demo)
         echo "=== sw-cor24-rpg-ii Demo ==="
         echo ""
-        if [[ ! -f "$RPG2" ]]; then
-            echo "rpg2.s not yet created. Run build.sh first."
-            exit 1
-        fi
-        $RUN -n 5000000 2>&1 | grep "^UART output:" -A 20 | tr '\n' ' ' \
+        ./build.sh run -n 5000000 2>&1 | grep "^UART output:" -A 20 | tr '\n' ' ' \
             | sed -e 's/.*UART output: //' -e 's/Executed.*//' \
             | sed -e 's/  */ /g' -e 's/^ //;s/ $//'
         echo ""
+        echo "Generated source: $RPG2_GEN"
         echo "To run tests: ./demo.sh test"
         ;;
     *)

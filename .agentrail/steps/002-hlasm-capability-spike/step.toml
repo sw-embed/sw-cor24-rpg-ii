@@ -1,0 +1,8 @@
+number = 2
+slug = "hlasm-capability-spike"
+status = "in-progress"
+description = "Prototype the minimal rpg2.hlasm build pipeline: authored HLASM source, gener..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T17:25:53"
+commits = []

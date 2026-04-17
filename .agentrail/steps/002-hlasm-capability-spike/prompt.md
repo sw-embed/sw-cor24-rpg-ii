@@ -1,0 +1,1 @@
+Prototype the minimal rpg2.hlasm build pipeline: authored HLASM source, generated plain .s capture, and successful run under cor24-run. Add the initial macro layer for subroutine structure and descriptor offsets. If a missing sw-cor24-hlasm feature becomes the main blocker, stop and define the corresponding upstream feature step instead of forcing the rewrite.

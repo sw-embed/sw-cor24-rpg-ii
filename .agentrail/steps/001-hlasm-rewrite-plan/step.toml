@@ -1,8 +1,9 @@
 number = 1
 slug = "hlasm-rewrite-plan"
-status = "in-progress"
+status = "completed"
 description = "Analyze the current project docs, the existing assembler source, and the curr..."
 role = "production"
 context_files = []
 created_at = "2026-04-16T17:16:03"
-commits = []
+completed_at = "2026-04-16T17:25:53"
+commits = ["eba683e039981841b97bde7923c55dcd1066d743"]

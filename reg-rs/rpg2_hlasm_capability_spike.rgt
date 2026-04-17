@@ -1,0 +1,5 @@
+command = './build.sh run -n 5000000 2>&1'
+timeout = 20
+preprocess = "grep -A 20 '^UART output:' || true"
+exit_code = 0
+desc = "HLASM capability spike: authored rpg2.hlasm generates runnable COR24 deck-reader output"

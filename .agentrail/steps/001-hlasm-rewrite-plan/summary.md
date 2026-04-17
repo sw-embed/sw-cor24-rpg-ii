@@ -1,0 +1,1 @@
+Archived the old hand-written assembler saga, initialized a new HLASM rewrite saga, and added docs/hlasm-rewrite-plan.md with source-format recommendations, staged migration phases, and explicit criteria for pivoting upstream into sw-cor24-hlasm.
