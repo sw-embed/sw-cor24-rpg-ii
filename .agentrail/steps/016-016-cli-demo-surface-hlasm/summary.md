@@ -1,0 +1,1 @@
+Added a CLI-facing minimal RPG-II demo surface with ./demo.sh mini, a short docs/minimal-rpg-demo.md guide, and a matching reg-rs fixture for the fixed H/F/I/C/O demo shape. Verified the new demo command directly and kept ./build.sh test passing.

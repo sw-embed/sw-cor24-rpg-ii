@@ -1,0 +1,1 @@
+Document and expose the current boundary of this minimal RPG-II demo more explicitly in repo-facing surfaces. Keep runtime behavior unchanged, but make it obvious from docs and CLI text which parts are real end-to-end flow today and which parts are still fixed-shape placeholders so users can evaluate how close this is to a true runnable RPG program.

@@ -1,0 +1,8 @@
+number = 17
+slug = "017-surface-current-demo-boundary"
+status = "in-progress"
+description = "Document and expose the current boundary of this minimal RPG-II demo more exp..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T23:38:56"
+commits = []

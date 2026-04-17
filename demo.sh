@@ -51,6 +51,13 @@ case "${1:-demo}" in
         echo "C  MOVE A0105 -> calc work field"
         echo "O  DETAIL output (10 chars)"
         echo ""
+        echo "Current boundary:"
+        echo "- Real today: build path, fixed H/F/I/C/O source parsing, one extracted field,"
+        echo "  one MOVE-style calc stage, one output-line format stage, CLI demo surface."
+        echo "- Placeholder today: source is embedded and fixed-shape; no general RPG parser,"
+        echo "  no variable C-spec execution, no general O-spec formatting, no free-form"
+        echo "  user-supplied RPG program execution yet."
+        echo ""
         echo "Current expected output:"
         print_current_output
         echo ""

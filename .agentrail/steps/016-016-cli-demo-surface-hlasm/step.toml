@@ -1,8 +1,9 @@
 number = 16
 slug = "016-cli-demo-surface-hlasm"
-status = "in-progress"
+status = "completed"
 description = "Build the first explicit CLI-facing minimal RPG demo surface around the curre..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-16T23:33:40"
-commits = []
+completed_at = "2026-04-16T23:38:56"
+commits = ["d83567d322075dc16d4625a1aa639f851dbc665f"]

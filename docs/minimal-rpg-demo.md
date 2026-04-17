@@ -17,6 +17,24 @@ Current fixed program shape:
 - `C` one MOVE-style calc stage from the extracted field into a computed work field
 - `O` one detail output record definition
 
+What is real end to end today:
+
+- the authored `rpg2.hlasm -> generated .s -> cor24-run` build path
+- parsing of the embedded fixed-shape `H/F/I/C/O` fixture
+- one extracted input field
+- one MOVE-style computed work field
+- one output-line assembly stage
+- a CLI-facing demo command and regression fixture
+
+What is still placeholder or fixed-shape:
+
+- the RPG source is embedded in `rpg2.hlasm`, not loaded as an arbitrary user program
+- `I` extraction is hard-wired to one known 10-byte slice
+- the `C` stage is one fixed MOVE-style copy, not a general C-spec executor
+- the `O` stage is one fixed 10-byte detail line, not a general O-spec formatter
+- the CLI demo presents the current expected output explicitly rather than running a
+  fully general RPG program surface
+
 Current execution path:
 
 1. parse the embedded `H/F/I/C/O` source fixture
@@ -39,5 +57,5 @@ RECORD 03C
 ```
 
 This is still a constrained demonstration, not a general RPG-II compiler or
-interpreter. The value is that the CLI now exposes a path that plausibly maps to
-a complete tiny RPG program instead of only a raw deck-reader preview.
+interpreter. The value is that the repo now exposes a path that plausibly maps
+to a complete tiny RPG program and states its current boundary explicitly.
