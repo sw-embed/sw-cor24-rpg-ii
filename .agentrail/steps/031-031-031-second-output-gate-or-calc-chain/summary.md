@@ -1,0 +1,1 @@
+Added a second parsed output-gate mode that emits only when indicator 01 is off, plus a new REVR01+gate fixture and matching CLI/docs/regression coverage on the vendored HLASM path.
