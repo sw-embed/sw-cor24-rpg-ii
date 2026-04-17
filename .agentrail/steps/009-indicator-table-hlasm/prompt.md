@@ -1,0 +1,1 @@
+Add the first indicator-table slice in rpg2.hlasm: define indicator storage, initialize it in the runtime path, and add minimal set/test/clear entry points without changing the current detail-preview demo output. Keep using the parser self-check and stay within known-good HLASM features.

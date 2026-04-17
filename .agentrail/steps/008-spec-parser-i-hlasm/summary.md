@@ -1,0 +1,1 @@
+Extended the parser self-check in rpg2.hlasm with the first I-spec path: source-deck classification now recognizes I specs, tracks I-spec counts, and populates a first placeholder field descriptor entry while preserving the current deck-reader demo behavior.

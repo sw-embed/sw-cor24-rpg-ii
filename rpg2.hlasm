@@ -170,7 +170,44 @@ _src_parse_done:
 	RET1
 _init_data_runtime:
 	FRAME1
-	; Placeholder for future indicators, fields, and accumulators.
+	la	r1,_indicator_runtime_ok
+	la	r0,0
+	sw	r0,0(r1)
+	la	r0,_init_indicator_table
+	jal	r1,(r0)
+	la	r0,1
+	push	r0
+	la	r0,_set_ind
+	jal	r1,(r0)
+	add	sp,3
+	la	r0,1
+	push	r0
+	la	r0,_test_ind
+	jal	r1,(r0)
+	add	sp,3
+	ceq	r0,z
+	brt	_ind_runtime_fail
+	la	r0,1
+	push	r0
+	la	r0,_clear_ind
+	jal	r1,(r0)
+	add	sp,3
+	la	r0,1
+	push	r0
+	la	r0,_test_ind
+	jal	r1,(r0)
+	add	sp,3
+	ceq	r0,z
+	brf	_ind_runtime_fail
+	la	r1,_indicator_runtime_ok
+	la	r0,1
+	sw	r0,0(r1)
+	bra	_ind_runtime_done
+_ind_runtime_fail:
+	la	r1,_indicator_runtime_ok
+	la	r0,0
+	sw	r0,0(r1)
+_ind_runtime_done:
 	RET1
 _next_detail_record:
 	FRAME1
@@ -181,6 +218,13 @@ _next_detail_record:
 	la	r0,0
 	bra	_next_detail_ret
 _next_detail_fetch:
+	la	r1,_indicator_runtime_ok
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_next_detail_fetch2
+	la	r0,0
+	bra	_next_detail_ret
+_next_detail_fetch2:
 	la	r0,_deck_desc
 	push	r0
 	la	r0,_read_record
@@ -319,6 +363,44 @@ _run_total_phase:
 	FRAME1
 	; Placeholder for LR handling and total-time output.
 	RET1
+; --- Indicator table slice ---
+_init_indicator_table:
+	FRAME21
+	la	r2,_indicator_table
+	lc	r1,16
+_ind_zero_loop:
+	ceq	r1,z
+	brt	_ind_zero_done
+	la	r0,0
+	sb	r0,0(r2)
+	add	r2,1
+	add	r1,-1
+	bra	_ind_zero_loop
+_ind_zero_done:
+	RET21
+_set_ind:
+	FRAME21
+	lw	r0,9(fp)
+	la	r2,_indicator_table
+	add	r2,r0
+	la	r0,1
+	sb	r0,0(r2)
+	RET21
+_clear_ind:
+	FRAME21
+	lw	r0,9(fp)
+	la	r2,_indicator_table
+	add	r2,r0
+	la	r0,0
+	sb	r0,0(r2)
+	RET21
+_test_ind:
+	FRAME21
+	lw	r0,9(fp)
+	la	r2,_indicator_table
+	add	r2,r0
+	lbu	r0,0(r2)
+	RET21
 ; --- Executable deck-reader subset ---
 ; _read_record: Read next record from deck.
 ; Arg (on stack): deck_desc pointer
@@ -423,10 +505,15 @@ _field_desc0_src_ptr:
 	.word	0
 _field_desc0_kind:
 	.word	0
+_indicator_runtime_ok:
+	.word	0
 _calc_table_count:
 	.word	0
 _output_table_count:
 	.word	0
+_indicator_table:
+	.byte 0,0,0,0,0,0,0,0
+	.byte 0,0,0,0,0,0,0,0
 _src_deck:
 	.byte 48,48,48,48,49,72
 	SP10

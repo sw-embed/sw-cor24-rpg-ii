@@ -1,0 +1,8 @@
+number = 9
+slug = "indicator-table-hlasm"
+status = "pending"
+description = "Add the first indicator-table slice in rpg2.hlasm: define indicator storage, ..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T23:17:36"
+commits = []
