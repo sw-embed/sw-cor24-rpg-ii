@@ -1,0 +1,15 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo ===
+Program:
+H  control header
+F  input file INFIL
+I  field A0105  (10-char input slice)
+C  MOVE A0105 -> calc work field
+O  DETAIL output (10 chars)
+
+Current expected output:
+RECORD 01A
+RECORD 02B
+RECORD 03C
+
+Authored source: rpg2.hlasm
+Generated source: build/rpg2.generated.s

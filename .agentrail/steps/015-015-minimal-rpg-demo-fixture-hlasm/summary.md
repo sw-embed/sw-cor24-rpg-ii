@@ -1,0 +1,1 @@
+Extended rpg2.hlasm and the embedded source fixture to represent a tiny fixed-shape RPG program path with H, F, I, C, and O specs. The parser now recognizes C/O specs, records one calc definition and one output definition, and the runtime still produces the same CLI output with ./build.sh test passing.

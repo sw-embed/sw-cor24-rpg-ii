@@ -1,8 +1,9 @@
 number = 15
 slug = "015-minimal-rpg-demo-fixture-hlasm"
-status = "in-progress"
+status = "completed"
 description = "Extend rpg2.hlasm and the current source fixture toward a minimal complete RP..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-16T23:30:15"
-commits = []
+completed_at = "2026-04-16T23:33:40"
+commits = ["ed7debc59a3d743b6e79ff2e3d03ca8d26df5588"]

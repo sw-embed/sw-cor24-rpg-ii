@@ -1,0 +1,1 @@
+Build the first explicit CLI-facing minimal RPG demo surface around the current rpg2.hlasm path. Keep behavior stable, but add the smallest repo-local demo/test/documentation wiring needed so this fixed-shape H/F/I/C/O source fixture can be presented as a minimal complete RPG-II program demonstration from the command line.

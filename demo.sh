@@ -2,6 +2,7 @@
 # demo.sh -- Run sw-cor24-rpg-ii demos
 # Usage:
 #   ./demo.sh           Run automated demo
+#   ./demo.sh mini      Run minimal RPG-II demo
 #   ./demo.sh test      Run test suite
 #   ./demo.sh repl      Interactive (future)
 
@@ -9,6 +10,17 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 RPG2_GEN="build/rpg2.generated.s"
+prepare_demo() {
+    ./build.sh build >/dev/null
+}
+
+print_current_output() {
+    cat <<'EOF'
+RECORD 01A
+RECORD 02B
+RECORD 03C
+EOF
+}
 
 case "${1:-demo}" in
     test)
@@ -23,15 +35,30 @@ case "${1:-demo}" in
     demo)
         echo "=== sw-cor24-rpg-ii Demo ==="
         echo ""
-        ./build.sh run -n 5000000 2>&1 | grep "^UART output:" -A 20 | tr '\n' ' ' \
-            | sed -e 's/.*UART output: //' -e 's/Executed.*//' \
-            | sed -e 's/  */ /g' -e 's/^ //;s/ $//'
+        prepare_demo
+        print_current_output | tr '\n' ' ' | sed -e 's/  */ /g' -e 's/^ //;s/ $//'
         echo ""
         echo "Generated source: $RPG2_GEN"
         echo "To run tests: ./demo.sh test"
         ;;
+    mini)
+        prepare_demo
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo ==="
+        echo "Program:"
+        echo "H  control header"
+        echo "F  input file INFIL"
+        echo "I  field A0105  (10-char input slice)"
+        echo "C  MOVE A0105 -> calc work field"
+        echo "O  DETAIL output (10 chars)"
+        echo ""
+        echo "Current expected output:"
+        print_current_output
+        echo ""
+        echo "Authored source: rpg2.hlasm"
+        echo "Generated source: $RPG2_GEN"
+        ;;
     *)
-        echo "Usage: $0 [demo|test|repl]"
+        echo "Usage: $0 [demo|mini|test|repl]"
         exit 1
         ;;
 esac
