@@ -1,0 +1,8 @@
+number = 3
+slug = "hlasm-feature-recheck"
+status = "in-progress"
+description = "Before expanding the RPG-II rewrite beyond the current capability spike, re-c..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T19:20:08"
+commits = []

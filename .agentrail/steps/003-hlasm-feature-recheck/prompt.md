@@ -1,0 +1,1 @@
+Before expanding the RPG-II rewrite beyond the current capability spike, re-check sw-cor24-hlasm for the blockers exposed here: blank lines currently terminate input early, and parameterized macros are still not safe to depend on. Proceed with deeper rewrite work only if those upstream features have improved or if an explicit upstream detour is chosen first.

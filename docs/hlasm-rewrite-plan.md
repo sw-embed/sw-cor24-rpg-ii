@@ -219,6 +219,38 @@ Pivot to upstream `hlasm` work if either of these becomes true:
 - the hand-lowered fallback is obscuring intent enough that review and test
   maintenance become the dominant cost.
 
+## Recheck Results
+
+Re-checked against the current `../sw-cor24-hlasm` after the initial pipeline
+spike:
+
+- local `../sw-cor24-hlasm/build.sh test` still passes;
+- newer upstream work such as include-ready source switching and bootstrap
+  memory-map support exists, so the project is still moving in the right
+  direction;
+- however, the two blockers exposed by the RPG-II spike still hold:
+  - blank lines still terminate input early;
+  - parameterized macros still emit `\param` text instead of substituting safe
+    argument values.
+
+That means:
+
+- the current `rpg2.hlasm` spike is valid as a conservative proof of pipeline;
+- deeper rewrite work should not assume normal source formatting with blank
+  lines;
+- deeper rewrite work should not depend on parameterized macros for `PROC`,
+  `CALL`, or descriptor helpers yet.
+
+### Current Decision
+
+Do not expand the RPG-II rewrite past the current capability-spike level until
+either:
+
+1. `sw-cor24-hlasm` fixes blank-line handling and macro-parameter
+   substitution, or
+2. an explicit decision is made to continue with temporary local workarounds
+   and accept the resulting source-style constraints.
+
 ## Build and Tooling Changes
 
 Replace the current direct build model:

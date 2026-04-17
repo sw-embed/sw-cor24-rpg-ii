@@ -1,0 +1,1 @@
+Prototyped a working rpg2.hlasm -> generated .s -> cor24-run pipeline, added a conservative no-argument macro layer plus a reg-rs test, and verified the generated program reproduces the current deck-reader output.
