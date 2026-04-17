@@ -1,0 +1,1 @@
+Added the first real parser slice in rpg2.hlasm: an embedded source deck, source-deck traversal through the shared record reader, and H/F/other classification counters with a parse-valid flag that gates the current detail demo path.

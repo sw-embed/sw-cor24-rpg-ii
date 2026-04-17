@@ -1,0 +1,8 @@
+number = 8
+slug = "spec-parser-i-hlasm"
+status = "in-progress"
+description = "Extend the parser path in rpg2.hlasm to add the first I-spec-oriented data st..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T23:16:00"
+commits = []

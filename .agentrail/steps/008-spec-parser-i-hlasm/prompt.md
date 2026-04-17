@@ -1,0 +1,1 @@
+Extend the parser path in rpg2.hlasm to add the first I-spec-oriented data structures and field-table placeholders. Keep the current detail-preview demo behavior intact, and continue using source-deck parsing as a runtime self-check while staying within currently known-good HLASM features.

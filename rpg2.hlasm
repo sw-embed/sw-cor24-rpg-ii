@@ -117,7 +117,15 @@ _init_source_parser:
 	sw	r0,0(r1)
 	la	r1,_f_spec_count
 	sw	r0,0(r1)
+	la	r1,_i_spec_count
+	sw	r0,0(r1)
 	la	r1,_other_spec_count
+	sw	r0,0(r1)
+	la	r1,_field_table_count
+	sw	r0,0(r1)
+	la	r1,_field_desc0_src_ptr
+	sw	r0,0(r1)
+	la	r1,_field_desc0_kind
 	sw	r0,0(r1)
 	la	r1,_source_parse_ok
 	sw	r0,0(r1)
@@ -138,6 +146,16 @@ _init_source_parser:
 	la	r1,_f_spec_count
 	lw	r0,0(r1)
 	lc	r1,2
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_i_spec_count
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_field_table_count
+	lw	r0,0(r1)
+	lc	r1,1
 	ceq	r0,r1
 	brf	_src_parse_fail
 	la	r1,_source_parse_ok
@@ -207,6 +225,9 @@ _classify_source_spec:
 	lc	r1,70
 	ceq	r0,r1
 	brt	_spec_is_f
+	lc	r1,73
+	ceq	r0,r1
+	brt	_spec_is_i
 	la	r0,_parse_other_spec
 	jal	r1,(r0)
 	bra	_spec_done
@@ -216,6 +237,10 @@ _spec_is_h:
 	bra	_spec_done
 _spec_is_f:
 	la	r0,_parse_f_spec
+	jal	r1,(r0)
+	bra	_spec_done
+_spec_is_i:
+	la	r0,_parse_i_spec
 	jal	r1,(r0)
 _spec_done:
 	RET21
@@ -241,6 +266,36 @@ _parse_f_spec:
 	add	r0,1
 	sw	r0,0(r1)
 	RET1
+_parse_i_spec:
+	FRAME21
+	la	r1,_source_spec_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_i_spec_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_field_table_count
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_i_spec_skip_desc
+	add	r0,1
+	sw	r0,0(r1)
+	lw	r0,9(fp)
+	la	r1,_field_desc0_src_ptr
+	sw	r0,0(r1)
+	la	r1,_field_desc0_kind
+	lc	r0,73
+	sw	r0,0(r1)
+	bra	_i_spec_done
+_i_spec_skip_desc:
+	la	r1,_field_table_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+_i_spec_done:
+	RET21
 _parse_other_spec:
 	FRAME1
 	la	r1,_source_spec_count
@@ -356,11 +411,17 @@ _h_spec_count:
 	.word	0
 _f_spec_count:
 	.word	0
+_i_spec_count:
+	.word	0
 _other_spec_count:
 	.word	0
 _source_parse_ok:
 	.word	0
 _field_table_count:
+	.word	0
+_field_desc0_src_ptr:
+	.word	0
+_field_desc0_kind:
 	.word	0
 _calc_table_count:
 	.word	0
@@ -377,6 +438,15 @@ _src_deck:
 	SP10
 	SP4
 	.byte 48,48,48,48,50,70,73,78,70,73,76,69
+	SP10
+	SP10
+	SP10
+	SP10
+	SP10
+	SP10
+	SP8
+	.byte 48,48,48,48,52,73,65,48,49,48,53
+	SP10
 	SP10
 	SP10
 	SP10
