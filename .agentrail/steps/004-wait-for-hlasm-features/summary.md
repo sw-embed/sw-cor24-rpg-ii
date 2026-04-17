@@ -1,0 +1,1 @@
+Re-checked upstream sw-cor24-hlasm after newer source-switching and patchable-main commits. The project is still healthy and advancing, but blank lines still terminate input early and parameterized macros still do not substitute safely, so deeper RPG-II rewrite work remains paused.
