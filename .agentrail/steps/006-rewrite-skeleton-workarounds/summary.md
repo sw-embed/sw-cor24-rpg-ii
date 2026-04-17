@@ -1,0 +1,1 @@
+Refactored rpg2.hlasm from a narrow capability spike into a clearer rewrite skeleton with explicit boot, runtime, parser, detail, and total-phase placeholders while preserving the current deck-reader behavior and working build/test pipeline.

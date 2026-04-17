@@ -1,0 +1,8 @@
+number = 7
+slug = "spec-parser-hf-hlasm"
+status = "pending"
+description = "Implement the first real parser step in rpg2.hlasm: add source-spec reading a..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T23:12:50"
+commits = []

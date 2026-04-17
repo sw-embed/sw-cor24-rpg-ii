@@ -1,0 +1,1 @@
+Implement the first real parser step in rpg2.hlasm: add source-spec reading and H/F spec classification entry points in the new skeleton layout. Keep the current deck-reader demo behavior intact or behind a simple mode path, and stay within HLASM features that are currently known-good in the latest sw-cor24-hlasm.
