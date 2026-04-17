@@ -9,15 +9,17 @@ O  DETAIL output (10 chars)
 Current boundary:
 - Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O
   source parsing, one extracted field, one MOVE-style calc stage, one
-  output-line format stage, CLI demo surface.
+  output-line format stage, live runtime-produced CLI demo surface.
 - Placeholder today: source shape is still fixed; no general RPG parser, no
   variable C-spec execution, no general O-spec formatting, no arbitrary
   user-supplied RPG program execution yet.
 
-Current expected output:
+Current runtime-produced output:
 RECORD 01A
 RECORD 02B
 RECORD 03C
+
+
 
 Authored source: rpg2.hlasm
 Tiny demo source: tiny_rpg_demo.src

@@ -1,6 +1,6 @@
 number = 23
 slug = "023-live-demo-output-surface"
-status = "blocked"
+status = "in-progress"
 description = "Implement the next smallest capability toward a genuinely runnable tiny user-..."
 role = "legacy"
 context_files = []

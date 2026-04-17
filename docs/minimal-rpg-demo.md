@@ -26,7 +26,7 @@ What is real end to end today:
 - one extracted input field
 - one MOVE-style computed work field
 - one output-line assembly stage
-- a CLI-facing demo command and regression fixture
+- a CLI-facing demo command and regression fixture driven by live runtime output
 
 What is still placeholder or fixed-shape:
 
@@ -34,8 +34,8 @@ What is still placeholder or fixed-shape:
 - `I` extraction is hard-wired to one known 10-byte slice
 - the `C` stage is one fixed MOVE-style copy, not a general C-spec executor
 - the `O` stage is one fixed 10-byte detail line, not a general O-spec formatter
-- the CLI demo presents the current expected output explicitly rather than running a
-  fully general RPG program surface
+- the CLI demo runs the current fixed-shape program and reports its live runtime output,
+  but it is still not a fully general RPG program surface
 
 Smallest remaining gap to a runnable tiny user-supplied RPG program:
 
@@ -45,8 +45,8 @@ Smallest remaining gap to a runnable tiny user-supplied RPG program:
    form instead of the fixed MOVE-style path
 3. decode one real `O`-spec detail-line definition from that source into runtime
    output metadata
-4. drive the CLI demo from the actual generated/runtime result of that supplied
-   source, not from an explicitly stated expected-output block
+4. generalize the CLI demo beyond this known-good tiny shape so it can surface
+   runtime output for a broader user-supplied program subset
 
 The practical next milestone is not "general RPG-II". It is:
 
@@ -63,10 +63,10 @@ Current execution path:
 6. emit the line over UART
 
 The CLI demo currently validates that the `rpg2.hlasm -> generated .s` path
-still builds, then presents the current fixed-shape program and its expected
-output explicitly.
+still builds, then runs the current fixed-shape tiny program and reports its
+actual runtime-produced UART output.
 
-Current expected output remains:
+Current runtime-produced output is:
 
 ```text
 RECORD 01A

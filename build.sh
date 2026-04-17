@@ -23,6 +23,8 @@ TEST_DECK="test_deck.bin"
 TEST_SRC_DECK_TXT="tiny_rpg_demo.src"
 TEST_SRC_DECK_BIN="$BUILD_DIR/tiny_rpg_demo.srcdeck.bin"
 RUN="cor24-run"
+HLASM_STAGE0_MAX_INSN=12000000
+HLASM_STAGE0_TAIL_LABEL="_indicator_table:"
 
 if ! command -v cor24-run &>/dev/null; then
     echo "ERROR: cor24-run not found. Build sw-cor24-emulator first."
@@ -53,7 +55,7 @@ generate() {
     mkdir -p "$BUILD_DIR"
     echo "=== Generating $RPG2_GEN from $HLASM_SRC ==="
     $RUN --run "$HLASM_STAGE0" --load-binary "$HLASM_SRC@$SRC_LOAD_ADDR" \
-        --speed 0 -n 2000000 2>&1 \
+        --speed 0 -n "$HLASM_STAGE0_MAX_INSN" 2>&1 \
         | awk '
             BEGIN { capture = 0 }
             /^UART output:/ {
@@ -72,6 +74,11 @@ generate() {
 
     if [[ ! -s "$RPG2_GEN" ]]; then
         echo "ERROR: generated source is empty: $RPG2_GEN"
+        exit 1
+    fi
+
+    if ! rg -q "^${HLASM_STAGE0_TAIL_LABEL}$" "$RPG2_GEN"; then
+        echo "ERROR: generated source is incomplete: missing tail label ${HLASM_STAGE0_TAIL_LABEL}"
         exit 1
     fi
 }

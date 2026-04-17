@@ -184,85 +184,154 @@ _init_source_parser:
 	lw	r0,0(r1)
 	lc	r1,5
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_2
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_2:
 	la	r1,_h_spec_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_3
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_3:
 	la	r1,_f_spec_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_4
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_4:
 	la	r1,_i_spec_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_5
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_5:
 	la	r1,_c_spec_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_6
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_6:
 	la	r1,_o_spec_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_7
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_7:
 	la	r1,_field_table_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_8
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_8:
 	la	r1,_field_desc0_offset
 	lw	r0,0(r1)
 	ceq	r0,z
-	brf	_src_parse_fail
+	brt	_src_parse_check_9
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_9:
 	la	r1,_field_desc0_len
 	lw	r0,0(r1)
 	lc	r1,10
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_10
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_10:
 	la	r1,_calc_table_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_11
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_11:
 	la	r1,_calc_desc0_op
 	lw	r0,0(r1)
 	lc	r1,77
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_12
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_12:
 	la	r1,_calc_desc0_src_field
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_13
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_13:
 	la	r1,_output_table_count
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_14
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_14:
 	la	r1,_output_desc0_kind
 	lw	r0,0(r1)
 	lc	r1,68
 	ceq	r0,r1
-	brf	_src_parse_fail
+	brt	_src_parse_check_15
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_15:
 	la	r1,_output_desc0_len
 	lw	r0,0(r1)
 	lc	r1,10
 	ceq	r0,r1
-	brf	_src_parse_fail
-	la	r1,_source_parse_ok
-	la	r0,1
-	sw	r0,0(r1)
-	bra	_src_parse_done
-_src_parse_fail:
+	brt	_src_parse_ok
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
-_src_parse_done:
+	RET1
+_src_parse_ok:
+	la	r1,_source_parse_ok
+	la	r0,1
+	sw	r0,0(r1)
 	RET1
 _init_data_runtime:
 	FRAME1
@@ -381,16 +450,22 @@ _spec_is_f:
 	jal	r1,(r0)
 	bra	_spec_done
 _spec_is_i:
+	push	r2
 	la	r0,_parse_i_spec
 	jal	r1,(r0)
+	add	sp,3
 	bra	_spec_done
 _spec_is_c:
+	push	r2
 	la	r0,_parse_c_spec
 	jal	r1,(r0)
+	add	sp,3
 	bra	_spec_done
 _spec_is_o:
+	push	r2
 	la	r0,_parse_o_spec
 	jal	r1,(r0)
+	add	sp,3
 _spec_done:
 	RET21
 _parse_h_spec:
@@ -440,7 +515,8 @@ _parse_i_spec:
 	sw	r0,0(r1)
 	lbu	r0,7(r2)
 	add	r0,-48
-	mul	r0,10
+	lc	r1,10
+	mul	r0,r1
 	lbu	r1,8(r2)
 	add	r1,-48
 	add	r0,r1
@@ -449,13 +525,15 @@ _parse_i_spec:
 	sw	r0,0(r1)
 	lbu	r0,9(r2)
 	add	r0,-48
-	mul	r0,10
+	lc	r1,10
+	mul	r0,r1
 	lbu	r1,10(r2)
 	add	r1,-48
 	add	r0,r1
 	lbu	r1,7(r2)
 	add	r1,-48
-	mul	r1,10
+	lc	r0,10
+	mul	r1,r0
 	lbu	r2,8(r2)
 	add	r2,-48
 	add	r1,r2
@@ -496,7 +574,8 @@ _parse_c_spec:
 	sw	r0,0(r1)
 	lbu	r0,10(r2)
 	add	r0,-48
-	mul	r0,10
+	lc	r1,10
+	mul	r0,r1
 	lbu	r1,11(r2)
 	add	r1,-48
 	add	r0,r1
@@ -529,7 +608,8 @@ _parse_o_spec:
 	sw	r0,0(r1)
 	lbu	r0,12(r2)
 	add	r0,-48
-	mul	r0,10
+	lc	r1,10
+	mul	r0,r1
 	lbu	r2,13(r2)
 	add	r2,-48
 	add	r0,r2
