@@ -25,14 +25,14 @@ The current runnable subset supports:
 - two `I` field specs
 - one `C` calc spec using `MOVE01`, `MOVE02`, or `REVR01` / `REVR02`
 - two `O` detail output specs, with the active one selected by the `MOVE`
-- one parsed indicator-style gate on an output spec
+- two parsed indicator-style gate modes on an output spec
 
 That means the tiny program can:
 
 - decode two input field slices from each input record
 - transform one of those fields through a tiny fixed calc stage
 - select one of two parsed detail output definitions
-- optionally suppress the selected output definition through indicator `01`
+- optionally require indicator `01` to be on or off before the selected output emits
 - emit one output line per input record
 
 ## Demo Sources
@@ -43,6 +43,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_tail3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_tail3.src)
 - [tiny_rpg_demo_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_gateoff.src)
 - [tiny_rpg_demo_rev3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_rev3.src)
+- [tiny_rpg_demo_revr_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr_gateoff.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -52,6 +53,9 @@ The gated variant uses `MOVE01`, selects the 10-byte output definition, and
 suppresses it because indicator `01` is off.
 
 The reverse variant uses `REVR02` and emits the selected 3-byte field in reverse order.
+
+The reverse-plus-gate variant uses `REVR01` and emits the reversed 10-byte field only when
+indicator `01` is off.
 
 ## Running The Demos
 
@@ -83,6 +87,12 @@ Run the reverse-field variant:
 
 ```sh
 ./demo.sh mini-rev3
+```
+
+Run the reverse-field plus gate-off variant:
+
+```sh
+./demo.sh mini-revr-gateoff
 ```
 
 Run the regression suite:
@@ -136,6 +146,7 @@ The demo source lines are intentionally compact:
 - `ODETAIL1000` defines a 10-byte output with no indicator gate
 - `ODETAIL0301` defines a 3-byte output gated by indicator `01`
 - `ODETAIL1001` defines a 10-byte output gated by indicator `01`
+- `ODETAIL1002` defines a 10-byte output gated by indicator `01` being off
 
 The current runtime still assumes a very specific record layout and program
 shape. Those lines are parsed as metadata, but only inside the small supported
@@ -148,7 +159,7 @@ Still missing:
 - arbitrary numbers of files, fields, calcs, and outputs
 - general C-spec execution beyond the current MOVE/REVR subset
 - general O-spec formatting
-- general indicator-driven calc/output branching beyond the one parsed gate
+- general indicator-driven calc/output branching beyond the current on/off gate modes
 - user-friendly diagnostics for malformed RPG source
 
 For the current boundary and examples, also see

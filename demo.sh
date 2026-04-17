@@ -6,6 +6,7 @@
 #   ./demo.sh mini-tail3 Run alternate second-field minimal RPG-II demo
 #   ./demo.sh mini-gateoff Run indicator-gated minimal RPG-II demo
 #   ./demo.sh mini-rev3 Run reverse-field minimal RPG-II demo
+#   ./demo.sh mini-revr-gateoff Run reverse-field with gate-off minimal RPG-II demo
 #   ./demo.sh test      Run test suite
 #   ./demo.sh repl      Interactive (future)
 
@@ -21,6 +22,7 @@ DEFAULT_DEMO_SRC="tiny_rpg_demo.src"
 SHORT_DEMO_SRC="tiny_rpg_demo_tail3.src"
 GATEOFF_DEMO_SRC="tiny_rpg_demo_gateoff.src"
 REV3_DEMO_SRC="tiny_rpg_demo_rev3.src"
+REVR_GATEOFF_DEMO_SRC="tiny_rpg_demo_revr_gateoff.src"
 prepare_demo() {
     TEST_SRC_DECK_TXT="${1:-$DEFAULT_DEMO_SRC}" ./build.sh build >/dev/null
 }
@@ -104,9 +106,11 @@ case "${1:-demo}" in
         echo "Alternate tiny demo source: $SHORT_DEMO_SRC"
         echo "Indicator-gated tiny demo source: $GATEOFF_DEMO_SRC"
         echo "Reverse-field tiny demo source: $REV3_DEMO_SRC"
+        echo "Reverse+gate tiny demo source: $REVR_GATEOFF_DEMO_SRC"
         echo "Try: ./demo.sh mini-tail3"
         echo "Try: ./demo.sh mini-gateoff"
         echo "Try: ./demo.sh mini-rev3"
+        echo "Try: ./demo.sh mini-revr-gateoff"
         echo "Generated source: $RPG2_GEN"
         ;;
     mini-tail3)
@@ -185,8 +189,33 @@ case "${1:-demo}" in
         echo "Tiny demo source: $REV3_DEMO_SRC"
         echo "Generated source: $RPG2_GEN"
         ;;
+    mini-revr-gateoff)
+        prepare_demo "$REVR_GATEOFF_DEMO_SRC"
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Reverse + Gate-Off Variant) ==="
+        echo "Program:"
+        echo "H  control header"
+        echo "F  input file INFIL"
+        echo "I  field 01: A0110  (10-char input slice)"
+        echo "I  field 02: A0810  (3-char input tail slice)"
+        echo "C  REVR01 -> calc work field"
+        echo "O  DETAIL01 output (10 chars) gated when indicator 01 is off"
+        echo "O  DETAIL02 output (3 chars)"
+        echo ""
+        echo "Current boundary:"
+        echo "- Real today: output gating now supports two tiny parsed conditions:"
+        echo "  gate 01 requires indicator 01 on, and gate 02 requires indicator 01 off."
+        echo "- This variant composes REVR01 with gate 02, so the reversed 10-byte field"
+        echo "  emits only because REVR01 leaves indicator 01 cleared."
+        echo ""
+        echo "Current runtime-produced output:"
+        print_runtime_output_or_placeholder "$REVR_GATEOFF_DEMO_SRC"
+        echo ""
+        echo "Authored source: rpg2.hlasm"
+        echo "Tiny demo source: $REVR_GATEOFF_DEMO_SRC"
+        echo "Generated source: $RPG2_GEN"
+        ;;
     *)
-        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|test|repl]"
+        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|test|repl]"
         exit 1
         ;;
 esac

@@ -408,6 +408,9 @@ _src_parse_check_18:
 	lc	r1,1
 	ceq	r0,r1
 	brt	_src_parse_check_18a
+	lc	r1,2
+	ceq	r0,r1
+	brt	_src_parse_check_18a
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -449,6 +452,9 @@ _src_parse_check_19:
 	lc	r1,1
 	ceq	r0,r1
 	brt	_src_parse_check_19a
+	lc	r1,2
+	ceq	r0,r1
+	brt	_src_parse_check_19a
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -485,6 +491,9 @@ _src_parse_check_20a:
 	lc	r1,1
 	ceq	r0,r1
 	brt	_src_parse_ok
+	lc	r1,2
+	ceq	r0,r1
+	brt	_src_parse_ok
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -506,6 +515,9 @@ _src_parse_check_21a:
 	ceq	r0,z
 	brt	_src_parse_ok
 	lc	r1,1
+	ceq	r0,r1
+	brt	_src_parse_ok
+	lc	r1,2
 	ceq	r0,r1
 	brt	_src_parse_ok
 	la	r1,_source_parse_ok
@@ -1220,12 +1232,29 @@ _format_output_line_check_kind:
 	lw	r0,0(r2)
 	ceq	r0,z
 	brt	_format_output_line_check_calc_ready
+	lc	r1,1
+	ceq	r0,r1
+	brt	_format_output_line_gate_on
+	lc	r1,2
+	ceq	r0,r1
+	brt	_format_output_line_gate_off
+	brf	_format_output_line_return
+_format_output_line_gate_on:
 	push	r0
 	la	r0,_test_ind
 	jal	r1,(r0)
 	add	sp,3
 	ceq	r0,z
 	brt	_format_output_line_return
+	bra	_format_output_line_check_calc_ready
+_format_output_line_gate_off:
+	lc	r0,1
+	push	r0
+	la	r0,_test_ind
+	jal	r1,(r0)
+	add	sp,3
+	ceq	r0,z
+	brf	_format_output_line_return
 _format_output_line_check_calc_ready:
 	la	r1,_calc_field_ready
 	lw	r0,0(r1)

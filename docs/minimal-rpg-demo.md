@@ -10,6 +10,7 @@ Run it with:
 ./demo.sh mini-tail3
 ./demo.sh mini-gateoff
 ./demo.sh mini-rev3
+./demo.sh mini-revr-gateoff
 ```
 
 Current supported tiny program shapes:
@@ -46,6 +47,14 @@ Current supported tiny program shapes:
   - `C` one REVR-style calc stage selecting field `02`
   - `O` detail output definition 01 for 10 bytes
   - `O` detail output definition 02 for 3 bytes
+- `tiny_rpg_demo_revr_gateoff.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` field 01: `A0110`
+  - `I` field 02: `A0810`
+  - `C` one REVR-style calc stage selecting field `01`
+  - `O` detail output definition 01 for 10 bytes gated by indicator-off mode `02`
+  - `O` detail output definition 02 for 3 bytes
 
 What is real end to end today:
 
@@ -56,7 +65,7 @@ What is real end to end today:
 - one MOVE-style computed work field that selects field `01` or `02`
 - one REVR-style computed work field that reverses selected field `01` or `02`
 - two parsed O-spec output definitions with runtime-selected output length up to 10 bytes
-- one parsed indicator-style output gate that can suppress the selected detail line
+- two parsed indicator-style output gate modes that can suppress or allow the selected detail line
 - a CLI-facing demo command and regression fixture driven by live runtime output
 
 What is still placeholder or fixed-shape:
@@ -64,7 +73,7 @@ What is still placeholder or fixed-shape:
 - the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is still a tiny fixed set of calc behaviors, not a general C-spec executor
 - the `O` stage is still one active detail line per record, not a general O-spec formatter
-- the indicator gate is still one tiny fixed-shape case, not general indicator-driven branching
+- output gating is still one tiny fixed-shape indicator case, not general indicator-driven branching
 - the CLI demo runs the current fixed-shape program and reports its live runtime output,
   but it is still not a fully general RPG program surface
 
@@ -113,6 +122,10 @@ RECORD 03C
 A10
 B20
 C30
+
+A10 DROCER
+B20 DROCER
+C30 DROCER
 ```
 
 This is still a constrained demonstration, not a general RPG-II compiler or

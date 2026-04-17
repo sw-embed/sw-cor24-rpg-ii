@@ -1,0 +1,4 @@
+command = './demo.sh mini-revr-gateoff 2>&1'
+timeout = 20
+exit_code = 0
+desc = "Minimal RPG-II demo surface: REVR01 plus indicator-off gate fixture runs through the CLI"

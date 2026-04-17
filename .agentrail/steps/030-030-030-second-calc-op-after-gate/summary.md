@@ -1,0 +1,1 @@
+Added a second parsed C-spec behavior, REVR, plus a new reverse-field tiny demo fixture and updated CLI/docs/regression coverage while keeping the existing demos working on the vendored HLASM path.
