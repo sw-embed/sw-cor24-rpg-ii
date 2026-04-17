@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by adding one more small independent calc capability without destabilizing the latest pushed vendored HLASM path. Prefer a second tiny calc slot over a wider parser rewrite, add one new source fixture that exercises it end to end, and update CLI/docs/regression surfaces only as needed.

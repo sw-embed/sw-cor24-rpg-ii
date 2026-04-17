@@ -23,7 +23,7 @@ The current runnable subset supports:
 - one `H` spec
 - one `F` input file spec
 - two `I` field specs
-- one `C` calc spec using `MOVE01`, `MOVE02`, or `REVR01` / `REVR02`
+- one or two `C` calc specs using `MOVE01`, `MOVE02`, `REVR01`, `REVR02`, or chained `REVR00`
 - two or three `O` detail output specs, with the active one selected by the tiny calc path
 - two parsed indicator-style gate modes on an output spec
 
@@ -31,6 +31,7 @@ That means the tiny program can:
 
 - decode two input field slices from each input record
 - transform one of those fields through a tiny fixed calc stage
+- optionally run a second calc stage over the current calc result
 - select one of two parsed detail output definitions
 - in one constrained case, select a third parsed detail output definition
 - optionally require indicator `01` to be on or off before the selected output emits
@@ -46,6 +47,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_rev3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_rev3.src)
 - [tiny_rpg_demo_revr_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr_gateoff.src)
 - [tiny_rpg_demo_revr6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr6.src)
+- [tiny_rpg_demo_chain.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -61,6 +63,9 @@ indicator `01` is off.
 
 The reverse-plus-third-shape variant uses `REVR01` and emits the reversed field through a
 third parsed 6-byte output definition.
+
+The chained-calc variant uses `MOVE01` followed by `REVR00`, so a second calc slot reverses
+the first calc result before output.
 
 ## Running The Demos
 
@@ -104,6 +109,12 @@ Run the reverse-field plus third-output-shape variant:
 
 ```sh
 ./demo.sh mini-revr6
+```
+
+Run the two-calc chained variant:
+
+```sh
+./demo.sh mini-chain
 ```
 
 Run the regression suite:
@@ -154,6 +165,7 @@ The demo source lines are intentionally compact:
 - `CMOVE02` selects field 02
 - `CREVR01` reverses field 01
 - `CREVR02` reverses field 02
+- `CREVR00` reverses the current calc result in a second calc slot
 - `ODETAIL1000` defines a 10-byte output with no indicator gate
 - `ODETAIL0301` defines a 3-byte output gated by indicator `01`
 - `ODETAIL1001` defines a 10-byte output gated by indicator `01`

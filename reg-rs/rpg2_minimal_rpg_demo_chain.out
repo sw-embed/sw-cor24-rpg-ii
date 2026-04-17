@@ -1,0 +1,25 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Two-Calc Chain Variant) ===
+Program:
+H  control header
+F  input file INFIL
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  MOVE01 -> calc stage 0
+C  REVR00 -> calc stage 1 over the current calc result
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
+
+Current boundary:
+- Real today: the tiny parsed C-spec subset can now carry a second calc slot,
+  and slot 1 can transform the current calc result via source selector 00.
+- This variant chains MOVE01 into REVR00, so the second calc stage reverses
+  the first stage output before formatting the detail line.
+
+Current runtime-produced output:
+A10 DROCER
+B20 DROCER
+C30 DROCER
+
+Authored source: rpg2.hlasm
+Tiny demo source: tiny_rpg_demo_chain.src
+Generated source: build/rpg2.generated.s

@@ -1,1 +1,1 @@
-BLOCKED: Latest pushed vendored HLASM 8fd928f6 supports structured control, but step-032 is blocked because structured IF/ELSEIF lowering in rpg2.hlasm emits undefined _hlif_* end labels and short-branch failures when used for inline _parse_o_spec descriptor storage; no clean repo-local feature can be shipped without upstream HLASM fixes or explicit instruction to avoid those forms.
+Added a third parsed output-shape demo path with a new REVR01+6-byte fixture, refreshed CLI/docs/regressions, and kept the vendored HLASM build green.

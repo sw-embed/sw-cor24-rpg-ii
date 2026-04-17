@@ -1,8 +1,9 @@
 number = 32
 slug = "032-032-third-output-shape-or-second-calc-slot"
-status = "in-progress"
+status = "completed"
 description = "Broaden the tiny runtime-parsed RPG-II subset by adding one more small indepe..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-17T11:59:17"
-commits = []
+completed_at = "2026-04-17T13:01:55"
+commits = ["214a8937cf977fa2111b2f936326d50548100478"]

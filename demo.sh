@@ -8,6 +8,7 @@
 #   ./demo.sh mini-rev3 Run reverse-field minimal RPG-II demo
 #   ./demo.sh mini-revr-gateoff Run reverse-field with gate-off minimal RPG-II demo
 #   ./demo.sh mini-revr6 Run reverse-field with third output-shape minimal RPG-II demo
+#   ./demo.sh mini-chain Run two-calc chained minimal RPG-II demo
 #   ./demo.sh test      Run test suite
 #   ./demo.sh repl      Interactive (future)
 
@@ -25,6 +26,7 @@ GATEOFF_DEMO_SRC="tiny_rpg_demo_gateoff.src"
 REV3_DEMO_SRC="tiny_rpg_demo_rev3.src"
 REVR_GATEOFF_DEMO_SRC="tiny_rpg_demo_revr_gateoff.src"
 REVR6_DEMO_SRC="tiny_rpg_demo_revr6.src"
+CHAIN_DEMO_SRC="tiny_rpg_demo_chain.src"
 prepare_demo() {
     TEST_SRC_DECK_TXT="${1:-$DEFAULT_DEMO_SRC}" ./build.sh build >/dev/null
 }
@@ -110,11 +112,13 @@ case "${1:-demo}" in
         echo "Reverse-field tiny demo source: $REV3_DEMO_SRC"
         echo "Reverse+gate tiny demo source: $REVR_GATEOFF_DEMO_SRC"
         echo "Reverse+6-byte tiny demo source: $REVR6_DEMO_SRC"
+        echo "Chained-calc tiny demo source: $CHAIN_DEMO_SRC"
         echo "Try: ./demo.sh mini-tail3"
         echo "Try: ./demo.sh mini-gateoff"
         echo "Try: ./demo.sh mini-rev3"
         echo "Try: ./demo.sh mini-revr-gateoff"
         echo "Try: ./demo.sh mini-revr6"
+        echo "Try: ./demo.sh mini-chain"
         echo "Generated source: $RPG2_GEN"
         ;;
     mini-tail3)
@@ -245,8 +249,34 @@ case "${1:-demo}" in
         echo "Tiny demo source: $REVR6_DEMO_SRC"
         echo "Generated source: $RPG2_GEN"
         ;;
+    mini-chain)
+        prepare_demo "$CHAIN_DEMO_SRC"
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Two-Calc Chain Variant) ==="
+        echo "Program:"
+        echo "H  control header"
+        echo "F  input file INFIL"
+        echo "I  field 01: A0110  (10-char input slice)"
+        echo "I  field 02: A0810  (3-char input tail slice)"
+        echo "C  MOVE01 -> calc stage 0"
+        echo "C  REVR00 -> calc stage 1 over the current calc result"
+        echo "O  DETAIL01 output (10 chars)"
+        echo "O  DETAIL02 output (3 chars)"
+        echo ""
+        echo "Current boundary:"
+        echo "- Real today: the tiny parsed C-spec subset can now carry a second calc slot,"
+        echo "  and slot 1 can transform the current calc result via source selector 00."
+        echo "- This variant chains MOVE01 into REVR00, so the second calc stage reverses"
+        echo "  the first stage output before formatting the detail line."
+        echo ""
+        echo "Current runtime-produced output:"
+        print_runtime_output_or_placeholder "$CHAIN_DEMO_SRC"
+        echo ""
+        echo "Authored source: rpg2.hlasm"
+        echo "Tiny demo source: $CHAIN_DEMO_SRC"
+        echo "Generated source: $RPG2_GEN"
+        ;;
     *)
-        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|mini-revr6|test|repl]"
+        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|mini-revr6|mini-chain|test|repl]"
         exit 1
         ;;
 esac
