@@ -24,7 +24,7 @@ The current runnable subset supports:
 - one `F` input file spec
 - two `I` field specs
 - one `C` calc spec using `MOVE01`, `MOVE02`, or `REVR01` / `REVR02`
-- two `O` detail output specs, with the active one selected by the `MOVE`
+- two or three `O` detail output specs, with the active one selected by the tiny calc path
 - two parsed indicator-style gate modes on an output spec
 
 That means the tiny program can:
@@ -32,6 +32,7 @@ That means the tiny program can:
 - decode two input field slices from each input record
 - transform one of those fields through a tiny fixed calc stage
 - select one of two parsed detail output definitions
+- in one constrained case, select a third parsed detail output definition
 - optionally require indicator `01` to be on or off before the selected output emits
 - emit one output line per input record
 
@@ -44,6 +45,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_gateoff.src)
 - [tiny_rpg_demo_rev3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_rev3.src)
 - [tiny_rpg_demo_revr_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr_gateoff.src)
+- [tiny_rpg_demo_revr6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr6.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -56,6 +58,9 @@ The reverse variant uses `REVR02` and emits the selected 3-byte field in reverse
 
 The reverse-plus-gate variant uses `REVR01` and emits the reversed 10-byte field only when
 indicator `01` is off.
+
+The reverse-plus-third-shape variant uses `REVR01` and emits the reversed field through a
+third parsed 6-byte output definition.
 
 ## Running The Demos
 
@@ -93,6 +98,12 @@ Run the reverse-field plus gate-off variant:
 
 ```sh
 ./demo.sh mini-revr-gateoff
+```
+
+Run the reverse-field plus third-output-shape variant:
+
+```sh
+./demo.sh mini-revr6
 ```
 
 Run the regression suite:
@@ -147,6 +158,7 @@ The demo source lines are intentionally compact:
 - `ODETAIL0301` defines a 3-byte output gated by indicator `01`
 - `ODETAIL1001` defines a 10-byte output gated by indicator `01`
 - `ODETAIL1002` defines a 10-byte output gated by indicator `01` being off
+- `ODETAIL0600` defines a 6-byte output with no indicator gate
 
 The current runtime still assumes a very specific record layout and program
 shape. Those lines are parsed as metadata, but only inside the small supported

@@ -1,0 +1,4 @@
+command = './demo.sh mini-revr6 2>&1'
+timeout = 20
+exit_code = 0
+desc = "Minimal RPG-II demo surface: REVR01 plus third 6-byte output fixture runs through the CLI"

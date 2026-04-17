@@ -1,6 +1,6 @@
 number = 32
 slug = "032-032-third-output-shape-or-second-calc-slot"
-status = "blocked"
+status = "in-progress"
 description = "Broaden the tiny runtime-parsed RPG-II subset by adding one more small indepe..."
 role = "legacy"
 context_files = []

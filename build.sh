@@ -29,6 +29,7 @@ TEST_SRC_DECK_BIN="$BUILD_DIR/tiny_rpg_demo.srcdeck.bin"
 RUN="cor24-run"
 HLASM_STAGE0_MAX_INSN=12000000
 HLASM_STAGE0_TAIL_LABEL="_indicator_table:"
+SRC_DECK_RECORD_COUNT=0
 
 if [[ -n "${HLASM_STAGE0:-}" ]]; then
     HLASM_STAGE0="$HLASM_STAGE0"
@@ -98,6 +99,7 @@ generate() {
 
 pack_source_deck() {
     mkdir -p "$BUILD_DIR"
+    SRC_DECK_RECORD_COUNT="$(awk 'END { print NR + 0 }' "$TEST_SRC_DECK_TXT")"
     awk '
         {
             line = substr($0, 1, 80)
@@ -109,6 +111,34 @@ pack_source_deck() {
         echo "ERROR: packed source deck is empty: $TEST_SRC_DECK_BIN"
         exit 1
     fi
+
+    if [[ "$SRC_DECK_RECORD_COUNT" -le 0 ]]; then
+        echo "ERROR: source deck has no records: $TEST_SRC_DECK_TXT"
+        exit 1
+    fi
+}
+
+patch_source_deck_count() {
+    local patched="$BUILD_DIR/rpg2.generated.patched.s"
+    awk -v count="$SRC_DECK_RECORD_COUNT" '
+        BEGIN { in_src_desc = 0; word_index = 0 }
+        /^_src_desc:$/ {
+            in_src_desc = 1
+            word_index = 0
+            print
+            next
+        }
+        in_src_desc && /^[[:space:]]*\.word[[:space:]]+/ {
+            word_index++
+            if (word_index == 3) {
+                printf "\t.word\t%s\n", count
+                in_src_desc = 0
+                next
+            }
+        }
+        { print }
+    ' "$RPG2_GEN" > "$patched"
+    mv "$patched" "$RPG2_GEN"
 }
 
 vendor_hlasm() {
@@ -138,6 +168,7 @@ EOF
 build() {
     generate
     pack_source_deck
+    patch_source_deck_count
     echo "=== Assembling $RPG2_GEN ==="
     $RUN --run "$RPG2_GEN" \
         --load-binary "$TEST_DECK@$DECK_LOAD_ADDR" \

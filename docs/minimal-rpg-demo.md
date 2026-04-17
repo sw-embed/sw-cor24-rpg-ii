@@ -11,6 +11,7 @@ Run it with:
 ./demo.sh mini-gateoff
 ./demo.sh mini-rev3
 ./demo.sh mini-revr-gateoff
+./demo.sh mini-revr6
 ```
 
 Current supported tiny program shapes:
@@ -55,6 +56,15 @@ Current supported tiny program shapes:
   - `C` one REVR-style calc stage selecting field `01`
   - `O` detail output definition 01 for 10 bytes gated by indicator-off mode `02`
   - `O` detail output definition 02 for 3 bytes
+- `tiny_rpg_demo_revr6.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` field 01: `A0110`
+  - `I` field 02: `A0810`
+  - `C` one REVR-style calc stage selecting field `01`
+  - `O` detail output definition 01 for 10 bytes
+  - `O` detail output definition 02 for 3 bytes
+  - `O` detail output definition 03 for 6 bytes
 
 What is real end to end today:
 
@@ -64,7 +74,7 @@ What is real end to end today:
 - two extracted input fields with runtime-decoded offsets and lengths up to 10 bytes
 - one MOVE-style computed work field that selects field `01` or `02`
 - one REVR-style computed work field that reverses selected field `01` or `02`
-- two parsed O-spec output definitions with runtime-selected output length up to 10 bytes
+- up to three parsed O-spec output definitions with runtime-selected output length up to 10 bytes
 - two parsed indicator-style output gate modes that can suppress or allow the selected detail line
 - a CLI-facing demo command and regression fixture driven by live runtime output
 
@@ -73,6 +83,7 @@ What is still placeholder or fixed-shape:
 - the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is still a tiny fixed set of calc behaviors, not a general C-spec executor
 - the `O` stage is still one active detail line per record, not a general O-spec formatter
+- third-output-shape selection is still constrained to one narrow known-good calc/output combination
 - output gating is still one tiny fixed-shape indicator case, not general indicator-driven branching
 - the CLI demo runs the current fixed-shape program and reports its live runtime output,
   but it is still not a fully general RPG program surface
@@ -126,6 +137,10 @@ C30
 A10 DROCER
 B20 DROCER
 C30 DROCER
+
+A10 DR
+B20 DR
+C30 DR
 ```
 
 This is still a constrained demonstration, not a general RPG-II compiler or

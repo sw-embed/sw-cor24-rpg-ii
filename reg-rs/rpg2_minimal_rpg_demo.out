@@ -27,8 +27,10 @@ Alternate tiny demo source: tiny_rpg_demo_tail3.src
 Indicator-gated tiny demo source: tiny_rpg_demo_gateoff.src
 Reverse-field tiny demo source: tiny_rpg_demo_rev3.src
 Reverse+gate tiny demo source: tiny_rpg_demo_revr_gateoff.src
+Reverse+6-byte tiny demo source: tiny_rpg_demo_revr6.src
 Try: ./demo.sh mini-tail3
 Try: ./demo.sh mini-gateoff
 Try: ./demo.sh mini-rev3
 Try: ./demo.sh mini-revr-gateoff
+Try: ./demo.sh mini-revr6
 Generated source: build/rpg2.generated.s
