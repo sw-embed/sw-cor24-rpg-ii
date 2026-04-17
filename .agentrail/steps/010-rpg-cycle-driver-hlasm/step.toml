@@ -1,8 +1,9 @@
 number = 10
 slug = "rpg-cycle-driver-hlasm"
-status = "in-progress"
+status = "completed"
 description = "Add the first explicit RPG cycle driver slice in rpg2.hlasm by separating sou..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-16T23:19:13"
-commits = []
+completed_at = "2026-04-16T23:21:56"
+commits = ["e65a829830e873c5e07a210434873fa14d60d363"]

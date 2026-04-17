@@ -1,0 +1,1 @@
+Refactored rpg2.hlasm to introduce an explicit RPG cycle driver with named startup, detail, and total phases. The current behavior is unchanged, but parse-time and detail-time are now separated more clearly for future calculation and output work.

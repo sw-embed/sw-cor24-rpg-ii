@@ -196,6 +196,10 @@ _init_data_runtime:
 	la	r1,_indicator_runtime_ok
 	la	r0,0
 	sw	r0,0(r1)
+	la	r1,_detail_record_count
+	sw	r0,0(r1)
+	la	r1,_detail_preview_ready
+	sw	r0,0(r1)
 	la	r0,_init_indicator_table
 	jal	r1,(r0)
 	la	r0,1
@@ -366,13 +370,13 @@ _rpg_cycle_detail:
 	ceq	r0,z
 	brt	_rpg_cycle_detail_eof
 	sw	r0,-3(fp)
-	la	r0,_run_detail_calcs
-	jal	r1,(r0)
 	lw	r0,-3(fp)
 	push	r0
-	la	r0,_emit_detail_output
+	la	r0,_run_detail_calcs
 	jal	r1,(r0)
 	add	sp,3
+	la	r0,_emit_detail_output
+	jal	r1,(r0)
 	la	r0,1
 	bra	_rpg_cycle_detail_done
 _rpg_cycle_detail_eof:
@@ -380,16 +384,52 @@ _rpg_cycle_detail_eof:
 _rpg_cycle_detail_done:
 	RET1
 _run_detail_calcs:
-	FRAME1
-	; Placeholder for future C-spec evaluation.
-	RET1
+	FRAME21
+	lw	r2,9(fp)
+	la	r1,_detail_record_count
+	lw	r0,0(r1)
+	add	r0,1
+	sw	r0,0(r1)
+	la	r1,_detail_preview_ready
+	la	r0,0
+	sw	r0,0(r1)
+	la	r1,_detail_preview_buf
+	lbu	r0,0(r2)
+	sb	r0,0(r1)
+	lbu	r0,1(r2)
+	sb	r0,1(r1)
+	lbu	r0,2(r2)
+	sb	r0,2(r1)
+	lbu	r0,3(r2)
+	sb	r0,3(r1)
+	lbu	r0,4(r2)
+	sb	r0,4(r1)
+	lbu	r0,5(r2)
+	sb	r0,5(r1)
+	lbu	r0,6(r2)
+	sb	r0,6(r1)
+	lbu	r0,7(r2)
+	sb	r0,7(r1)
+	lbu	r0,8(r2)
+	sb	r0,8(r1)
+	lbu	r0,9(r2)
+	sb	r0,9(r1)
+	la	r1,_detail_preview_ready
+	la	r0,1
+	sw	r0,0(r1)
+	RET21
 _emit_detail_output:
 	FRAME1
-	lw	r0,6(fp)
+	la	r1,_detail_preview_ready
+	lw	r0,0(r1)
+	ceq	r0,z
+	brt	_emit_detail_output_done
+	la	r0,_detail_preview_buf
 	push	r0
 	la	r0,_render_detail_preview
 	jal	r1,(r0)
 	add	sp,3
+_emit_detail_output_done:
 	RET1
 _rpg_cycle_total:
 	FRAME1
@@ -548,6 +588,12 @@ _calc_table_count:
 	.word	0
 _output_table_count:
 	.word	0
+_detail_record_count:
+	.word	0
+_detail_preview_ready:
+	.word	0
+_detail_preview_buf:
+	.byte 0,0,0,0,0,0,0,0,0,0
 _indicator_table:
 	.byte 0,0,0,0,0,0,0,0
 	.byte 0,0,0,0,0,0,0,0

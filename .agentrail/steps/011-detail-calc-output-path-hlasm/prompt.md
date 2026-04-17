@@ -1,0 +1,1 @@
+Extend the current RPG cycle slice in rpg2.hlasm so detail-time does a little more real work than just preview emission. Add one small calculation/output checkpoint or explicit field-move stage that keeps the current visible output stable while making the detail path closer to a real RPG cycle.
