@@ -5,13 +5,13 @@ F  input file INFIL
 I  field 01: A0110  (10-char input slice)
 I  field 02: A0810  (3-char input tail slice)
 C  MOVE01 -> calc work field
-O  DETAIL output (10 chars)
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
 
 Current boundary:
 - Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O
   source parsing, two decoded I-spec fields, one MOVE-style calc stage that
-  selects field 01 or 02, one output-line format stage, live runtime-produced
-  CLI demo surface.
+  selects field 01 or 02, and two selectable O-spec output definitions.
 - Placeholder today: the subset is still tiny; there is no general RPG
   parser, no variable C-spec execution beyond one MOVE selector, no general
   O-spec formatting, and no arbitrary user-supplied RPG program execution.

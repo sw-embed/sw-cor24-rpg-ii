@@ -1,0 +1,8 @@
+number = 26
+slug = "026-two-output-lengths-or-second-output-line"
+status = "in-progress"
+description = "Broaden the tiny runtime-parsed RPG-II subset by adding one more constrained ..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T11:05:38"
+commits = []

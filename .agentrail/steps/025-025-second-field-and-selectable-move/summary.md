@@ -1,0 +1,1 @@
+Broadened the tiny runtime-parsed subset to decode two I-spec fields and let the single MOVE-style C-spec select field 01 or 02, then updated the tiny demo programs, CLI surface, docs, and regression fixtures to prove both MOVE01 and MOVE02 variants run end to end.

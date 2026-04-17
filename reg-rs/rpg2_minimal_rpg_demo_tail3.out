@@ -5,14 +5,15 @@ F  input file INFIL
 I  field 01: A0110  (10-char input slice)
 I  field 02: A0810  (3-char input tail slice)
 C  MOVE02 -> calc work field
-O  DETAIL output (3 chars)
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
 
 Current boundary:
 - Real today: the external tiny source deck can now vary between two decoded
   I-spec fields, and the single MOVE-style C-spec selects which one feeds
-  the output line.
-- Placeholder today: there is still only one calc op, one output line, and
-  one input file in the supported runtime-parsed subset.
+  one of two parsed O-spec output definitions.
+- Placeholder today: there is still only one calc op, one active output
+  line per record, and one input file in the supported runtime-parsed subset.
 
 Current runtime-produced output:
 01A

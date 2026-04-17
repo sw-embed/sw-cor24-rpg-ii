@@ -18,14 +18,16 @@ Current supported tiny program shapes:
   - `I` field 01: `A0110`
   - `I` field 02: `A0810`
   - `C` one MOVE-style calc stage selecting field `01`
-  - `O` one detail output record definition for 10 bytes
+  - `O` detail output definition 01 for 10 bytes
+  - `O` detail output definition 02 for 3 bytes
 - `tiny_rpg_demo_tail3.src`
   - `H` control header
   - `F` one input file: `INFIL`
   - `I` field 01: `A0110`
   - `I` field 02: `A0810`
   - `C` one MOVE-style calc stage selecting field `02`
-  - `O` one detail output record definition for 3 bytes
+  - `O` detail output definition 01 for 10 bytes
+  - `O` detail output definition 02 for 3 bytes
 
 What is real end to end today:
 
@@ -34,14 +36,14 @@ What is real end to end today:
 - parsing of a narrow but now variable `H/F/I/C/O` tiny source shape
 - two extracted input fields with runtime-decoded offsets and lengths up to 10 bytes
 - one MOVE-style computed work field that selects field `01` or `02`
-- one output-line assembly stage with runtime-decoded output length up to 10 bytes
+- two parsed O-spec output definitions with runtime-selected output length up to 10 bytes
 - a CLI-facing demo command and regression fixture driven by live runtime output
 
 What is still placeholder or fixed-shape:
 
 - the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is one fixed MOVE-style selector, not a general C-spec executor
-- the `O` stage is still one detail line, not a general O-spec formatter
+- the `O` stage is still one active detail line per record, not a general O-spec formatter
 - the CLI demo runs the current fixed-shape program and reports its live runtime output,
   but it is still not a fully general RPG program surface
 
@@ -58,8 +60,8 @@ Smallest remaining gap to a runnable tiny user-supplied RPG program:
 
 The practical next milestone is not "general RPG-II". It is:
 
-- one tiny user-supplied program with a couple of `I` fields, one `C` operation, and one
-  `O` detail line, all parsed from source at runtime
+- one tiny user-supplied program with a couple of `I` fields, one `C` operation, and a
+  couple of `O` detail definitions, all parsed from source at runtime
 
 Current execution path:
 
@@ -67,7 +69,7 @@ Current execution path:
 2. read each 80-byte input record from `test_deck.bin`
 3. extract the runtime-decoded field slices
 4. copy the selected field through the fixed C-spec-like work field
-5. format one output line with runtime-decoded length
+5. select one parsed output definition and format one output line with its runtime-decoded length
 6. emit the line over UART
 
 The CLI demo currently validates that the `rpg2.hlasm -> generated .s` path
