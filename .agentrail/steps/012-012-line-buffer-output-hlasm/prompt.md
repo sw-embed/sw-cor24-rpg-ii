@@ -1,0 +1,1 @@
+Extend rpg2.hlasm so detail-time formats the current preview into an explicit output line buffer before UART emission. Keep the visible output stable, but make the path look more like RPG output processing by separating record/work data from output-buffer assembly.

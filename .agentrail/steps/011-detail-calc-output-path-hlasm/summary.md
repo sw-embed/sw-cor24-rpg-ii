@@ -1,0 +1,1 @@
+Added a real detail-time work step in rpg2.hlasm by copying each record's 10-byte preview slice into a work buffer, tracking detail records, and emitting from that buffer without changing visible output. Verified with ./build.sh test.
