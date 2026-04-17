@@ -1,0 +1,1 @@
+Recorded the explicit decision to proceed with local HLASM workarounds instead of continuing to wait on upstream fixes. The rewrite may now advance, but it must avoid blank lines in HLASM source and avoid depending on parameterized macros.

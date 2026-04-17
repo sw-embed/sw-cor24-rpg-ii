@@ -1,0 +1,8 @@
+number = 6
+slug = "rewrite-skeleton-workarounds"
+status = "in-progress"
+description = "Create the initial RPG-II rewrite skeleton in rpg2.hlasm using only HLASM fea..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-16T22:08:57"
+commits = []
