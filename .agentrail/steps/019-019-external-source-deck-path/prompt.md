@@ -1,0 +1,1 @@
+Implement the first concrete capability from the runnable-gap analysis: start replacing the embedded fixed-shape source fixture path with an external source-deck or buffer path for the tiny demo program while keeping current behavior stable. Stay narrow: prove the runtime can read the tiny program source from outside rpg2.hlasm before broadening I/C/O parsing.

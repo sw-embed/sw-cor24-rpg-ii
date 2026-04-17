@@ -17,8 +17,11 @@ BUILD_DIR="build"
 RPG2_GEN="$BUILD_DIR/rpg2.generated.s"
 RPG2_LEGACY="rpg2.s"
 SRC_LOAD_ADDR=524288
+SRC_DECK_LOAD_ADDR=655360
 DECK_LOAD_ADDR=589824
 TEST_DECK="test_deck.bin"
+TEST_SRC_DECK_TXT="tiny_rpg_demo.src"
+TEST_SRC_DECK_BIN="$BUILD_DIR/tiny_rpg_demo.srcdeck.bin"
 RUN="cor24-run"
 
 if ! command -v cor24-run &>/dev/null; then
@@ -38,6 +41,11 @@ fi
 
 if [[ ! -f "$TEST_DECK" ]]; then
     echo "ERROR: $TEST_DECK not found."
+    exit 1
+fi
+
+if [[ ! -f "$TEST_SRC_DECK_TXT" ]]; then
+    echo "ERROR: $TEST_SRC_DECK_TXT not found."
     exit 1
 fi
 
@@ -68,10 +76,28 @@ generate() {
     fi
 }
 
+pack_source_deck() {
+    mkdir -p "$BUILD_DIR"
+    awk '
+        {
+            line = substr($0, 1, 80)
+            printf "%-80s", line
+        }
+    ' "$TEST_SRC_DECK_TXT" > "$TEST_SRC_DECK_BIN"
+
+    if [[ ! -s "$TEST_SRC_DECK_BIN" ]]; then
+        echo "ERROR: packed source deck is empty: $TEST_SRC_DECK_BIN"
+        exit 1
+    fi
+}
+
 build() {
     generate
+    pack_source_deck
     echo "=== Assembling $RPG2_GEN ==="
-    $RUN --run "$RPG2_GEN" --load-binary "$TEST_DECK@$DECK_LOAD_ADDR" \
+    $RUN --run "$RPG2_GEN" \
+        --load-binary "$TEST_DECK@$DECK_LOAD_ADDR" \
+        --load-binary "$TEST_SRC_DECK_BIN@$SRC_DECK_LOAD_ADDR" \
         --speed 0 -n 50000 2>&1 | tail -5
     echo "Assemble check OK."
 }
@@ -80,7 +106,9 @@ run() {
     build
     echo ""
     echo "=== Running ==="
-    $RUN --run "$RPG2_GEN" --load-binary "$TEST_DECK@$DECK_LOAD_ADDR" \
+    $RUN --run "$RPG2_GEN" \
+        --load-binary "$TEST_DECK@$DECK_LOAD_ADDR" \
+        --load-binary "$TEST_SRC_DECK_BIN@$SRC_DECK_LOAD_ADDR" \
         --speed 0 "${@:2}"
 }
 

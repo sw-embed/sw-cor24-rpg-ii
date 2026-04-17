@@ -1,0 +1,8 @@
+number = 19
+slug = "019-external-source-deck-path"
+status = "in-progress"
+description = "Implement the first concrete capability from the runnable-gap analysis: start..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T00:01:15"
+commits = []

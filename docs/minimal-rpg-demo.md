@@ -1,7 +1,8 @@
 # Minimal RPG-II Demo
 
 This repo now has a CLI-facing minimal RPG-II demo surface built around the
-fixed-shape source fixture embedded in `rpg2.hlasm`.
+fixed-shape tiny source program in `tiny_rpg_demo.src`, loaded at runtime as an
+external source deck.
 
 Run it with:
 
@@ -20,7 +21,8 @@ Current fixed program shape:
 What is real end to end today:
 
 - the authored `rpg2.hlasm -> generated .s -> cor24-run` build path
-- parsing of the embedded fixed-shape `H/F/I/C/O` fixture
+- loading of the tiny demo source from an external source-deck buffer
+- parsing of the fixed-shape `H/F/I/C/O` demo source
 - one extracted input field
 - one MOVE-style computed work field
 - one output-line assembly stage
@@ -28,7 +30,7 @@ What is real end to end today:
 
 What is still placeholder or fixed-shape:
 
-- the RPG source is embedded in `rpg2.hlasm`, not loaded as an arbitrary user program
+- the tiny RPG source still has a fixed known shape rather than supporting arbitrary programs
 - `I` extraction is hard-wired to one known 10-byte slice
 - the `C` stage is one fixed MOVE-style copy, not a general C-spec executor
 - the `O` stage is one fixed 10-byte detail line, not a general O-spec formatter
@@ -37,15 +39,13 @@ What is still placeholder or fixed-shape:
 
 Smallest remaining gap to a runnable tiny user-supplied RPG program:
 
-1. load RPG source from an external deck or buffer instead of the embedded fixed
-   fixture in `rpg2.hlasm`
-2. decode one real `I`-spec field definition from that user-supplied source into
+1. decode one real `I`-spec field definition from that external user-supplied source into
    runtime field metadata
-3. decode one real `C`-spec operation from that source into a tiny executable calc
+2. decode one real `C`-spec operation from that source into a tiny executable calc
    form instead of the fixed MOVE-style path
-4. decode one real `O`-spec detail-line definition from that source into runtime
+3. decode one real `O`-spec detail-line definition from that source into runtime
    output metadata
-5. drive the CLI demo from the actual generated/runtime result of that supplied
+4. drive the CLI demo from the actual generated/runtime result of that supplied
    source, not from an explicitly stated expected-output block
 
 The practical next milestone is not "general RPG-II". It is:
@@ -55,7 +55,7 @@ The practical next milestone is not "general RPG-II". It is:
 
 Current execution path:
 
-1. parse the embedded `H/F/I/C/O` source fixture
+1. load and parse the external fixed-shape `H/F/I/C/O` demo source
 2. read each 80-byte input record from `test_deck.bin`
 3. extract the first 10 bytes into `A0105`
 4. copy that field through the fixed C-spec-like work field

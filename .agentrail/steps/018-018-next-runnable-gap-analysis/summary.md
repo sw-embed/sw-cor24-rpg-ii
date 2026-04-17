@@ -1,0 +1,1 @@
+Added a short repo-facing gap analysis to docs/minimal-rpg-demo.md that spells out the smallest remaining capabilities needed to move from the fixed-shape demo to a genuinely runnable tiny user-supplied RPG program. Kept code unchanged and grounded the next milestone in concrete parser/runtime work.

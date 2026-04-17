@@ -787,7 +787,7 @@ _deck_desc:
 	.word	3
 	.word	0
 _src_desc:
-	.word	_src_deck
+	.word	655360
 	.word	80
 	.word	5
 	.word	0
@@ -850,47 +850,3 @@ _output_line_buf:
 _indicator_table:
 	.byte 0,0,0,0,0,0,0,0
 	.byte 0,0,0,0,0,0,0,0
-_src_deck:
-	.byte 48,48,48,48,49,72
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP4
-	.byte 48,48,48,48,50,70,73,78,70,73,76,69
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP8
-	.byte 48,48,48,48,52,73,65,48,49,48,53
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP8
-	.byte 48,48,48,48,53,67,77,79,86,69,48,49
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP8
-	.byte 48,48,48,48,54,79,68,69,84,65,73,76
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP10
-	SP8
