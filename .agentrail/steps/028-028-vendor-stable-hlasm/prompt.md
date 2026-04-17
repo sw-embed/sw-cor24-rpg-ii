@@ -1,0 +1,1 @@
+Vendor a stable HLASM stage-0 snapshot into this repo under a local ignored work/vendor path, teach build.sh to prefer the vendored snapshot over ../sw-cor24-hlasm by default while still allowing an explicit override, and document how to refresh/use the vendor so this repo no longer depends on the sibling worktree being buildable.

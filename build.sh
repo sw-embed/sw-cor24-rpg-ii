@@ -6,14 +6,18 @@ set -euo pipefail
 #   ./build.sh              Assemble check only
 #   ./build.sh run          Build and run on emulator
 #   ./build.sh test         Run test suite
+#   ./build.sh vendor-hlasm Refresh vendored stable HLASM stage-0
 #   ./build.sh clean        Remove build artifacts
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
 HLASM_SRC="rpg2.hlasm"
-HLASM_STAGE0="../sw-cor24-hlasm/hlasm.s"
 BUILD_DIR="build"
+WORK_DIR="work"
+VENDORED_HLASM_DIR="$WORK_DIR/vendor/sw-cor24-hlasm"
+VENDORED_HLASM_STAGE0="$VENDORED_HLASM_DIR/hlasm.s"
+FALLBACK_HLASM_STAGE0="../sw-cor24-hlasm/hlasm.s"
 RPG2_GEN="$BUILD_DIR/rpg2.generated.s"
 RPG2_LEGACY="rpg2.s"
 SRC_LOAD_ADDR=524288
@@ -25,6 +29,14 @@ TEST_SRC_DECK_BIN="$BUILD_DIR/tiny_rpg_demo.srcdeck.bin"
 RUN="cor24-run"
 HLASM_STAGE0_MAX_INSN=12000000
 HLASM_STAGE0_TAIL_LABEL="_indicator_table:"
+
+if [[ -n "${HLASM_STAGE0:-}" ]]; then
+    HLASM_STAGE0="$HLASM_STAGE0"
+elif [[ -f "$VENDORED_HLASM_STAGE0" ]]; then
+    HLASM_STAGE0="$VENDORED_HLASM_STAGE0"
+else
+    HLASM_STAGE0="$FALLBACK_HLASM_STAGE0"
+fi
 
 if ! command -v cor24-run &>/dev/null; then
     echo "ERROR: cor24-run not found. Build sw-cor24-emulator first."
@@ -53,6 +65,7 @@ fi
 
 generate() {
     mkdir -p "$BUILD_DIR"
+    echo "=== Using HLASM stage-0: $HLASM_STAGE0 ==="
     echo "=== Generating $RPG2_GEN from $HLASM_SRC ==="
     $RUN --run "$HLASM_STAGE0" --load-binary "$HLASM_SRC@$SRC_LOAD_ADDR" \
         --speed 0 -n "$HLASM_STAGE0_MAX_INSN" 2>&1 \
@@ -98,6 +111,30 @@ pack_source_deck() {
     fi
 }
 
+vendor_hlasm() {
+    local source_repo="../sw-cor24-hlasm"
+    local source_ref="origin/main"
+    local vendor_readme="$VENDORED_HLASM_DIR/README.txt"
+    local vendor_commit
+
+    if [[ ! -d "$source_repo/.git" ]]; then
+        echo "ERROR: source repo not found: $source_repo"
+        exit 1
+    fi
+
+    vendor_commit="$(git -C "$source_repo" rev-parse "$source_ref")"
+    mkdir -p "$VENDORED_HLASM_DIR"
+    git -C "$source_repo" show "$source_ref:hlasm.s" > "$VENDORED_HLASM_STAGE0"
+    cat > "$vendor_readme" <<EOF
+Vendored stable HLASM stage-0 snapshot for sw-cor24-rpg-ii.
+Source repo: $source_repo
+Source ref: $source_ref
+Source commit: $vendor_commit
+Refresh with: ./build.sh vendor-hlasm
+EOF
+    echo "Vendored $VENDORED_HLASM_STAGE0 from $source_repo@$vendor_commit"
+}
+
 build() {
     generate
     pack_source_deck
@@ -139,6 +176,7 @@ case "$CMD" in
     build)  build ;;
     run)    shift; run "$@" ;;
     test)   test_suite ;;
+    vendor-hlasm) vendor_hlasm ;;
     clean)  clean ;;
-    *)      echo "Usage: $0 {build|run|test|clean}"; exit 1 ;;
+    *)      echo "Usage: $0 {build|run|test|vendor-hlasm|clean}"; exit 1 ;;
 esac

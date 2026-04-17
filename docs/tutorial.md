@@ -70,6 +70,27 @@ Run the regression suite:
 ./build.sh test
 ```
 
+## Pinned HLASM Snapshot
+
+This repo can use a vendored stable `hlasm.s` snapshot instead of reading the
+live sibling worktree directly.
+
+Refresh the local vendored copy from the last pushed sibling `origin/main`:
+
+```sh
+./build.sh vendor-hlasm
+```
+
+After that, `build.sh` prefers:
+
+1. `HLASM_STAGE0` if you set it explicitly
+2. `work/vendor/sw-cor24-hlasm/hlasm.s` if it exists
+3. `../sw-cor24-hlasm/hlasm.s` as a fallback
+
+The vendored path lives under `work/vendor/` and is gitignored on purpose, so
+you can keep this repo building against a stable snapshot while `sw-cor24-hlasm`
+is mid-change.
+
 ## How The Pipeline Works
 
 1. `rpg2.hlasm` is the authored source.
