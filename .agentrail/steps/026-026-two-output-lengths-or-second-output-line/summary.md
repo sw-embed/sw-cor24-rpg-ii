@@ -1,0 +1,1 @@
+Broadened the tiny runtime-parsed subset to decode two O-spec detail output definitions and select between them via the current MOVE01/MOVE02 field selector, updated the demo source decks and CLI/docs/fixtures, and added docs/tutorial.md covering current use cases and demo workflow.

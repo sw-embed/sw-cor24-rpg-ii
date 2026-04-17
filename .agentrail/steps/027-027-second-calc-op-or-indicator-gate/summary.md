@@ -1,0 +1,1 @@
+BLOCKED: Blocked by sibling sw-cor24-hlasm worktree: latest local hlasm.s is dirty and fails its own ./build.sh build with branch-target errors, so the current RPG-II step cannot be validated here against latest HLASM. Ask the sibling-repo agent to restore a buildable HEAD or commit/push the in-progress literals/data work before resuming this step.

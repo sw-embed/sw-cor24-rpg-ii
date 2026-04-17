@@ -1,8 +1,9 @@
 number = 26
 slug = "026-two-output-lengths-or-second-output-line"
-status = "in-progress"
+status = "completed"
 description = "Broaden the tiny runtime-parsed RPG-II subset by adding one more constrained ..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-17T11:05:38"
-commits = []
+completed_at = "2026-04-17T11:20:38"
+commits = ["81a9c3d69eb10ef08cd10b98ee7578781ac50d80"]
