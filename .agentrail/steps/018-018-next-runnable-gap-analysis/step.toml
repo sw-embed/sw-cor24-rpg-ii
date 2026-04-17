@@ -1,0 +1,8 @@
+number = 18
+slug = "018-next-runnable-gap-analysis"
+status = "in-progress"
+description = "Analyze the remaining gap between the current fixed-shape minimal RPG-II demo..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T00:00:00"
+commits = []

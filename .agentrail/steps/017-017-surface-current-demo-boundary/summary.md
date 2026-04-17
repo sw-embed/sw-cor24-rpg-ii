@@ -1,0 +1,1 @@
+Clarified the current minimal RPG-II demo boundary in both ./demo.sh mini and docs/minimal-rpg-demo.md so users can see exactly which parts are real end-to-end today and which parts are still fixed-shape placeholders. Verified the updated CLI text with ./demo.sh mini and kept ./build.sh test passing.

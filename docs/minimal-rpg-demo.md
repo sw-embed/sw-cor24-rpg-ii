@@ -35,6 +35,24 @@ What is still placeholder or fixed-shape:
 - the CLI demo presents the current expected output explicitly rather than running a
   fully general RPG program surface
 
+Smallest remaining gap to a runnable tiny user-supplied RPG program:
+
+1. load RPG source from an external deck or buffer instead of the embedded fixed
+   fixture in `rpg2.hlasm`
+2. decode one real `I`-spec field definition from that user-supplied source into
+   runtime field metadata
+3. decode one real `C`-spec operation from that source into a tiny executable calc
+   form instead of the fixed MOVE-style path
+4. decode one real `O`-spec detail-line definition from that source into runtime
+   output metadata
+5. drive the CLI demo from the actual generated/runtime result of that supplied
+   source, not from an explicitly stated expected-output block
+
+The practical next milestone is not "general RPG-II". It is:
+
+- one tiny user-supplied program with one `I` field, one `C` operation, and one
+  `O` detail line, all parsed from source at runtime
+
 Current execution path:
 
 1. parse the embedded `H/F/I/C/O` source fixture

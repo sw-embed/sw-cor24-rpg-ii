@@ -1,0 +1,1 @@
+Analyze the remaining gap between the current fixed-shape minimal RPG-II demo and a genuinely runnable tiny user-supplied RPG program. Keep code unchanged unless a tiny doc-only addition is needed, and produce the smallest repo-facing guidance on what concrete capabilities are still missing next.
