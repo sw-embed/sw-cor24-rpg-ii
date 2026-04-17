@@ -1,0 +1,22 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Indicator-Gated Variant) ===
+Program:
+H  control header
+F  input file INFIL
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  MOVE01 -> calc work field
+O  DETAIL01 output (10 chars) gated by indicator 01
+O  DETAIL02 output (3 chars)
+
+Current boundary:
+- Real today: one parsed indicator-style gate can now enable or suppress the
+  selected O-spec output definition.
+- In this variant, MOVE01 clears indicator 01, so the selected gated output
+  is suppressed and no detail lines are emitted.
+
+Current runtime-produced output:
+(no output)
+
+Authored source: rpg2.hlasm
+Tiny demo source: tiny_rpg_demo_gateoff.src
+Generated source: build/rpg2.generated.s

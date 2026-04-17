@@ -1,8 +1,9 @@
 number = 28
 slug = "028-vendor-stable-hlasm"
-status = "in-progress"
+status = "completed"
 description = "Vendor a stable HLASM stage-0 snapshot into this repo under a local ignored w..."
 role = "production"
 context_files = []
 created_at = "2026-04-17T11:33:14"
-commits = []
+completed_at = "2026-04-17T11:36:02"
+commits = ["91a1b3c655087a029f93bc856b4683ed20f14333"]

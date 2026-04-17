@@ -1,0 +1,8 @@
+number = 29
+slug = "029-resume-indicator-gate-on-vendored-hlasm"
+status = "in-progress"
+description = "Resume the blocked tiny runtime-parsed subset expansion, but use the vendored..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T11:36:02"
+commits = []

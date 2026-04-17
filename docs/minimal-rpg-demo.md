@@ -8,6 +8,7 @@ Run it with:
 ```sh
 ./demo.sh mini
 ./demo.sh mini-tail3
+./demo.sh mini-gateoff
 ```
 
 Current supported tiny program shapes:
@@ -28,6 +29,14 @@ Current supported tiny program shapes:
   - `C` one MOVE-style calc stage selecting field `02`
   - `O` detail output definition 01 for 10 bytes
   - `O` detail output definition 02 for 3 bytes
+- `tiny_rpg_demo_gateoff.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` field 01: `A0110`
+  - `I` field 02: `A0810`
+  - `C` one MOVE-style calc stage selecting field `01`
+  - `O` detail output definition 01 for 10 bytes gated by indicator `01`
+  - `O` detail output definition 02 for 3 bytes
 
 What is real end to end today:
 
@@ -37,6 +46,7 @@ What is real end to end today:
 - two extracted input fields with runtime-decoded offsets and lengths up to 10 bytes
 - one MOVE-style computed work field that selects field `01` or `02`
 - two parsed O-spec output definitions with runtime-selected output length up to 10 bytes
+- one parsed indicator-style output gate that can suppress the selected detail line
 - a CLI-facing demo command and regression fixture driven by live runtime output
 
 What is still placeholder or fixed-shape:
@@ -44,6 +54,7 @@ What is still placeholder or fixed-shape:
 - the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is one fixed MOVE-style selector, not a general C-spec executor
 - the `O` stage is still one active detail line per record, not a general O-spec formatter
+- the indicator gate is still one tiny fixed-shape case, not general indicator-driven branching
 - the CLI demo runs the current fixed-shape program and reports its live runtime output,
   but it is still not a fully general RPG program surface
 
@@ -69,8 +80,8 @@ Current execution path:
 2. read each 80-byte input record from `test_deck.bin`
 3. extract the runtime-decoded field slices
 4. copy the selected field through the fixed C-spec-like work field
-5. select one parsed output definition and format one output line with its runtime-decoded length
-6. emit the line over UART
+5. select one parsed output definition, apply its optional indicator gate, and format one output line with its runtime-decoded length
+6. emit the line over UART if it is still enabled
 
 The CLI demo currently validates that the `rpg2.hlasm -> generated .s` path
 still builds, then runs the selected tiny program and reports its
@@ -86,6 +97,8 @@ RECORD 03C
 01A
 02B
 03C
+
+(no output)
 ```
 
 This is still a constrained demonstration, not a general RPG-II compiler or

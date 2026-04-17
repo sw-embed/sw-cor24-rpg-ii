@@ -1,0 +1,1 @@
+Resume the blocked tiny runtime-parsed subset expansion, but use the vendored stable HLASM stage-0 path instead of the live sibling worktree. Add one constrained new behavior, preferably a parsed indicator-style gate on the existing output definitions, then update the demo surface/docs/tests with a variant that exercises it.

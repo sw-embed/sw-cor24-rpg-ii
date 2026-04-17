@@ -20,8 +20,6 @@ Current runtime-produced output:
 02B
 03C
 
-
-
 Authored source: rpg2.hlasm
 Tiny demo source: tiny_rpg_demo_tail3.src
 Generated source: build/rpg2.generated.s

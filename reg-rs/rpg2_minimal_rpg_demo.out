@@ -21,10 +21,10 @@ RECORD 01A
 RECORD 02B
 RECORD 03C
 
-
-
 Authored source: rpg2.hlasm
 Tiny demo source: tiny_rpg_demo.src
 Alternate tiny demo source: tiny_rpg_demo_tail3.src
+Indicator-gated tiny demo source: tiny_rpg_demo_gateoff.src
 Try: ./demo.sh mini-tail3
+Try: ./demo.sh mini-gateoff
 Generated source: build/rpg2.generated.s

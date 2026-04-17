@@ -1,0 +1,1 @@
+Stopped depending on the live sibling sw-cor24-hlasm worktree by adding a vendored stable HLASM stage-0 path under work/vendor, teaching build.sh to prefer it by default with an explicit override and refresh command, and documenting the pinned-snapshot workflow in docs/tutorial.md.

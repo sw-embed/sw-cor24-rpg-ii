@@ -25,12 +25,14 @@ The current runnable subset supports:
 - two `I` field specs
 - one `C` calc spec using `MOVE01` or `MOVE02`
 - two `O` detail output specs, with the active one selected by the `MOVE`
+- one parsed indicator-style gate on an output spec
 
 That means the tiny program can:
 
 - decode two input field slices from each input record
 - select one of those fields through a fixed MOVE-style calc stage
 - select one of two parsed detail output definitions
+- optionally suppress the selected output definition through indicator `01`
 - emit one output line per input record
 
 ## Demo Sources
@@ -39,10 +41,14 @@ The demo source decks live in the repo root:
 
 - [tiny_rpg_demo.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo.src)
 - [tiny_rpg_demo_tail3.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_tail3.src)
+- [tiny_rpg_demo_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_gateoff.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
 The second variant uses `MOVE02` and the 3-byte output definition.
+
+The gated variant uses `MOVE01`, selects the 10-byte output definition, and
+suppresses it because indicator `01` is off.
 
 ## Running The Demos
 
@@ -62,6 +68,12 @@ Run the second-field / second-output variant:
 
 ```sh
 ./demo.sh mini-tail3
+```
+
+Run the indicator-gated no-output variant:
+
+```sh
+./demo.sh mini-gateoff
 ```
 
 Run the regression suite:
@@ -94,7 +106,7 @@ is mid-change.
 ## How The Pipeline Works
 
 1. `rpg2.hlasm` is the authored source.
-2. `build.sh` runs `../sw-cor24-hlasm/hlasm.s` to generate `build/rpg2.generated.s`.
+2. `build.sh` runs the selected HLASM stage-0 snapshot to generate `build/rpg2.generated.s`.
 3. The chosen tiny source deck is packed into `build/tiny_rpg_demo.srcdeck.bin`.
 4. `cor24-run` loads:
    - the generated COR24 assembly
@@ -110,8 +122,9 @@ The demo source lines are intentionally compact:
 - `IA0810` means field 02 spans columns 8-10
 - `CMOVE01` selects field 01
 - `CMOVE02` selects field 02
-- `ODETAIL10` defines a 10-byte output
-- `ODETAIL03` defines a 3-byte output
+- `ODETAIL1000` defines a 10-byte output with no indicator gate
+- `ODETAIL0301` defines a 3-byte output gated by indicator `01`
+- `ODETAIL1001` defines a 10-byte output gated by indicator `01`
 
 The current runtime still assumes a very specific record layout and program
 shape. Those lines are parsed as metadata, but only inside the small supported
@@ -124,7 +137,7 @@ Still missing:
 - arbitrary numbers of files, fields, calcs, and outputs
 - general C-spec execution
 - general O-spec formatting
-- indicators driving real calc/output branching
+- general indicator-driven calc/output branching beyond the one parsed gate
 - user-friendly diagnostics for malformed RPG source
 
 For the current boundary and examples, also see
