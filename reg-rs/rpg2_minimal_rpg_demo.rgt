@@ -1,4 +1,4 @@
 command = './demo.sh mini 2>&1'
 timeout = 20
 exit_code = 0
-desc = "Minimal RPG-II demo surface: fixed H/F/I/C/O fixture is presented through the CLI"
+desc = "Minimal RPG-II demo surface: two-field fixture using MOVE01 is presented through the CLI"

@@ -2,17 +2,19 @@
 Program:
 H  control header
 F  input file INFIL
-I  field A0110  (10-char input slice)
-C  MOVE A0110 -> calc work field
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  MOVE01 -> calc work field
 O  DETAIL output (10 chars)
 
 Current boundary:
 - Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O
-  source parsing, one extracted field, one MOVE-style calc stage, one
-  output-line format stage, live runtime-produced CLI demo surface.
-- Placeholder today: only a tiny narrow subset varies; there is still no
-  general RPG parser, no variable C-spec execution, no general O-spec
-  formatting, and no arbitrary user-supplied RPG program execution yet.
+  source parsing, two decoded I-spec fields, one MOVE-style calc stage that
+  selects field 01 or 02, one output-line format stage, live runtime-produced
+  CLI demo surface.
+- Placeholder today: the subset is still tiny; there is no general RPG
+  parser, no variable C-spec execution beyond one MOVE selector, no general
+  O-spec formatting, and no arbitrary user-supplied RPG program execution.
 
 Current runtime-produced output:
 RECORD 01A

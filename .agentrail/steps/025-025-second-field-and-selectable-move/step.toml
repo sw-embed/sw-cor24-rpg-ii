@@ -1,0 +1,8 @@
+number = 25
+slug = "025-second-field-and-selectable-move"
+status = "in-progress"
+description = "Broaden the tiny runtime-parsed RPG-II subset by adding one more real degree ..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T10:53:22"
+commits = []

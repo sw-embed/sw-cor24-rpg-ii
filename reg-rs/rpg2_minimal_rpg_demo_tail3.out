@@ -1,17 +1,18 @@
-=== sw-cor24-rpg-ii Minimal RPG-II Demo (Tail-3 Variant) ===
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Second-Field Variant) ===
 Program:
 H  control header
 F  input file INFIL
-I  field A0810  (3-char input tail slice)
-C  MOVE A0810 -> calc work field
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  MOVE02 -> calc work field
 O  DETAIL output (3 chars)
 
 Current boundary:
-- Real today: the external tiny source deck can now vary its single extracted
-  field offset/length and matching DETAIL output length within the current
-  one-field, one-MOVE, one-output-line subset.
-- Placeholder today: there is still only one field, one calc op, one output
-  line, and one input file in the supported runtime-parsed subset.
+- Real today: the external tiny source deck can now vary between two decoded
+  I-spec fields, and the single MOVE-style C-spec selects which one feeds
+  the output line.
+- Placeholder today: there is still only one calc op, one output line, and
+  one input file in the supported runtime-parsed subset.
 
 Current runtime-produced output:
 01A

@@ -3,7 +3,7 @@
 # Usage:
 #   ./demo.sh           Run automated demo
 #   ./demo.sh mini      Run minimal RPG-II demo
-#   ./demo.sh mini-tail3 Run alternate minimal RPG-II demo
+#   ./demo.sh mini-tail3 Run alternate second-field minimal RPG-II demo
 #   ./demo.sh test      Run test suite
 #   ./demo.sh repl      Interactive (future)
 
@@ -68,17 +68,19 @@ case "${1:-demo}" in
         echo "Program:"
         echo "H  control header"
         echo "F  input file INFIL"
-        echo "I  field A0110  (10-char input slice)"
-        echo "C  MOVE A0110 -> calc work field"
+        echo "I  field 01: A0110  (10-char input slice)"
+        echo "I  field 02: A0810  (3-char input tail slice)"
+        echo "C  MOVE01 -> calc work field"
         echo "O  DETAIL output (10 chars)"
         echo ""
         echo "Current boundary:"
         echo "- Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O"
-        echo "  source parsing, one extracted field, one MOVE-style calc stage, one"
-        echo "  output-line format stage, live runtime-produced CLI demo surface."
-        echo "- Placeholder today: only a tiny narrow subset varies; there is still no"
-        echo "  general RPG parser, no variable C-spec execution, no general O-spec"
-        echo "  formatting, and no arbitrary user-supplied RPG program execution yet."
+        echo "  source parsing, two decoded I-spec fields, one MOVE-style calc stage that"
+        echo "  selects field 01 or 02, one output-line format stage, live runtime-produced"
+        echo "  CLI demo surface."
+        echo "- Placeholder today: the subset is still tiny; there is no general RPG"
+        echo "  parser, no variable C-spec execution beyond one MOVE selector, no general"
+        echo "  O-spec formatting, and no arbitrary user-supplied RPG program execution."
         echo ""
         echo "Current runtime-produced output:"
         print_runtime_output "$DEFAULT_DEMO_SRC"
@@ -91,20 +93,21 @@ case "${1:-demo}" in
         ;;
     mini-tail3)
         prepare_demo "$SHORT_DEMO_SRC"
-        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Tail-3 Variant) ==="
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Second-Field Variant) ==="
         echo "Program:"
         echo "H  control header"
         echo "F  input file INFIL"
-        echo "I  field A0810  (3-char input tail slice)"
-        echo "C  MOVE A0810 -> calc work field"
+        echo "I  field 01: A0110  (10-char input slice)"
+        echo "I  field 02: A0810  (3-char input tail slice)"
+        echo "C  MOVE02 -> calc work field"
         echo "O  DETAIL output (3 chars)"
         echo ""
         echo "Current boundary:"
-        echo "- Real today: the external tiny source deck can now vary its single extracted"
-        echo "  field offset/length and matching DETAIL output length within the current"
-        echo "  one-field, one-MOVE, one-output-line subset."
-        echo "- Placeholder today: there is still only one field, one calc op, one output"
-        echo "  line, and one input file in the supported runtime-parsed subset."
+        echo "- Real today: the external tiny source deck can now vary between two decoded"
+        echo "  I-spec fields, and the single MOVE-style C-spec selects which one feeds"
+        echo "  the output line."
+        echo "- Placeholder today: there is still only one calc op, one output line, and"
+        echo "  one input file in the supported runtime-parsed subset."
         echo ""
         echo "Current runtime-produced output:"
         print_runtime_output "$SHORT_DEMO_SRC"

@@ -1,4 +1,4 @@
 command = './demo.sh mini-tail3 2>&1'
 timeout = 20
 exit_code = 0
-desc = "Minimal RPG-II demo surface: alternate tiny tail-slice fixture runs through the CLI"
+desc = "Minimal RPG-II demo surface: second-field MOVE02 fixture runs through the CLI"

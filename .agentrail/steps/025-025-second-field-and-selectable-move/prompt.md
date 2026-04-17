@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by adding one more real degree of freedom without becoming a general executor: support two decoded I-spec fields and let the single MOVE-style C-spec select which field feeds the output line, then update the tiny demo surface/docs/tests with at least one program variant that uses the second field.

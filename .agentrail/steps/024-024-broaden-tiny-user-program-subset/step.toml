@@ -1,8 +1,9 @@
 number = 24
 slug = "024-broaden-tiny-user-program-subset"
-status = "in-progress"
+status = "completed"
 description = "Broaden the current tiny runtime-parsed RPG-II subset without expanding to a ..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-17T10:43:27"
-commits = []
+completed_at = "2026-04-17T10:53:22"
+commits = ["ee8c04b1e8871e02229df1432f0236d2bfd78668"]

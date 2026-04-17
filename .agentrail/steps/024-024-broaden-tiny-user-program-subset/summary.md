@@ -1,0 +1,1 @@
+Broadened the tiny runtime-parsed RPG-II subset so the external source deck can vary its single I-spec slice and matching O-spec output length up to 10 bytes, added a second tail-slice demo program, and updated the CLI/docs/fixtures to prove both variants run end to end.
