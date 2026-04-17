@@ -1,0 +1,1 @@
+Analyze the current project docs, the existing assembler source, and the current state of ../sw-cor24-hlasm. Produce docs/hlasm-rewrite-plan.md describing rewrite goals, architecture, structured-programming approach, feature gaps, migration phases, validation strategy, and recommended source file extensions.
