@@ -1,0 +1,1 @@
+Implement the next smallest capability toward a runnable tiny user-supplied program: decode the first C-spec operation from the external tiny source deck into runtime calc metadata instead of relying on the fixed MOVE-style stage. Keep the program shape narrow and current visible output stable.

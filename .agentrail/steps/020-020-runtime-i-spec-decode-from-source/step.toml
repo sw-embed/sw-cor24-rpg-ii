@@ -1,8 +1,9 @@
 number = 20
 slug = "020-runtime-i-spec-decode-from-source"
-status = "in-progress"
+status = "completed"
 description = "Implement the next smallest capability toward a runnable tiny user-supplied p..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-17T00:04:19"
-commits = []
+completed_at = "2026-04-17T00:06:56"
+commits = ["19f3c5877c4dd05dcfe6dd3d43a5cf3d88f9e68c"]

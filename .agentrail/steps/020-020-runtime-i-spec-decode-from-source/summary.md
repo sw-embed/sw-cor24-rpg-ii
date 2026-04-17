@@ -1,0 +1,1 @@
+Decoded the first I-spec field definition from the external tiny source deck into runtime field metadata instead of hard-coding the descriptor values. The tiny demo source now expresses the 10-byte slice as A0110, visible output stayed stable, and verification passed with ./build.sh test plus ./demo.sh mini.

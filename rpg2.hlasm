@@ -160,6 +160,12 @@ _init_source_parser:
 	sw	r0,0(r1)
 	la	r1,_calc_table_count
 	sw	r0,0(r1)
+	la	r1,_calc_desc0_src_ptr
+	sw	r0,0(r1)
+	la	r1,_calc_desc0_op
+	sw	r0,0(r1)
+	la	r1,_calc_desc0_src_field
+	sw	r0,0(r1)
 	la	r1,_output_desc0_src_ptr
 	sw	r0,0(r1)
 	la	r1,_output_desc0_kind
@@ -219,6 +225,16 @@ _init_source_parser:
 	ceq	r0,r1
 	brf	_src_parse_fail
 	la	r1,_calc_table_count
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_calc_desc0_op
+	lw	r0,0(r1)
+	lc	r1,77
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_calc_desc0_src_field
 	lw	r0,0(r1)
 	lc	r1,1
 	ceq	r0,r1
@@ -447,6 +463,7 @@ _i_spec_done:
 	RET21
 _parse_c_spec:
 	FRAME21
+	lw	r2,9(fp)
 	la	r1,_source_spec_count
 	lw	r0,0(r1)
 	add	r0,1
@@ -460,6 +477,20 @@ _parse_c_spec:
 	ceq	r0,z
 	brf	_c_spec_done
 	add	r0,1
+	sw	r0,0(r1)
+	lw	r0,9(fp)
+	la	r1,_calc_desc0_src_ptr
+	sw	r0,0(r1)
+	la	r1,_calc_desc0_op
+	lbu	r0,6(r2)
+	sw	r0,0(r1)
+	lbu	r0,10(r2)
+	add	r0,-48
+	mul	r0,10
+	lbu	r1,11(r2)
+	add	r1,-48
+	add	r0,r1
+	la	r1,_calc_desc0_src_field
 	sw	r0,0(r1)
 _c_spec_done:
 	RET21
@@ -601,6 +632,16 @@ _run_cspec_move0:
 	la	r1,_calc_field_ready
 	la	r0,0
 	sw	r0,0(r1)
+	la	r1,_calc_desc0_op
+	lw	r0,0(r1)
+	lc	r1,77
+	ceq	r0,r1
+	brf	_run_cspec_move0_done
+	la	r1,_calc_desc0_src_field
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_run_cspec_move0_done
 	la	r1,_detail_field_ready
 	lw	r0,0(r1)
 	ceq	r0,z
@@ -845,6 +886,12 @@ _field_desc0_kind:
 _field_desc0_offset:
 	.word	0
 _field_desc0_len:
+	.word	0
+_calc_desc0_src_ptr:
+	.word	0
+_calc_desc0_op:
+	.word	0
+_calc_desc0_src_field:
 	.word	0
 _output_desc0_src_ptr:
 	.word	0
