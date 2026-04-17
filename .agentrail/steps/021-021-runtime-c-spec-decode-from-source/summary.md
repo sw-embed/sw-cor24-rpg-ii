@@ -1,0 +1,1 @@
+Decoded the first C-spec operation from the external tiny source deck into runtime calc metadata instead of relying on a purely fixed calc descriptor. The runtime now records one MOVE op plus its source-field reference from the source line, keeps current output stable, and verification passed with ./build.sh test and ./demo.sh mini.

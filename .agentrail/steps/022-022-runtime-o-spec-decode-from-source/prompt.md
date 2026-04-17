@@ -1,0 +1,1 @@
+Implement the next smallest capability toward a runnable tiny user-supplied program: decode the first O-spec detail-line definition from the external tiny source deck into runtime output metadata instead of relying on the fixed output descriptor values. Keep the program shape narrow and current visible output stable.

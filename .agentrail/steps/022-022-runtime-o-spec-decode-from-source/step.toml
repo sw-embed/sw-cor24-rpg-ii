@@ -1,0 +1,8 @@
+number = 22
+slug = "022-runtime-o-spec-decode-from-source"
+status = "in-progress"
+description = "Implement the next smallest capability toward a runnable tiny user-supplied p..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T00:09:05"
+commits = []

@@ -244,6 +244,16 @@ _init_source_parser:
 	lc	r1,1
 	ceq	r0,r1
 	brf	_src_parse_fail
+	la	r1,_output_desc0_kind
+	lw	r0,0(r1)
+	lc	r1,68
+	ceq	r0,r1
+	brf	_src_parse_fail
+	la	r1,_output_desc0_len
+	lw	r0,0(r1)
+	lc	r1,10
+	ceq	r0,r1
+	brf	_src_parse_fail
 	la	r1,_source_parse_ok
 	la	r0,1
 	sw	r0,0(r1)
@@ -496,6 +506,7 @@ _c_spec_done:
 	RET21
 _parse_o_spec:
 	FRAME21
+	lw	r2,9(fp)
 	la	r1,_source_spec_count
 	lw	r0,0(r1)
 	add	r0,1
@@ -514,10 +525,15 @@ _parse_o_spec:
 	la	r1,_output_desc0_src_ptr
 	sw	r0,0(r1)
 	la	r1,_output_desc0_kind
-	lc	r0,79
+	lbu	r0,6(r2)
 	sw	r0,0(r1)
+	lbu	r0,12(r2)
+	add	r0,-48
+	mul	r0,10
+	lbu	r2,13(r2)
+	add	r2,-48
+	add	r0,r2
 	la	r1,_output_desc0_len
-	la	r0,10
 	sw	r0,0(r1)
 _o_spec_done:
 	RET21
@@ -697,6 +713,16 @@ _format_output_line:
 	lw	r0,0(r1)
 	ceq	r0,z
 	brt	_format_output_line_done
+	la	r1,_output_desc0_kind
+	lw	r0,0(r1)
+	lc	r1,68
+	ceq	r0,r1
+	brf	_format_output_line_done
+	la	r1,_output_desc0_len
+	lw	r0,0(r1)
+	lc	r1,10
+	ceq	r0,r1
+	brf	_format_output_line_done
 	la	r1,_calc_field_ready
 	lw	r0,0(r1)
 	ceq	r0,z
