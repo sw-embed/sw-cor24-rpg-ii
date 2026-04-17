@@ -3,6 +3,7 @@
 # Usage:
 #   ./demo.sh           Run automated demo
 #   ./demo.sh mini      Run minimal RPG-II demo
+#   ./demo.sh mini-tail3 Run alternate minimal RPG-II demo
 #   ./demo.sh test      Run test suite
 #   ./demo.sh repl      Interactive (future)
 
@@ -14,10 +15,14 @@ DECK_LOAD_ADDR=589824
 SRC_DECK_LOAD_ADDR=655360
 TEST_DECK="test_deck.bin"
 TEST_SRC_DECK_BIN="build/tiny_rpg_demo.srcdeck.bin"
+DEFAULT_DEMO_SRC="tiny_rpg_demo.src"
+SHORT_DEMO_SRC="tiny_rpg_demo_tail3.src"
 prepare_demo() {
-    ./build.sh build >/dev/null
+    TEST_SRC_DECK_TXT="${1:-$DEFAULT_DEMO_SRC}" ./build.sh build >/dev/null
 }
 print_runtime_output() {
+    local demo_src="${1:-$DEFAULT_DEMO_SRC}"
+    TEST_SRC_DECK_TXT="$demo_src" \
     cor24-run --run "$RPG2_GEN" \
         --load-binary "$TEST_DECK@$DECK_LOAD_ADDR" \
         --load-binary "$TEST_SRC_DECK_BIN@$SRC_DECK_LOAD_ADDR" \
@@ -58,7 +63,7 @@ case "${1:-demo}" in
         echo "To run tests: ./demo.sh test"
         ;;
     mini)
-        prepare_demo
+        prepare_demo "$DEFAULT_DEMO_SRC"
         echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo ==="
         echo "Program:"
         echo "H  control header"
@@ -71,19 +76,45 @@ case "${1:-demo}" in
         echo "- Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O"
         echo "  source parsing, one extracted field, one MOVE-style calc stage, one"
         echo "  output-line format stage, live runtime-produced CLI demo surface."
-        echo "- Placeholder today: source shape is still fixed; no general RPG parser, no"
-        echo "  variable C-spec execution, no general O-spec formatting, no arbitrary"
-        echo "  user-supplied RPG program execution yet."
+        echo "- Placeholder today: only a tiny narrow subset varies; there is still no"
+        echo "  general RPG parser, no variable C-spec execution, no general O-spec"
+        echo "  formatting, and no arbitrary user-supplied RPG program execution yet."
         echo ""
         echo "Current runtime-produced output:"
-        print_runtime_output
+        print_runtime_output "$DEFAULT_DEMO_SRC"
         echo ""
         echo "Authored source: rpg2.hlasm"
-        echo "Tiny demo source: tiny_rpg_demo.src"
+        echo "Tiny demo source: $DEFAULT_DEMO_SRC"
+        echo "Alternate tiny demo source: $SHORT_DEMO_SRC"
+        echo "Try: ./demo.sh mini-tail3"
+        echo "Generated source: $RPG2_GEN"
+        ;;
+    mini-tail3)
+        prepare_demo "$SHORT_DEMO_SRC"
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Tail-3 Variant) ==="
+        echo "Program:"
+        echo "H  control header"
+        echo "F  input file INFIL"
+        echo "I  field A0810  (3-char input tail slice)"
+        echo "C  MOVE A0810 -> calc work field"
+        echo "O  DETAIL output (3 chars)"
+        echo ""
+        echo "Current boundary:"
+        echo "- Real today: the external tiny source deck can now vary its single extracted"
+        echo "  field offset/length and matching DETAIL output length within the current"
+        echo "  one-field, one-MOVE, one-output-line subset."
+        echo "- Placeholder today: there is still only one field, one calc op, one output"
+        echo "  line, and one input file in the supported runtime-parsed subset."
+        echo ""
+        echo "Current runtime-produced output:"
+        print_runtime_output "$SHORT_DEMO_SRC"
+        echo ""
+        echo "Authored source: rpg2.hlasm"
+        echo "Tiny demo source: $SHORT_DEMO_SRC"
         echo "Generated source: $RPG2_GEN"
         ;;
     *)
-        echo "Usage: $0 [demo|mini|test|repl]"
+        echo "Usage: $0 [demo|mini|mini-tail3|test|repl]"
         exit 1
         ;;
 esac

@@ -1,39 +1,45 @@
 # Minimal RPG-II Demo
 
-This repo now has a CLI-facing minimal RPG-II demo surface built around the
-fixed-shape tiny source program in `tiny_rpg_demo.src`, loaded at runtime as an
-external source deck.
+This repo now has a CLI-facing minimal RPG-II demo surface built around tiny
+source programs loaded at runtime as external source decks.
 
 Run it with:
 
 ```sh
 ./demo.sh mini
+./demo.sh mini-tail3
 ```
 
-Current fixed program shape:
+Current supported tiny program shapes:
 
-- `H` control header
-- `F` one input file: `INFIL`
-- `I` one extracted field: `A0110`
-- `C` one MOVE-style calc stage from the extracted field into a computed work field
-- `O` one detail output record definition
+- `tiny_rpg_demo.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` one extracted field: `A0110`
+  - `C` one MOVE-style calc stage from the extracted field into a computed work field
+  - `O` one detail output record definition for 10 bytes
+- `tiny_rpg_demo_tail3.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` one extracted field: `A0810`
+  - `C` one MOVE-style calc stage from the extracted field into a computed work field
+  - `O` one detail output record definition for 3 bytes
 
 What is real end to end today:
 
 - the authored `rpg2.hlasm -> generated .s -> cor24-run` build path
-- loading of the tiny demo source from an external source-deck buffer
-- parsing of the fixed-shape `H/F/I/C/O` demo source
-- one extracted input field
+- loading of tiny demo source from an external source-deck buffer
+- parsing of a narrow but now variable `H/F/I/C/O` tiny source shape
+- one extracted input field with runtime-decoded offset and length up to 10 bytes
 - one MOVE-style computed work field
-- one output-line assembly stage
+- one output-line assembly stage with runtime-decoded output length up to 10 bytes
 - a CLI-facing demo command and regression fixture driven by live runtime output
 
 What is still placeholder or fixed-shape:
 
-- the tiny RPG source still has a fixed known shape rather than supporting arbitrary programs
-- `I` extraction is hard-wired to one known 10-byte slice
+- the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is one fixed MOVE-style copy, not a general C-spec executor
-- the `O` stage is one fixed 10-byte detail line, not a general O-spec formatter
+- the `O` stage is still one detail line, not a general O-spec formatter
 - the CLI demo runs the current fixed-shape program and reports its live runtime output,
   but it is still not a fully general RPG program surface
 
@@ -45,8 +51,8 @@ Smallest remaining gap to a runnable tiny user-supplied RPG program:
    form instead of the fixed MOVE-style path
 3. decode one real `O`-spec detail-line definition from that source into runtime
    output metadata
-4. generalize the CLI demo beyond this known-good tiny shape so it can surface
-   runtime output for a broader user-supplied program subset
+4. broaden the CLI/demo path beyond these known-good tiny shapes so it can surface
+   runtime output for a slightly broader user-supplied program subset
 
 The practical next milestone is not "general RPG-II". It is:
 
@@ -55,23 +61,27 @@ The practical next milestone is not "general RPG-II". It is:
 
 Current execution path:
 
-1. load and parse the external fixed-shape `H/F/I/C/O` demo source
+1. load and parse an external tiny `H/F/I/C/O` demo source
 2. read each 80-byte input record from `test_deck.bin`
-3. extract the first 10 bytes into `A0110`
+3. extract the runtime-decoded field slice
 4. copy that field through the fixed C-spec-like work field
-5. format one 10-byte output line
+5. format one output line with runtime-decoded length
 6. emit the line over UART
 
 The CLI demo currently validates that the `rpg2.hlasm -> generated .s` path
-still builds, then runs the current fixed-shape tiny program and reports its
+still builds, then runs the selected tiny program and reports its
 actual runtime-produced UART output.
 
-Current runtime-produced output is:
+Current runtime-produced outputs are:
 
 ```text
 RECORD 01A
 RECORD 02B
 RECORD 03C
+
+01A
+02B
+03C
 ```
 
 This is still a constrained demonstration, not a general RPG-II compiler or

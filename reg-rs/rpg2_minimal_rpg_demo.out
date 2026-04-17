@@ -10,9 +10,9 @@ Current boundary:
 - Real today: build path, external tiny source-deck loading, fixed H/F/I/C/O
   source parsing, one extracted field, one MOVE-style calc stage, one
   output-line format stage, live runtime-produced CLI demo surface.
-- Placeholder today: source shape is still fixed; no general RPG parser, no
-  variable C-spec execution, no general O-spec formatting, no arbitrary
-  user-supplied RPG program execution yet.
+- Placeholder today: only a tiny narrow subset varies; there is still no
+  general RPG parser, no variable C-spec execution, no general O-spec
+  formatting, and no arbitrary user-supplied RPG program execution yet.
 
 Current runtime-produced output:
 RECORD 01A
@@ -23,4 +23,6 @@ RECORD 03C
 
 Authored source: rpg2.hlasm
 Tiny demo source: tiny_rpg_demo.src
+Alternate tiny demo source: tiny_rpg_demo_tail3.src
+Try: ./demo.sh mini-tail3
 Generated source: build/rpg2.generated.s

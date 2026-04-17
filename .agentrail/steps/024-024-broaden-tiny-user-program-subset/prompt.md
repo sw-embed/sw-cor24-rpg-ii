@@ -1,0 +1,1 @@
+Broaden the current tiny runtime-parsed RPG-II subset without expanding to a general compiler: relax one or two fixed-shape assumptions so the external source deck can vary in a small but real way, then update the CLI demo/docs/tests to prove that at least one additional tiny user-supplied program variant runs end to end.

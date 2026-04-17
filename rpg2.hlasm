@@ -252,8 +252,17 @@ _src_parse_check_7:
 _src_parse_check_8:
 	la	r1,_field_desc0_offset
 	lw	r0,0(r1)
+	cls	r0,z
+	brf	_src_parse_check_8b
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_8b:
+	la	r1,_field_desc0_len
+	lw	r0,0(r1)
 	ceq	r0,z
-	brt	_src_parse_check_9
+	brf	_src_parse_check_9
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -262,8 +271,8 @@ _src_parse_check_9:
 	la	r1,_field_desc0_len
 	lw	r0,0(r1)
 	lc	r1,10
-	ceq	r0,r1
-	brt	_src_parse_check_10
+	clu	r1,r0
+	brf	_src_parse_check_10
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -321,7 +330,27 @@ _src_parse_check_14:
 _src_parse_check_15:
 	la	r1,_output_desc0_len
 	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_src_parse_check_16
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_16:
+	la	r1,_output_desc0_len
+	lw	r0,0(r1)
 	lc	r1,10
+	clu	r1,r0
+	brf	_src_parse_check_17
+	la	r1,_source_parse_ok
+	la	r0,0
+	sw	r0,0(r1)
+	RET1
+_src_parse_check_17:
+	la	r1,_output_desc0_len
+	lw	r0,0(r1)
+	la	r1,_field_desc0_len
+	lw	r1,0(r1)
 	ceq	r0,r1
 	brt	_src_parse_ok
 	la	r1,_source_parse_ok
@@ -396,7 +425,7 @@ _render_detail_preview:
 	FRAME1
 	lw	r0,6(fp)
 	push	r0
-	la	r0,_emit_10
+	la	r0,_emit_output_line
 	jal	r1,(r0)
 	add	sp,3
 	la	r0,_emit_crlf
@@ -668,26 +697,20 @@ _run_detail_calcs:
 	jal	r1,(r0)
 	la	r2,_detail_field0_buf
 	la	r1,_detail_preview_buf
+	la	r0,_field_desc0_len
+	lw	r0,0(r0)
+_copy_preview_loop:
+	ceq	r0,z
+	brt	_copy_preview_done
+	push	r0
 	lbu	r0,0(r2)
 	sb	r0,0(r1)
-	lbu	r0,1(r2)
-	sb	r0,1(r1)
-	lbu	r0,2(r2)
-	sb	r0,2(r1)
-	lbu	r0,3(r2)
-	sb	r0,3(r1)
-	lbu	r0,4(r2)
-	sb	r0,4(r1)
-	lbu	r0,5(r2)
-	sb	r0,5(r1)
-	lbu	r0,6(r2)
-	sb	r0,6(r1)
-	lbu	r0,7(r2)
-	sb	r0,7(r1)
-	lbu	r0,8(r2)
-	sb	r0,8(r1)
-	lbu	r0,9(r2)
-	sb	r0,9(r1)
+	pop	r0
+	add	r2,1
+	add	r1,1
+	add	r0,-1
+	bra	_copy_preview_loop
+_copy_preview_done:
 	la	r1,_detail_preview_ready
 	la	r0,1
 	sw	r0,0(r1)
@@ -699,26 +722,20 @@ _extract_field0:
 	lw	r0,0(r1)
 	add	r2,r0
 	la	r1,_detail_field0_buf
+	la	r0,_field_desc0_len
+	lw	r0,0(r0)
+_extract_field0_loop:
+	ceq	r0,z
+	brt	_extract_field0_done
+	push	r0
 	lbu	r0,0(r2)
 	sb	r0,0(r1)
-	lbu	r0,1(r2)
-	sb	r0,1(r1)
-	lbu	r0,2(r2)
-	sb	r0,2(r1)
-	lbu	r0,3(r2)
-	sb	r0,3(r1)
-	lbu	r0,4(r2)
-	sb	r0,4(r1)
-	lbu	r0,5(r2)
-	sb	r0,5(r1)
-	lbu	r0,6(r2)
-	sb	r0,6(r1)
-	lbu	r0,7(r2)
-	sb	r0,7(r1)
-	lbu	r0,8(r2)
-	sb	r0,8(r1)
-	lbu	r0,9(r2)
-	sb	r0,9(r1)
+	pop	r0
+	add	r2,1
+	add	r1,1
+	add	r0,-1
+	bra	_extract_field0_loop
+_extract_field0_done:
 	la	r1,_detail_field_ready
 	la	r0,1
 	sw	r0,0(r1)
@@ -744,26 +761,20 @@ _run_cspec_move0:
 	brt	_run_cspec_move0_done
 	la	r2,_detail_field0_buf
 	la	r1,_calc_field0_buf
+	la	r0,_field_desc0_len
+	lw	r0,0(r0)
+_run_cspec_move0_loop:
+	ceq	r0,z
+	brt	_run_cspec_move0_copy_done
+	push	r0
 	lbu	r0,0(r2)
 	sb	r0,0(r1)
-	lbu	r0,1(r2)
-	sb	r0,1(r1)
-	lbu	r0,2(r2)
-	sb	r0,2(r1)
-	lbu	r0,3(r2)
-	sb	r0,3(r1)
-	lbu	r0,4(r2)
-	sb	r0,4(r1)
-	lbu	r0,5(r2)
-	sb	r0,5(r1)
-	lbu	r0,6(r2)
-	sb	r0,6(r1)
-	lbu	r0,7(r2)
-	sb	r0,7(r1)
-	lbu	r0,8(r2)
-	sb	r0,8(r1)
-	lbu	r0,9(r2)
-	sb	r0,9(r1)
+	pop	r0
+	add	r2,1
+	add	r1,1
+	add	r0,-1
+	bra	_run_cspec_move0_loop
+_run_cspec_move0_copy_done:
 	la	r1,_calc_field_ready
 	la	r0,1
 	sw	r0,0(r1)
@@ -798,37 +809,26 @@ _format_output_line:
 	lc	r1,68
 	ceq	r0,r1
 	brf	_format_output_line_done
-	la	r1,_output_desc0_len
-	lw	r0,0(r1)
-	lc	r1,10
-	ceq	r0,r1
-	brf	_format_output_line_done
 	la	r1,_calc_field_ready
 	lw	r0,0(r1)
 	ceq	r0,z
 	brt	_format_output_line_done
 	la	r2,_calc_field0_buf
 	la	r1,_output_line_buf
+	la	r0,_output_desc0_len
+	lw	r0,0(r0)
+_format_output_line_loop:
+	ceq	r0,z
+	brt	_format_output_line_copy_done
+	push	r0
 	lbu	r0,0(r2)
 	sb	r0,0(r1)
-	lbu	r0,1(r2)
-	sb	r0,1(r1)
-	lbu	r0,2(r2)
-	sb	r0,2(r1)
-	lbu	r0,3(r2)
-	sb	r0,3(r1)
-	lbu	r0,4(r2)
-	sb	r0,4(r1)
-	lbu	r0,5(r2)
-	sb	r0,5(r1)
-	lbu	r0,6(r2)
-	sb	r0,6(r1)
-	lbu	r0,7(r2)
-	sb	r0,7(r1)
-	lbu	r0,8(r2)
-	sb	r0,8(r1)
-	lbu	r0,9(r2)
-	sb	r0,9(r1)
+	pop	r0
+	add	r2,1
+	add	r1,1
+	add	r0,-1
+	bra	_format_output_line_loop
+_format_output_line_copy_done:
 	la	r1,_output_line_ready
 	la	r0,1
 	sw	r0,0(r1)
@@ -907,15 +907,16 @@ _eof:
 	la	r0,0
 _ret:
 	RET21
-; _emit_10: Print 10 bytes from address to UART.
+; _emit_output_line: Print output_desc0_len bytes from address to UART.
 ; Arg (on stack): pointer to bytes
-_emit_10:
+_emit_output_line:
 	FRAME21
 	lw	r2,9(fp)
-	la	r1,10
-_next_byte:
+	la	r0,_output_desc0_len
+	lw	r1,0(r0)
+_emit_output_line_next_byte:
 	ceq	r1,z
-	brt	_done10
+	brt	_emit_output_line_done
 	lbu	r0,0(r2)
 	push	r2
 	push	r1
@@ -927,8 +928,8 @@ _next_byte:
 	pop	r2
 	add	r2,1
 	add	r1,-1
-	bra	_next_byte
-_done10:
+	bra	_emit_output_line_next_byte
+_emit_output_line_done:
 	RET21
 ; _emit_crlf: Print CR+LF to UART.
 _emit_crlf:

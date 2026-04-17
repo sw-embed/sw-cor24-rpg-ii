@@ -1,1 +1,1 @@
-BLOCKED: Blocked by current sw-cor24-hlasm compatibility with this repo's source-decode paths: generation of build/rpg2.generated.s truncates in _parse_i_spec and then in _parse_c_spec, leaving a partial .s with undefined labels, so demo.sh cannot report truthful live runtime output yet. Stayed within this repo and reverted temporary workaround edits.
+Raised the HLASM stage-0 generation guardrails, fixed the local source-dispatch/runtime blocker in rpg2.hlasm, and switched the minimal CLI demo to show actual UART-produced output from the tiny external source program.
