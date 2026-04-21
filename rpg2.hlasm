@@ -1460,6 +1460,20 @@ _run_cspec_calc1_move_check2:
 _run_cspec_calc1_move_bad:
 	RET1
 _run_cspec_calc1_rev:
+	la	r1,_calc_desc1_src_field
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brf	_run_cspec_calc1_rev_check2
+	la	r0,_run_cspec_rev0_select0
+	jmp	(r0)
+_run_cspec_calc1_rev_check2:
+	lc	r1,2
+	ceq	r0,r1
+	brf	_run_cspec_calc1_rev_current
+	la	r0,_run_cspec_rev0_select1
+	jmp	(r0)
+_run_cspec_calc1_rev_current:
 	la	r2,_calc_field0_buf
 	la	r0,_calc_field_len
 	lw	r0,0(r0)

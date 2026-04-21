@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by extending the chained calc path one more small step without destabilizing the pinned vendored HLASM path. Prefer adding reverse-field source selectors to calc slot 1 or one equally small chained behavior, add one new source fixture that exercises it end to end, and update CLI/docs/regression surfaces only as needed.

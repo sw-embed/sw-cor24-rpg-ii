@@ -1,0 +1,8 @@
+number = 37
+slug = "037-037-chain-reverse-field-selectors"
+status = "in-progress"
+description = "Broaden the tiny runtime-parsed RPG-II subset by extending the chained calc p..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-21T15:30:05"
+commits = []

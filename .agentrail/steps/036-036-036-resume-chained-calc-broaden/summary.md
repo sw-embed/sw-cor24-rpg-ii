@@ -1,0 +1,1 @@
+Extended the chained calc path so calc slot 1 can reselect raw field 01 or 02 with MOVE, added a new REVR01->MOVE01->DETAIL03 demo fixture, and updated CLI/docs/regressions.

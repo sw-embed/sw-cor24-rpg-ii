@@ -51,6 +51,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_revr6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr6.src)
 - [tiny_rpg_demo_chain.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain.src)
 - [tiny_rpg_demo_chain_move1_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move1_6.src)
+- [tiny_rpg_demo_chain_move2_revr1.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move2_revr1.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -72,6 +73,10 @@ the first calc result before output.
 
 The chained-reselect variant uses `REVR01` followed by `MOVE01`, so calc slot 1
 reselects raw field 01 after slot 0 has already influenced output-shape selection.
+
+The chained-reverse-selector variant uses `MOVE02` followed by `REVR01`, so calc
+slot 1 overrides the stage-0 result with reversed field 01 while keeping the short
+output path chosen by stage 0.
 
 ## Running The Demos
 
@@ -127,6 +132,12 @@ Run the chained raw-field reselection variant:
 
 ```sh
 ./demo.sh mini-chain-move1-6
+```
+
+Run the chained reverse-field-selector variant:
+
+```sh
+./demo.sh mini-chain-move2-revr1
 ```
 
 Run the regression suite:
@@ -203,6 +214,7 @@ The demo source lines are intentionally compact:
 - `CREVR02` reverses field 02
 - `CREVR00` reverses the current calc result in a second calc slot
 - a second-slot `CMOVE01` or `CMOVE02` can reselect a raw field in the current tiny chained subset
+- a second-slot `CREVR01` or `CREVR02` can reverse a raw field in the current tiny chained subset
 - `ODETAIL1000` defines a 10-byte output with no indicator gate
 - `ODETAIL0301` defines a 3-byte output gated by indicator `01`
 - `ODETAIL1001` defines a 10-byte output gated by indicator `01`

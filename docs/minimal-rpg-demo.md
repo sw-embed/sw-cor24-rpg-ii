@@ -14,6 +14,7 @@ Run it with:
 ./demo.sh mini-revr6
 ./demo.sh mini-chain
 ./demo.sh mini-chain-move1-6
+./demo.sh mini-chain-move2-revr1
 ```
 
 Current supported tiny program shapes:
@@ -86,6 +87,15 @@ Current supported tiny program shapes:
   - `O` detail output definition 01 for 10 bytes
   - `O` detail output definition 02 for 3 bytes
   - `O` detail output definition 03 for 6 bytes
+- `tiny_rpg_demo_chain_move2_revr1.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` field 01: `A0110`
+  - `I` field 02: `A0810`
+  - `C` calc stage 01: `MOVE02`
+  - `C` calc stage 02: `REVR01`
+  - `O` detail output definition 01 for 10 bytes
+  - `O` detail output definition 02 for 3 bytes
 
 What is real end to end today:
 
@@ -97,6 +107,7 @@ What is real end to end today:
 - one REVR-style computed work field that reverses selected field `01` or `02`
 - an optional second calc slot that can transform the current calc result through source selector `00`
 - calc slot 1 can also reselect raw field `01` or `02` through a tiny `MOVE` subset
+- calc slot 1 can also reverse raw field `01` or `02` through a tiny `REVR` subset
 - up to three parsed O-spec output definitions with runtime-selected output length up to 10 bytes
 - two parsed indicator-style output gate modes that can suppress or allow the selected detail line
 - a CLI-facing demo command and regression fixture driven by live runtime output
@@ -106,6 +117,7 @@ What is still placeholder or fixed-shape:
 - the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is still a tiny fixed set of calc behaviors, not a general C-spec executor
 - the second calc slot is still constrained to a tiny chained subset over the current calc result or a raw field reselection
+- the second calc slot is still constrained to a tiny chained subset over the current calc result or a raw field reselection/reverse
 - the `O` stage is still one active detail line per record, not a general O-spec formatter
 - third-output-shape selection is still constrained to one narrow known-good calc/output combination
 - output gating is still one tiny fixed-shape indicator case, not general indicator-driven branching
@@ -173,6 +185,10 @@ C30 DROCER
 RECORD
 RECORD
 RECORD
+
+A10
+B20
+C30
 ```
 
 This is still a constrained demonstration, not a general RPG-II compiler or
