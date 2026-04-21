@@ -1,0 +1,26 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Chain REVR00 + Third Output Shape) ===
+Program:
+H  control header
+F  input file INFIL
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  REVR01 -> calc stage 0
+C  REVR00 -> calc stage 1 reverses the current calc result
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
+O  DETAIL03 output (6 chars)
+
+Current boundary:
+- Real today: calc slot 1 can still work over source selector 00 while stage 0
+  drives the third output-shape selection.
+- This variant composes REVR01 with REVR00, so the second calc stage cancels
+  the first reversal and DETAIL03 emits the 6-byte field-01 prefix.
+
+Current runtime-produced output:
+RECORD
+RECORD
+RECORD
+
+Authored source: rpg2.hlasm
+Tiny demo source: tiny_rpg_demo_chain_revr0_6.src
+Generated source: build/rpg2.generated.s

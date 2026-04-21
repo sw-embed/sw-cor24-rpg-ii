@@ -1,0 +1,4 @@
+command = './demo.sh mini-chain-revr0-6 2>&1'
+timeout = 20
+exit_code = 0
+desc = "Minimal RPG-II demo surface: chained REVR00 with third output shape runs through the CLI"

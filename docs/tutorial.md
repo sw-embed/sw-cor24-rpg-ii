@@ -52,6 +52,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_chain.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain.src)
 - [tiny_rpg_demo_chain_move1_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move1_6.src)
 - [tiny_rpg_demo_chain_move2_revr1.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move2_revr1.src)
+- [tiny_rpg_demo_chain_revr0_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_revr0_6.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -77,6 +78,9 @@ reselects raw field 01 after slot 0 has already influenced output-shape selectio
 The chained-reverse-selector variant uses `MOVE02` followed by `REVR01`, so calc
 slot 1 overrides the stage-0 result with reversed field 01 while keeping the short
 output path chosen by stage 0.
+
+The chained-third-shape variant uses `REVR01` followed by `REVR00`, so calc slot 1
+works over the current calc result while stage 0 still selects the 6-byte output shape.
 
 ## Running The Demos
 
@@ -138,6 +142,12 @@ Run the chained reverse-field-selector variant:
 
 ```sh
 ./demo.sh mini-chain-move2-revr1
+```
+
+Run the chained third-output-shape variant:
+
+```sh
+./demo.sh mini-chain-revr0-6
 ```
 
 Run the regression suite:

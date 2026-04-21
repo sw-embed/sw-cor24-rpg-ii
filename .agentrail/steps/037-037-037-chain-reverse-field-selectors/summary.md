@@ -1,0 +1,1 @@
+Extended calc slot 1 so REVR can target raw field 01 or 02, added a MOVE02->REVR01 chained demo fixture, and updated CLI/docs/regressions.

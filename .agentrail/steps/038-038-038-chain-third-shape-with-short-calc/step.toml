@@ -1,0 +1,8 @@
+number = 38
+slug = "038-038-chain-third-shape-with-short-calc"
+status = "in-progress"
+description = "Broaden the tiny runtime-parsed RPG-II subset by extending the chained calc p..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-21T16:09:27"
+commits = []

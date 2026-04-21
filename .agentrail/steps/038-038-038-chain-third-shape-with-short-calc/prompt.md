@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by extending the chained calc path one more small step without destabilizing the pinned vendored HLASM path. Prefer one small chained behavior that composes calc slot 1 with the third output shape, add one new source fixture that exercises it end to end, and update CLI/docs/regression surfaces only as needed.
