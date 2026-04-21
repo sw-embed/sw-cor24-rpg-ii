@@ -224,6 +224,9 @@ _init_source_parser:
 	lc	r1,8
 	ceq	r0,r1
 	brt	_src_parse_check_2
+	lc	r1,9
+	ceq	r0,r1
+	brt	_src_parse_check_2
 	la	r1,_source_parse_ok
 	la	r0,0
 	sw	r0,0(r1)
@@ -413,6 +416,12 @@ _src_parse_check_14b:
 	la	r1,_calc_desc1_src_field
 	lw	r0,0(r1)
 	ceq	r0,z
+	brt	_src_parse_check_14f
+	lc	r1,1
+	ceq	r0,r1
+	brt	_src_parse_check_14f
+	lc	r1,2
+	ceq	r0,r1
 	brt	_src_parse_check_14f
 	la	r1,_source_parse_ok
 	la	r0,0
@@ -1412,6 +1421,12 @@ _run_cspec_calc1_check_op:
 	lw	r0,0(r1)
 	ceq	r0,z
 	brt	_run_cspec_calc1_check_move
+	lc	r1,1
+	ceq	r0,r1
+	brt	_run_cspec_calc1_check_move
+	lc	r1,2
+	ceq	r0,r1
+	brt	_run_cspec_calc1_check_move
 	RET1
 _run_cspec_calc1_check_move:
 	la	r1,_calc_desc1_op
@@ -1424,6 +1439,25 @@ _run_cspec_calc1_check_move:
 	brt	_run_cspec_calc1_rev
 	RET1
 _run_cspec_calc1_move:
+	la	r1,_calc_desc1_src_field
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_run_cspec_calc1_move_check1
+	la	r0,_run_cspec_calc1_done
+	jmp	(r0)
+_run_cspec_calc1_move_check1:
+	lc	r1,1
+	ceq	r0,r1
+	brf	_run_cspec_calc1_move_check2
+	la	r0,_run_cspec_calc1_move_select0
+	jmp	(r0)
+_run_cspec_calc1_move_check2:
+	lc	r1,2
+	ceq	r0,r1
+	brf	_run_cspec_calc1_move_bad
+	la	r0,_run_cspec_calc1_move_select1
+	jmp	(r0)
+_run_cspec_calc1_move_bad:
 	RET1
 _run_cspec_calc1_rev:
 	la	r2,_calc_field0_buf
@@ -1459,6 +1493,47 @@ _run_cspec_calc1_rev_copyback_loop:
 	add	r1,1
 	add	r0,-1
 	bra	_run_cspec_calc1_rev_copyback_loop
+_run_cspec_calc1_move_select0:
+	la	r1,_detail_field_ready
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_run_cspec_calc1_move_select0_have
+	RET1
+_run_cspec_calc1_move_select0_have:
+	la	r2,_detail_field0_buf
+	la	r0,_field_desc0_len
+	lw	r0,0(r0)
+	la	r1,_calc_field_len
+	sw	r0,0(r1)
+	bra	_run_cspec_calc1_move_copy
+_run_cspec_calc1_move_select1:
+	la	r1,_detail_field1_ready
+	lw	r0,0(r1)
+	ceq	r0,z
+	brf	_run_cspec_calc1_move_select1_have
+	RET1
+_run_cspec_calc1_move_select1_have:
+	la	r2,_detail_field1_buf
+	la	r0,_field_desc1_len
+	lw	r0,0(r0)
+	la	r1,_calc_field_len
+	sw	r0,0(r1)
+_run_cspec_calc1_move_copy:
+	la	r1,_calc_field0_buf
+_run_cspec_calc1_move_loop:
+	ceq	r0,z
+	brf	_run_cspec_calc1_move_loop_body
+	la	r0,_run_cspec_calc1_done
+	jmp	(r0)
+_run_cspec_calc1_move_loop_body:
+	push	r0
+	lbu	r0,0(r2)
+	sb	r0,0(r1)
+	pop	r0
+	add	r2,1
+	add	r1,1
+	add	r0,-1
+	bra	_run_cspec_calc1_move_loop
 _run_cspec_calc1_done:
 	RET1
 _emit_detail_output:

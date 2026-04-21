@@ -24,6 +24,7 @@ The current runnable subset supports:
 - one `F` input file spec
 - two `I` field specs
 - one or two `C` calc specs using `MOVE01`, `MOVE02`, `REVR01`, `REVR02`, or chained `REVR00`
+- one or two `C` calc specs using `MOVE01`, `MOVE02`, `REVR01`, `REVR02`, or chained `REVR00`
 - two or three `O` detail output specs, with the active one selected by the tiny calc path
 - two parsed indicator-style gate modes on an output spec
 
@@ -32,6 +33,7 @@ That means the tiny program can:
 - decode two input field slices from each input record
 - transform one of those fields through a tiny fixed calc stage
 - optionally run a second calc stage over the current calc result
+- in a narrow chained case, let calc slot 1 reselect raw field `01` or `02`
 - select one of two parsed detail output definitions
 - in one constrained case, select a third parsed detail output definition
 - optionally require indicator `01` to be on or off before the selected output emits
@@ -48,6 +50,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_revr_gateoff.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr_gateoff.src)
 - [tiny_rpg_demo_revr6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr6.src)
 - [tiny_rpg_demo_chain.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain.src)
+- [tiny_rpg_demo_chain_move1_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move1_6.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -66,6 +69,9 @@ third parsed 6-byte output definition.
 
 The chained-calc variant uses `MOVE01` followed by `REVR00`, so a second calc slot reverses
 the first calc result before output.
+
+The chained-reselect variant uses `REVR01` followed by `MOVE01`, so calc slot 1
+reselects raw field 01 after slot 0 has already influenced output-shape selection.
 
 ## Running The Demos
 
@@ -115,6 +121,12 @@ Run the two-calc chained variant:
 
 ```sh
 ./demo.sh mini-chain
+```
+
+Run the chained raw-field reselection variant:
+
+```sh
+./demo.sh mini-chain-move1-6
 ```
 
 Run the regression suite:
@@ -190,6 +202,7 @@ The demo source lines are intentionally compact:
 - `CREVR01` reverses field 01
 - `CREVR02` reverses field 02
 - `CREVR00` reverses the current calc result in a second calc slot
+- a second-slot `CMOVE01` or `CMOVE02` can reselect a raw field in the current tiny chained subset
 - `ODETAIL1000` defines a 10-byte output with no indicator gate
 - `ODETAIL0301` defines a 3-byte output gated by indicator `01`
 - `ODETAIL1001` defines a 10-byte output gated by indicator `01`

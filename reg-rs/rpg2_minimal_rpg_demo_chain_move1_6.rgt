@@ -1,0 +1,4 @@
+command = './demo.sh mini-chain-move1-6 2>&1'
+timeout = 20
+exit_code = 0
+desc = "Minimal RPG-II demo surface: chained calc raw-field reselection with 6-byte output runs through the CLI"

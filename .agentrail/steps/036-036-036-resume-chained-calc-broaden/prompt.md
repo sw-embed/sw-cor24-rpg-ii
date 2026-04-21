@@ -1,0 +1,1 @@
+Resume the blocked chained-calc broadening work now that the vendored HLASM pinning workflow is explicit. Broaden the tiny runtime-parsed RPG-II subset by extending the chained calc path with one small additional calc-chain capability or source selector, add one new source fixture that exercises it end to end, and update CLI/docs/regression surfaces only as needed.

@@ -9,6 +9,7 @@
 #   ./demo.sh mini-revr-gateoff Run reverse-field with gate-off minimal RPG-II demo
 #   ./demo.sh mini-revr6 Run reverse-field with third output-shape minimal RPG-II demo
 #   ./demo.sh mini-chain Run two-calc chained minimal RPG-II demo
+#   ./demo.sh mini-chain-move1-6 Run chained calc with second-stage MOVE01 and 6-byte output demo
 #   ./demo.sh test      Run test suite
 #   ./demo.sh repl      Interactive (future)
 
@@ -27,6 +28,7 @@ REV3_DEMO_SRC="tiny_rpg_demo_rev3.src"
 REVR_GATEOFF_DEMO_SRC="tiny_rpg_demo_revr_gateoff.src"
 REVR6_DEMO_SRC="tiny_rpg_demo_revr6.src"
 CHAIN_DEMO_SRC="tiny_rpg_demo_chain.src"
+CHAIN_MOVE1_6_DEMO_SRC="tiny_rpg_demo_chain_move1_6.src"
 prepare_demo() {
     TEST_SRC_DECK_TXT="${1:-$DEFAULT_DEMO_SRC}" ./build.sh build >/dev/null
 }
@@ -113,12 +115,14 @@ case "${1:-demo}" in
         echo "Reverse+gate tiny demo source: $REVR_GATEOFF_DEMO_SRC"
         echo "Reverse+6-byte tiny demo source: $REVR6_DEMO_SRC"
         echo "Chained-calc tiny demo source: $CHAIN_DEMO_SRC"
+        echo "Chained MOVE01+6-byte tiny demo source: $CHAIN_MOVE1_6_DEMO_SRC"
         echo "Try: ./demo.sh mini-tail3"
         echo "Try: ./demo.sh mini-gateoff"
         echo "Try: ./demo.sh mini-rev3"
         echo "Try: ./demo.sh mini-revr-gateoff"
         echo "Try: ./demo.sh mini-revr6"
         echo "Try: ./demo.sh mini-chain"
+        echo "Try: ./demo.sh mini-chain-move1-6"
         echo "Generated source: $RPG2_GEN"
         ;;
     mini-tail3)
@@ -275,8 +279,35 @@ case "${1:-demo}" in
         echo "Tiny demo source: $CHAIN_DEMO_SRC"
         echo "Generated source: $RPG2_GEN"
         ;;
+    mini-chain-move1-6)
+        prepare_demo "$CHAIN_MOVE1_6_DEMO_SRC"
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Chain Reselect + 6-Byte Output) ==="
+        echo "Program:"
+        echo "H  control header"
+        echo "F  input file INFIL"
+        echo "I  field 01: A0110  (10-char input slice)"
+        echo "I  field 02: A0810  (3-char input tail slice)"
+        echo "C  REVR01 -> calc stage 0"
+        echo "C  MOVE01 -> calc stage 1 reselects raw field 01"
+        echo "O  DETAIL01 output (10 chars)"
+        echo "O  DETAIL02 output (3 chars)"
+        echo "O  DETAIL03 output (6 chars)"
+        echo ""
+        echo "Current boundary:"
+        echo "- Real today: calc slot 1 can now use source selector 01 or 02, so a chained"
+        echo "  program can replace the first calc result with a freshly selected raw field."
+        echo "- This variant uses REVR01 only to select DETAIL03, then MOVE01 overrides the"
+        echo "  calc result so the emitted 6-byte line is the raw field-01 prefix."
+        echo ""
+        echo "Current runtime-produced output:"
+        print_runtime_output_or_placeholder "$CHAIN_MOVE1_6_DEMO_SRC"
+        echo ""
+        echo "Authored source: rpg2.hlasm"
+        echo "Tiny demo source: $CHAIN_MOVE1_6_DEMO_SRC"
+        echo "Generated source: $RPG2_GEN"
+        ;;
     *)
-        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|mini-revr6|mini-chain|test|repl]"
+        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|mini-revr6|mini-chain|mini-chain-move1-6|test|repl]"
         exit 1
         ;;
 esac
