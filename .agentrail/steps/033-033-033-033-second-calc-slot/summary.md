@@ -1,0 +1,1 @@
+Added a two-C-spec chained calc path with a new MOVE01 -> REVR00 demo fixture, updated CLI/docs/regressions, and kept the vendored HLASM path green.

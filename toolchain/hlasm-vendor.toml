@@ -1,0 +1,11 @@
+# Pinned HLASM vendor metadata for sw-cor24-rpg-ii.
+# The vendored stage-0 source itself lives under work/vendor/ and stays gitignored.
+# This file is the checked-in record that tells a fresh clone what upstream repo/ref
+# to vendor from and what path build.sh prefers once the snapshot is present.
+
+upstream_repo = "../sw-cor24-hlasm"
+upstream_ref = "85a0296e8a0322d9e684976ed184e5b89adb6268"
+upstream_ref_kind = "commit"
+vendored_stage0 = "work/vendor/sw-cor24-hlasm/hlasm.s"
+refresh_command = "./build.sh vendor-hlasm"
+build_precedence = "HLASM_STAGE0 env -> vendored stage0 -> ../sw-cor24-hlasm/hlasm.s fallback"

@@ -1,0 +1,8 @@
+number = 34
+slug = "034-034-chained-calc-broaden"
+status = "blocked"
+description = "Broaden the tiny runtime-parsed RPG-II subset by extending the new chained ca..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-17T13:24:25"
+commits = []

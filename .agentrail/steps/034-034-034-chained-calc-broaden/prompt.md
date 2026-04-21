@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by extending the new chained calc path without destabilizing the latest pushed vendored HLASM path. Prefer one small additional calc-chain capability or source selector over a wider parser rewrite, add one new source fixture that exercises it end to end, and update CLI/docs/regression surfaces only as needed.

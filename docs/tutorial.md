@@ -128,11 +128,34 @@ Run the regression suite:
 This repo can use a vendored stable `hlasm.s` snapshot instead of reading the
 live sibling worktree directly.
 
-Refresh the local vendored copy from the last pushed sibling `origin/main`:
+The checked-in pin for that snapshot lives in
+[toolchain/hlasm-vendor.toml](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/toolchain/hlasm-vendor.toml).
+It records:
+
+- the upstream `sw-cor24-hlasm` repo path
+- the pinned upstream ref, which can be a commit SHA or tag
+- the gitignored vendored `hlasm.s` path used by this repo
+- the refresh command
+- the build precedence
+
+Inspect the current pin:
+
+```sh
+./build.sh vendor-info
+```
+
+Refresh the local vendored copy from that pinned ref:
 
 ```sh
 ./build.sh vendor-hlasm
 ```
+
+On a fresh clone, the intended rebuild flow is:
+
+1. clone or place the upstream repo at the path recorded in `toolchain/hlasm-vendor.toml`
+2. ensure that repo has the pinned commit or tag
+3. run `./build.sh vendor-hlasm`
+4. build or test this repo normally
 
 After that, `build.sh` prefers:
 
@@ -142,7 +165,8 @@ After that, `build.sh` prefers:
 
 The vendored path lives under `work/vendor/` and is gitignored on purpose, so
 you can keep this repo building against a stable snapshot while `sw-cor24-hlasm`
-is mid-change.
+is mid-change, but still have a checked-in record of exactly which upstream
+ref that snapshot should come from.
 
 ## How The Pipeline Works
 

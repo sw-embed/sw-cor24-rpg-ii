@@ -7,6 +7,7 @@ set -euo pipefail
 #   ./build.sh run          Build and run on emulator
 #   ./build.sh test         Run test suite
 #   ./build.sh vendor-hlasm Refresh vendored stable HLASM stage-0
+#   ./build.sh vendor-info  Show checked-in vendored HLASM metadata
 #   ./build.sh clean        Remove build artifacts
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -15,6 +16,7 @@ cd "$SCRIPT_DIR"
 HLASM_SRC="rpg2.hlasm"
 BUILD_DIR="build"
 WORK_DIR="work"
+HLASM_VENDOR_METADATA="toolchain/hlasm-vendor.toml"
 VENDORED_HLASM_DIR="$WORK_DIR/vendor/sw-cor24-hlasm"
 VENDORED_HLASM_STAGE0="$VENDORED_HLASM_DIR/hlasm.s"
 FALLBACK_HLASM_STAGE0="../sw-cor24-hlasm/hlasm.s"
@@ -30,6 +32,25 @@ RUN="cor24-run"
 HLASM_STAGE0_MAX_INSN=12000000
 HLASM_STAGE0_TAIL_LABEL="_indicator_table:"
 SRC_DECK_RECORD_COUNT=0
+
+metadata_value() {
+    local key="$1"
+    awk -F '=' -v key="$key" '
+        $1 ~ "^[[:space:]]*" key "[[:space:]]*$" {
+            value = $2
+            sub(/^[[:space:]]*/, "", value)
+            sub(/[[:space:]]*$/, "", value)
+            gsub(/^"/, "", value)
+            gsub(/"$/, "", value)
+            print value
+            exit
+        }
+    ' "$HLASM_VENDOR_METADATA"
+}
+
+if [[ -f "$HLASM_VENDOR_METADATA" ]]; then
+    VENDORED_HLASM_STAGE0="$(metadata_value vendored_stage0)"
+fi
 
 if [[ -n "${HLASM_STAGE0:-}" ]]; then
     HLASM_STAGE0="$HLASM_STAGE0"
@@ -142,10 +163,20 @@ patch_source_deck_count() {
 }
 
 vendor_hlasm() {
-    local source_repo="../sw-cor24-hlasm"
-    local source_ref="origin/main"
+    local source_repo
+    local source_ref
+    local source_ref_kind
     local vendor_readme="$VENDORED_HLASM_DIR/README.txt"
     local vendor_commit
+
+    if [[ ! -f "$HLASM_VENDOR_METADATA" ]]; then
+        echo "ERROR: vendor metadata not found: $HLASM_VENDOR_METADATA"
+        exit 1
+    fi
+
+    source_repo="$(metadata_value upstream_repo)"
+    source_ref="$(metadata_value upstream_ref)"
+    source_ref_kind="$(metadata_value upstream_ref_kind)"
 
     if [[ ! -d "$source_repo/.git" ]]; then
         echo "ERROR: source repo not found: $source_repo"
@@ -158,11 +189,22 @@ vendor_hlasm() {
     cat > "$vendor_readme" <<EOF
 Vendored stable HLASM stage-0 snapshot for sw-cor24-rpg-ii.
 Source repo: $source_repo
+Source ref kind: $source_ref_kind
 Source ref: $source_ref
 Source commit: $vendor_commit
-Refresh with: ./build.sh vendor-hlasm
+Metadata file: $HLASM_VENDOR_METADATA
+Refresh with: $(metadata_value refresh_command)
 EOF
     echo "Vendored $VENDORED_HLASM_STAGE0 from $source_repo@$vendor_commit"
+}
+
+vendor_info() {
+    if [[ ! -f "$HLASM_VENDOR_METADATA" ]]; then
+        echo "ERROR: vendor metadata not found: $HLASM_VENDOR_METADATA"
+        exit 1
+    fi
+
+    cat "$HLASM_VENDOR_METADATA"
 }
 
 build() {
@@ -208,6 +250,7 @@ case "$CMD" in
     run)    shift; run "$@" ;;
     test)   test_suite ;;
     vendor-hlasm) vendor_hlasm ;;
+    vendor-info) vendor_info ;;
     clean)  clean ;;
-    *)      echo "Usage: $0 {build|run|test|vendor-hlasm|clean}"; exit 1 ;;
+    *)      echo "Usage: $0 {build|run|test|vendor-hlasm|vendor-info|clean}"; exit 1 ;;
 esac
