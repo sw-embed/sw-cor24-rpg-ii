@@ -1,0 +1,1 @@
+Broaden the tiny runtime-parsed RPG-II subset by making the second calc slot metadata-driven for the existing MOVE/REVR subset, without adding a broader parser/runtime rewrite. Keep the work within the current tiny source shape, update the CLI demo surface only as needed to prove the new path, and preserve the vendored latest-pushed HLASM workflow.

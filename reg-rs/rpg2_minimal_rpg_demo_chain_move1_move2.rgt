@@ -1,0 +1,2 @@
+command = './demo.sh mini-chain-move1-move2 2>&1'
+expected = 'rpg2_minimal_rpg_demo_chain_move1_move2.out'

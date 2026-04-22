@@ -1,0 +1,1 @@
+Updated the tiny RPG docs to reflect the current subset and documented the next smallest meaningful capability as a metadata-driven second calc slot.

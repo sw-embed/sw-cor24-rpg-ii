@@ -62,6 +62,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_revr6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_revr6.src)
 - [tiny_rpg_demo_chain.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain.src)
 - [tiny_rpg_demo_chain_move1_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move1_6.src)
+- [tiny_rpg_demo_chain_move1_move2.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move1_move2.src)
 - [tiny_rpg_demo_chain_move2_revr1.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move2_revr1.src)
 - [tiny_rpg_demo_chain_revr0_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_revr0_6.src)
 - [tiny_rpg_demo_chain_move2f6_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move2f6_6.src)
@@ -86,6 +87,10 @@ the first calc result before output.
 
 The chained-reselect variant uses `REVR01` followed by `MOVE01`, so calc slot 1
 reselects raw field 01 after slot 0 has already influenced output-shape selection.
+
+The chained-metadata-selection variant uses `MOVE01` followed by `MOVE02`, so calc
+slot 1 reselects field 02 and now also drives the matching 3-byte output definition
+in the current two-output subset.
 
 The chained-reverse-selector variant uses `MOVE02` followed by `REVR01`, so calc
 slot 1 overrides the stage-0 result with reversed field 01 while keeping the short
@@ -152,6 +157,12 @@ Run the chained raw-field reselection variant:
 
 ```sh
 ./demo.sh mini-chain-move1-6
+```
+
+Run the chained metadata-driven second-MOVE variant:
+
+```sh
+./demo.sh mini-chain-move1-move2
 ```
 
 Run the chained reverse-field-selector variant:

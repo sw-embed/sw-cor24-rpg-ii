@@ -10,6 +10,7 @@
 #   ./demo.sh mini-revr6 Run reverse-field with third output-shape minimal RPG-II demo
 #   ./demo.sh mini-chain Run two-calc chained minimal RPG-II demo
 #   ./demo.sh mini-chain-move1-6 Run chained calc with second-stage MOVE01 and 6-byte output demo
+#   ./demo.sh mini-chain-move1-move2 Run chained calc where second-stage MOVE02 selects the short output
 #   ./demo.sh mini-chain-move2-revr1 Run chained calc with second-stage REVR01 overriding MOVE02
 #   ./demo.sh mini-chain-revr0-6 Run chained calc with REVR00 over the third output shape
 #   ./demo.sh mini-chain-move2f6-6 Run chained calc where field 2 drives the 6-byte output
@@ -32,6 +33,7 @@ REVR_GATEOFF_DEMO_SRC="tiny_rpg_demo_revr_gateoff.src"
 REVR6_DEMO_SRC="tiny_rpg_demo_revr6.src"
 CHAIN_DEMO_SRC="tiny_rpg_demo_chain.src"
 CHAIN_MOVE1_6_DEMO_SRC="tiny_rpg_demo_chain_move1_6.src"
+CHAIN_MOVE1_MOVE2_DEMO_SRC="tiny_rpg_demo_chain_move1_move2.src"
 CHAIN_MOVE2_REVR1_DEMO_SRC="tiny_rpg_demo_chain_move2_revr1.src"
 CHAIN_REVR0_6_DEMO_SRC="tiny_rpg_demo_chain_revr0_6.src"
 CHAIN_MOVE2F6_6_DEMO_SRC="tiny_rpg_demo_chain_move2f6_6.src"
@@ -122,6 +124,7 @@ case "${1:-demo}" in
         echo "Reverse+6-byte tiny demo source: $REVR6_DEMO_SRC"
         echo "Chained-calc tiny demo source: $CHAIN_DEMO_SRC"
         echo "Chained MOVE01+6-byte tiny demo source: $CHAIN_MOVE1_6_DEMO_SRC"
+        echo "Chained MOVE01+MOVE02 tiny demo source: $CHAIN_MOVE1_MOVE2_DEMO_SRC"
         echo "Chained MOVE02+REVR01 tiny demo source: $CHAIN_MOVE2_REVR1_DEMO_SRC"
         echo "Chained REVR00+6-byte tiny demo source: $CHAIN_REVR0_6_DEMO_SRC"
         echo "Chained field2+6-byte tiny demo source: $CHAIN_MOVE2F6_6_DEMO_SRC"
@@ -132,6 +135,7 @@ case "${1:-demo}" in
         echo "Try: ./demo.sh mini-revr6"
         echo "Try: ./demo.sh mini-chain"
         echo "Try: ./demo.sh mini-chain-move1-6"
+        echo "Try: ./demo.sh mini-chain-move1-move2"
         echo "Try: ./demo.sh mini-chain-move2-revr1"
         echo "Try: ./demo.sh mini-chain-revr0-6"
         echo "Try: ./demo.sh mini-chain-move2f6-6"
@@ -318,6 +322,34 @@ case "${1:-demo}" in
         echo "Tiny demo source: $CHAIN_MOVE1_6_DEMO_SRC"
         echo "Generated source: $RPG2_GEN"
         ;;
+    mini-chain-move1-move2)
+        prepare_demo "$CHAIN_MOVE1_MOVE2_DEMO_SRC"
+        echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Chain MOVE01 + MOVE02) ==="
+        echo "Program:"
+        echo "H  control header"
+        echo "F  input file INFIL"
+        echo "I  field 01: A0110  (10-char input slice)"
+        echo "I  field 02: A0810  (3-char input tail slice)"
+        echo "C  MOVE01 -> calc stage 0"
+        echo "C  MOVE02 -> calc stage 1 reselects field 02"
+        echo "O  DETAIL01 output (10 chars)"
+        echo "O  DETAIL02 output (3 chars)"
+        echo ""
+        echo "Current boundary:"
+        echo "- Real today: when calc slot 1 is a parsed MOVE over field 01 or 02, the"
+        echo "  runtime now lets that decoded metadata pick the matching two-output detail"
+        echo "  definition instead of leaving short-vs-long output selection hard-wired to"
+        echo "  calc slot 0."
+        echo "- Placeholder today: this is still only the current tiny MOVE/REVR subset,"
+        echo "  not a general multi-step C-spec executor or general O-spec selector."
+        echo ""
+        echo "Current runtime-produced output:"
+        print_runtime_output_or_placeholder "$CHAIN_MOVE1_MOVE2_DEMO_SRC"
+        echo ""
+        echo "Authored source: rpg2.hlasm"
+        echo "Tiny demo source: $CHAIN_MOVE1_MOVE2_DEMO_SRC"
+        echo "Generated source: $RPG2_GEN"
+        ;;
     mini-chain-move2-revr1)
         prepare_demo "$CHAIN_MOVE2_REVR1_DEMO_SRC"
         echo "=== sw-cor24-rpg-ii Minimal RPG-II Demo (Chain Reverse Field Override) ==="
@@ -399,7 +431,7 @@ case "${1:-demo}" in
         echo "Generated source: $RPG2_GEN"
         ;;
     *)
-        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|mini-revr6|mini-chain|mini-chain-move1-6|mini-chain-move2-revr1|mini-chain-revr0-6|mini-chain-move2f6-6|test|repl]"
+        echo "Usage: $0 [demo|mini|mini-tail3|mini-gateoff|mini-rev3|mini-revr-gateoff|mini-revr6|mini-chain|mini-chain-move1-6|mini-chain-move1-move2|mini-chain-move2-revr1|mini-chain-revr0-6|mini-chain-move2f6-6|test|repl]"
         exit 1
         ;;
 esac

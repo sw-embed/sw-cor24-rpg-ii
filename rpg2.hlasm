@@ -1578,6 +1578,28 @@ _format_output_line:
 	lw	r0,0(r1)
 	ceq	r0,z
 	brt	_format_output_line_return
+	lc	r1,2
+	ceq	r0,r1
+	brf	_fol3
+	la	r1,_calc_table_count
+	lw	r0,0(r1)
+	lc	r1,2
+	ceq	r0,r1
+	brf	_format_output_line_select_by_field
+	la	r1,_calc_desc1_op
+	lw	r0,0(r1)
+	lc	r1,77
+	ceq	r0,r1
+	brf	_format_output_line_select_by_field
+	la	r1,_calc_desc1_src_field
+	lw	r0,0(r1)
+	lc	r1,1
+	ceq	r0,r1
+	brt	_format_output_line_use_desc0
+	lc	r1,2
+	ceq	r0,r1
+	brt	_format_output_line_use_desc1
+_fol3:
 	lc	r1,3
 	ceq	r0,r1
 	brf	_format_output_line_select_by_field

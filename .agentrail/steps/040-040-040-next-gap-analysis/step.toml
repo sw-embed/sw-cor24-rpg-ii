@@ -1,8 +1,9 @@
 number = 40
 slug = "040-040-next-gap-analysis"
-status = "in-progress"
+status = "completed"
 description = "Reassess the tiny runtime-parsed RPG-II subset after the current chained calc..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-22T09:34:17"
-commits = []
+completed_at = "2026-04-22T09:38:26"
+commits = ["8ff02f2bcf1b7390b7043afeca64ea9d871d6d0b"]
