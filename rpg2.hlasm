@@ -1590,7 +1590,11 @@ _format_output_line:
 	lw	r0,0(r1)
 	lc	r1,77
 	ceq	r0,r1
+	brt	_format_output_line_select_by_calc1_field
+	lc	r1,82
+	ceq	r0,r1
 	brf	_format_output_line_select_by_field
+_format_output_line_select_by_calc1_field:
 	la	r1,_calc_desc1_src_field
 	lw	r0,0(r1)
 	lc	r1,1

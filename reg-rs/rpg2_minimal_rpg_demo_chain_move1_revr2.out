@@ -1,0 +1,27 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Chain MOVE01 + REVR02) ===
+Program:
+H  control header
+F  input file INFIL
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0810  (3-char input tail slice)
+C  MOVE01 -> calc stage 0
+C  REVR02 -> calc stage 1 reverses field 02
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
+
+Current boundary:
+- Real today: when calc slot 1 is a parsed REVR over field 01 or 02, the
+  runtime now lets that decoded metadata pick the matching two-output detail
+  definition instead of leaving short-vs-long output selection fixed to
+  calc slot 0.
+- Placeholder today: this is still only the current tiny MOVE/REVR subset,
+  not a general multi-step C-spec executor or general O-spec selector.
+
+Current runtime-produced output:
+A10
+B20
+C30
+
+Authored source: rpg2.hlasm
+Tiny demo source: tiny_rpg_demo_chain_move1_revr2.src
+Generated source: build/rpg2.generated.s

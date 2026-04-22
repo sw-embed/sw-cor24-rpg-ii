@@ -11,14 +11,15 @@ O  DETAIL02 output (3 chars)
 
 Current boundary:
 - Real today: calc slot 1 can now use REVR01 or REVR02, reusing the raw-field
-  reverse helpers instead of only reversing the current calc result.
-- This variant lets stage 0 pick the short output path with MOVE02, then
-  overrides the calc result with reversed field 01 before output.
+  reverse helpers and, in the two-output subset, also taking over matching
+  output-definition selection from calc slot 0.
+- This variant starts with MOVE02, then REVR01 overrides both the calc result
+  and the selected detail shape, so the reversed 10-byte field 01 is emitted.
 
 Current runtime-produced output:
-A10
-B20
-C30
+A10 DROCER
+B20 DROCER
+C30 DROCER
 
 Authored source: rpg2.hlasm
 Tiny demo source: tiny_rpg_demo_chain_move2_revr1.src

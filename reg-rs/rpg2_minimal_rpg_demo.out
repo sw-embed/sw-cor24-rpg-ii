@@ -31,6 +31,7 @@ Reverse+6-byte tiny demo source: tiny_rpg_demo_revr6.src
 Chained-calc tiny demo source: tiny_rpg_demo_chain.src
 Chained MOVE01+6-byte tiny demo source: tiny_rpg_demo_chain_move1_6.src
 Chained MOVE01+MOVE02 tiny demo source: tiny_rpg_demo_chain_move1_move2.src
+Chained MOVE01+REVR02 tiny demo source: tiny_rpg_demo_chain_move1_revr2.src
 Chained MOVE02+REVR01 tiny demo source: tiny_rpg_demo_chain_move2_revr1.src
 Chained REVR00+6-byte tiny demo source: tiny_rpg_demo_chain_revr0_6.src
 Chained field2+6-byte tiny demo source: tiny_rpg_demo_chain_move2f6_6.src
@@ -42,6 +43,7 @@ Try: ./demo.sh mini-revr6
 Try: ./demo.sh mini-chain
 Try: ./demo.sh mini-chain-move1-6
 Try: ./demo.sh mini-chain-move1-move2
+Try: ./demo.sh mini-chain-move1-revr2
 Try: ./demo.sh mini-chain-move2-revr1
 Try: ./demo.sh mini-chain-revr0-6
 Try: ./demo.sh mini-chain-move2f6-6

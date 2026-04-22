@@ -1,8 +1,9 @@
 number = 41
 slug = "041-metadata-driven-second-calc-slot"
-status = "in-progress"
+status = "completed"
 description = "Broaden the tiny runtime-parsed RPG-II subset by making the second calc slot ..."
 role = "legacy"
 context_files = []
 created_at = "2026-04-22T09:38:26"
-commits = []
+completed_at = "2026-04-22T09:48:42"
+commits = ["f9eb55a8662be515c0f9e23542351e697fe41c16"]

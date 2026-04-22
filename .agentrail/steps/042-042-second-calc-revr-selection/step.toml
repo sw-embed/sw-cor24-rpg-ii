@@ -1,0 +1,8 @@
+number = 42
+slug = "042-second-calc-revr-selection"
+status = "in-progress"
+description = "Broaden the tiny runtime-parsed RPG-II subset by extending the metadata-drive..."
+role = "legacy"
+context_files = []
+created_at = "2026-04-22T09:48:42"
+commits = []

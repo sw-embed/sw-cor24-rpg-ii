@@ -1,0 +1,1 @@
+Made two-output second-stage MOVE selection metadata-driven, added a proof demo, and refreshed the docs and regression fixtures.

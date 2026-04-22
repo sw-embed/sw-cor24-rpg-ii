@@ -15,6 +15,7 @@ Run it with:
 ./demo.sh mini-chain
 ./demo.sh mini-chain-move1-6
 ./demo.sh mini-chain-move1-move2
+./demo.sh mini-chain-move1-revr2
 ./demo.sh mini-chain-move2-revr1
 ./demo.sh mini-chain-revr0-6
 ./demo.sh mini-chain-move2f6-6
@@ -99,6 +100,15 @@ Current supported tiny program shapes:
   - `C` calc stage 02: `MOVE02`
   - `O` detail output definition 01 for 10 bytes
   - `O` detail output definition 02 for 3 bytes
+- `tiny_rpg_demo_chain_move1_revr2.src`
+  - `H` control header
+  - `F` one input file: `INFIL`
+  - `I` field 01: `A0110`
+  - `I` field 02: `A0810`
+  - `C` calc stage 01: `MOVE01`
+  - `C` calc stage 02: `REVR02`
+  - `O` detail output definition 01 for 10 bytes
+  - `O` detail output definition 02 for 3 bytes
 - `tiny_rpg_demo_chain_move2_revr1.src`
   - `H` control header
   - `F` one input file: `INFIL`
@@ -141,6 +151,7 @@ What is real end to end today:
 - calc slot 1 can also reselect raw field `01` or `02` through a tiny `MOVE` subset
 - calc slot 1 can also reverse raw field `01` or `02` through a tiny `REVR` subset
 - when calc slot 1 is a parsed `MOVE01` or `MOVE02` in a two-output program, it can now drive the matching output definition instead of leaving output selection fixed to calc slot 0
+- when calc slot 1 is a parsed `REVR01` or `REVR02` in a two-output program, it can now also drive the matching output definition instead of leaving output selection fixed to calc slot 0
 - calc slot 1 can also still operate on source selector `00` while the program uses the third output shape
 - the third output shape can now be paired with a different decoded field so the 6-byte visible result is not always field 01
 - up to three parsed O-spec output definitions with runtime-selected output length up to 10 bytes
@@ -230,6 +241,10 @@ RECORD
 01A
 02B
 03C
+
+A10
+B20
+C30
 
 A10
 B20
