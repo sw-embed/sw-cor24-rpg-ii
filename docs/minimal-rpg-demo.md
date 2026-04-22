@@ -140,7 +140,6 @@ What is still placeholder or fixed-shape:
 
 - the tiny RPG source still has a very narrow known shape rather than supporting arbitrary programs
 - the `C` stage is still a tiny fixed set of calc behaviors, not a general C-spec executor
-- the second calc slot is still constrained to a tiny chained subset over the current calc result or a raw field reselection
 - the second calc slot is still constrained to a tiny chained subset over the current calc result or a raw field reselection/reverse
 - the `O` stage is still one active detail line per record, not a general O-spec formatter
 - third-output-shape selection is still constrained to one narrow known-good calc/output combination
@@ -148,30 +147,37 @@ What is still placeholder or fixed-shape:
 - the CLI demo runs the current fixed-shape program and reports its live runtime output,
   but it is still not a fully general RPG program surface
 
-Smallest remaining gap to a runnable tiny user-supplied RPG program:
+Next smallest meaningful capability:
 
-1. decode one real `I`-spec field definition from that external user-supplied source into
-   runtime field metadata
-2. decode one real `C`-spec operation from that source into a tiny executable calc
-   form instead of the fixed MOVE-style path
-3. decode one real `O`-spec detail-line definition from that source into runtime
-   output metadata
-4. broaden the CLI/demo path beyond these known-good tiny shapes so it can surface
-   runtime output for a slightly broader user-supplied program subset
+- make the second calc slot fully metadata-driven for the same tiny `MOVE`/`REVR`
+  subset instead of recognizing only the current known-good chained shapes
+- keep the current limits on opcodes and operand forms, but remove the need for the
+  runtime to special-case just a few demo combinations
+- once that works, add one demo whose second calc slot is user-authored but not
+  hard-coded as another one-off shape
 
-The practical next milestone is not "general RPG-II". It is:
+Why this is the next step:
 
-- one tiny user-supplied program with a couple of `I` fields, one `C` operation, and a
-  couple of `O` detail definitions, all parsed from source at runtime
+- it is smaller than a broader parser/runtime rewrite
+- it moves the repo closer to a genuinely user-authored tiny program instead of just
+  adding another canned demo variant
+- it strengthens the current `C`-spec execution path, which is now the narrowest
+  part of the remaining fixed-shape behavior
+
+The practical next milestone is still not "general RPG-II". It is:
+
+- one tiny user-authored two-calc program in the existing subset, parsed from source
+  and run without adding another special-case execution path
 
 Current execution path:
 
 1. load and parse an external tiny `H/F/I/C/O` demo source
 2. read each 80-byte input record from `test_deck.bin`
 3. extract the runtime-decoded field slices
-4. copy the selected field through the fixed C-spec-like work field
-5. select one parsed output definition, apply its optional indicator gate, and format one output line with its runtime-decoded length
-6. emit the line over UART if it is still enabled
+4. execute the first calc stage over one decoded field
+5. optionally execute the second calc stage over the current calc result or a tiny raw-field selector
+6. select one parsed output definition, apply its optional indicator gate, and format one output line with its runtime-decoded length
+7. emit the line over UART if it is still enabled
 
 The CLI demo currently validates that the `rpg2.hlasm -> generated .s` path
 still builds, then runs the selected tiny program and reports its

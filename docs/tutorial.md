@@ -24,7 +24,6 @@ The current runnable subset supports:
 - one `F` input file spec
 - two `I` field specs
 - one or two `C` calc specs using `MOVE01`, `MOVE02`, `REVR01`, `REVR02`, or chained `REVR00`
-- one or two `C` calc specs using `MOVE01`, `MOVE02`, `REVR01`, `REVR02`, or chained `REVR00`
 - two or three `O` detail output specs, with the active one selected by the tiny calc path
 - two parsed indicator-style gate modes on an output spec
 
@@ -38,6 +37,18 @@ That means the tiny program can:
 - in one constrained case, select a third parsed detail output definition
 - optionally require indicator `01` to be on or off before the selected output emits
 - emit one output line per input record
+
+## Smallest Useful Next Step
+
+The next useful capability is not another one-off demo shape. It is making the
+second calc slot fully metadata-driven for the existing tiny `MOVE` / `REVR`
+subset.
+
+That would let a user-authored two-calc tiny program run because its second
+`C` spec was actually decoded and executed from source, not because the runtime
+recognized one more special-case chain. It is a smaller step than a broader
+parser/runtime rewrite and is the clearest path toward a genuinely user-authored
+tiny RPG program in the current subset.
 
 ## Demo Sources
 

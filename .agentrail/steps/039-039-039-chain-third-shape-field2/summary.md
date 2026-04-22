@@ -1,0 +1,1 @@
+Added a chained third-shape demo where calc slot 1 reselects a 6-byte field-2 slice, updated CLI/docs/regressions, and kept the pinned vendored HLASM path green.

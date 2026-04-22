@@ -1,0 +1,1 @@
+Reassess the tiny runtime-parsed RPG-II subset after the current chained calc and third-shape demos. Document the next smallest meaningful capability that would move this repo closer to a genuinely user-supplied tiny RPG program, and only implement it if it is clearly smaller than a broader parser/runtime rewrite.
