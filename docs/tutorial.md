@@ -53,6 +53,7 @@ The demo source decks live in the repo root:
 - [tiny_rpg_demo_chain_move1_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move1_6.src)
 - [tiny_rpg_demo_chain_move2_revr1.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move2_revr1.src)
 - [tiny_rpg_demo_chain_revr0_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_revr0_6.src)
+- [tiny_rpg_demo_chain_move2f6_6.src](/Users/mike/github/sw-embed/sw-cor24-rpg-ii/tiny_rpg_demo_chain_move2f6_6.src)
 
 The first variant uses `MOVE01` and the 10-byte output definition.
 
@@ -81,6 +82,10 @@ output path chosen by stage 0.
 
 The chained-third-shape variant uses `REVR01` followed by `REVR00`, so calc slot 1
 works over the current calc result while stage 0 still selects the 6-byte output shape.
+
+The chained-field2-third-shape variant uses `REVR01` followed by `MOVE02`, so stage 0
+still selects the 6-byte output shape while calc slot 1 replaces the visible result
+with a different decoded 6-byte field.
 
 ## Running The Demos
 
@@ -148,6 +153,12 @@ Run the chained third-output-shape variant:
 
 ```sh
 ./demo.sh mini-chain-revr0-6
+```
+
+Run the chained field-2 third-shape variant:
+
+```sh
+./demo.sh mini-chain-move2f6-6
 ```
 
 Run the regression suite:

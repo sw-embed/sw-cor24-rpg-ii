@@ -1,0 +1,4 @@
+command = './demo.sh mini-chain-move2f6-6 2>&1'
+timeout = 20
+exit_code = 0
+desc = "Minimal RPG-II demo surface: chained field-2 third-shape fixture runs through the CLI"

@@ -1,0 +1,1 @@
+Added a chained REVR01->REVR00 third-output-shape demo fixture, updated CLI/docs/regressions, and kept the pinned vendored HLASM path green.

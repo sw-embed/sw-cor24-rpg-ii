@@ -1,0 +1,26 @@
+=== sw-cor24-rpg-ii Minimal RPG-II Demo (Chain Field-2 Third Shape) ===
+Program:
+H  control header
+F  input file INFIL
+I  field 01: A0110  (10-char input slice)
+I  field 02: A0510  (6-char mid-record slice)
+C  REVR01 -> calc stage 0
+C  MOVE02 -> calc stage 1 reselects field 02
+O  DETAIL01 output (10 chars)
+O  DETAIL02 output (3 chars)
+O  DETAIL03 output (6 chars)
+
+Current boundary:
+- Real today: stage 0 can still drive the third output-shape selection while
+  calc slot 1 replaces the visible result with a different decoded field.
+- This variant uses field 02 as a 6-byte slice, so DETAIL03 emits RD 01A-
+  style prefixes instead of the field-01 prefix used by earlier 6-byte demos.
+
+Current runtime-produced output:
+RD 01A
+RD 02B
+RD 03C
+
+Authored source: rpg2.hlasm
+Tiny demo source: tiny_rpg_demo_chain_move2f6_6.src
+Generated source: build/rpg2.generated.s
